@@ -34,21 +34,19 @@ html, body {
   background-color: #002b5c;
 }
 
-/* Custom Scrollbar */
+/* Hide Scrollbar Globally */
 ::-webkit-scrollbar {
-  width: 8px;
+  display: none;
+  width: 0px;
+  background: transparent;
 }
 
-::-webkit-scrollbar-track {
-  background: #f1f5f9;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #eb1e25;
+html, body {
+  font-family: 'Open Sans', sans-serif;
+  color: #333333;
+  background-color: #ffffff;
+  overflow-x: hidden;
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
 }
 

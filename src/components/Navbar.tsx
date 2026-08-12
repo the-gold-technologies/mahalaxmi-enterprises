@@ -1,6 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Search, ChevronDown, Menu, X, Plus, Minus } from "lucide-react";
 
 interface NavbarProps {
@@ -16,9 +18,10 @@ export default function Navbar({
   language,
   setLanguage,
 }: NavbarProps) {
+  const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<string>("HOME");
+  const [activeTab, setActiveTab] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState("");
 
   const increaseFont = () => {
@@ -30,18 +33,10 @@ export default function Navbar({
   };
 
   const navItems = [
-    { name: "HOME", link: "#" },
+    { name: "HOME", link: "/" },
     {
       name: "ABOUT US",
-      link: "#about",
-      sub: [
-        { name: "About HPCL", link: "#about" },
-        { name: "About HP Lubricants", link: "#about" },
-        { name: "About Caltex Lubricants", link: "#about" },
-        { name: "We are No. 1", link: "#about" },
-        { name: "Our Vision", link: "#about" },
-        { name: "Awards & Milestones", link: "#about" },
-      ],
+      link: "/about-us",
     },
     {
       name: "PRODUCTS & SERVICES",
@@ -85,6 +80,16 @@ export default function Navbar({
     { name: "BLOGS", link: "#blogs" },
     { name: "CONTACT US", link: "#contact" },
   ];
+
+  const checkIsActive = (item: { name: string; link: string }) => {
+    if (item.link === "/") {
+      return pathname === "/" && (!activeTab || activeTab === "HOME");
+    }
+    if (item.link.startsWith("/")) {
+      return pathname === item.link || pathname.startsWith(item.link + "/");
+    }
+    return activeTab === item.name;
+  };
 
   return (
     <header className="relative z-50 bg-white shadow-md">
@@ -133,9 +138,9 @@ export default function Navbar({
       {/* Main Navbar */}
       <div className="flex justify-between items-end py-0.5 px-10 pt-4 ">
         {/* Logo */}
-        <a href="#" className="flex items-end gap-10 ">
+        <Link href="/" className="flex items-end gap-10 ">
           <img
-            src="./logo.png"
+            src="/logo.png"
             alt="HP Lubricants - Power to Perform"
             className="w-[200px] -ml-10"
             onError={(e) => {
@@ -159,12 +164,12 @@ export default function Navbar({
               हिन्दी
             </button>
           </div>
-        </a>
+        </Link>
 
         {/* Desktop Menu */}
         <nav className="hidden lg:flex items-center gap-5 mb-6">
           {navItems.map((item, idx) => {
-            const isActive = activeTab === item.name;
+            const isActive = checkIsActive(item);
             return (
               <div
                 key={idx}
@@ -172,7 +177,7 @@ export default function Navbar({
                 onMouseEnter={() => setOpenDropdown(item.name)}
                 onMouseLeave={() => setOpenDropdown(null)}
               >
-                <a
+                <Link
                   href={item.link}
                   onClick={() => setActiveTab(item.name)}
                   className={`text-[14px] font-sans font-medium tracking-normal transition flex items-center gap-1 ${
@@ -192,20 +197,20 @@ export default function Navbar({
                       }
                     />
                   )}
-                </a>
+                </Link>
 
                 {/* Submenu Dropdown */}
                 {item.sub && openDropdown === item.name && (
                   <div className="absolute top-full left-0 w-52 bg-white shadow-lg border border-gray-100 rounded-b py-2 z-50 animate-fadeIn">
                     {item.sub.map((s, sIdx) => (
-                      <a
+                      <Link
                         key={sIdx}
                         href={s.link}
                         onClick={() => setActiveTab(item.name)}
                         className="block px-4 py-2 text-xs font-semibold text-gray-700 hover:bg-gray-50 hover:text-[#eb1e25] transition"
                       >
                         {s.name}
-                      </a>
+                      </Link>
                     ))}
                   </div>
                 )}
@@ -228,10 +233,10 @@ export default function Navbar({
       {mobileMenuOpen && (
         <div className="lg:hidden bg-white border-t border-gray-200 px-4 py-3 flex flex-col gap-2">
           {navItems.map((item, idx) => {
-            const isActive = activeTab === item.name;
+            const isActive = checkIsActive(item);
             return (
               <div key={idx}>
-                <a
+                <Link
                   href={item.link}
                   onClick={() => {
                     setActiveTab(item.name);
@@ -242,11 +247,11 @@ export default function Navbar({
                   }`}
                 >
                   {item.name}
-                </a>
+                </Link>
                 {item.sub && (
                   <div className="pl-4 flex flex-col gap-1 border-l-2 border-red-500 my-1">
                     {item.sub.map((s, sIdx) => (
-                      <a
+                      <Link
                         key={sIdx}
                         href={s.link}
                         onClick={() => {
@@ -256,7 +261,7 @@ export default function Navbar({
                         className="text-xs text-gray-600 hover:text-[#eb1e25] py-1"
                       >
                         {s.name}
-                      </a>
+                      </Link>
                     ))}
                   </div>
                 )}

@@ -1,0 +1,397 @@
+  <!DOCTYPE html>
+<html lang="en" dir="ltr" prefix="content: http://purl.org/rss/1.0/modules/content/ dc: http://purl.org/dc/terms/ foaf: http://xmlns.com/foaf/0.1/ og: http://ogp.me/ns# rdfs: http://www.w3.org/2000/01/rdf-schema# sioc: http://rdfs.org/sioc/ns# sioct: http://rdfs.org/sioc/types# skos: http://www.w3.org/2004/02/skos/core# xsd: http://www.w3.org/2001/XMLSchema#">
+    <head>
+      <link rel="profile" href="http://www.w3.org/1999/xhtml/vocab" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+      <meta name="facebook-domain-verification" content="dglvixic0bhvvajqmy8rgby7o5t6g4" />
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script src="https://www.google.com/recaptcha/api.js?hl=en" async="async" defer="defer"></script>
+<link rel="shortcut icon" href="https://www.hplubricants.in/sites/default/files/fevicon.png" type="image/png" />
+<meta name="generator" content="Drupal 7 (https://www.drupal.org)" />
+<link rel="canonical" href="https://www.hplubricants.in/" />
+<link rel="shortlink" href="https://www.hplubricants.in/" />
+            <title>Page not found | HP Lubricants - India's Largest Lube Marketer | HPCL</title>  
+            <style>
+@import url("https://www.hplubricants.in/modules/system/system.base.css?tje6uh");
+</style>
+<style>
+@import url("https://www.hplubricants.in/modules/locale/locale.css?tje6uh");
+@import url("https://www.hplubricants.in/sites/all/themes/hpcl/css/bootstrap.min.css?tje6uh");
+@import url("https://www.hplubricants.in/sites/all/themes/hpcl/css/swiper.css?tje6uh");
+@import url("https://www.hplubricants.in/sites/all/themes/hpcl/css/shortcodes.css?tje6uh");
+@import url("https://www.hplubricants.in/sites/all/themes/hpcl/css/youtube.css?tje6uh");
+@import url("https://www.hplubricants.in/sites/all/themes/hpcl/css/hover.css?tje6uh");
+@import url("https://www.hplubricants.in/sites/all/themes/hpcl/css/timeline.css?tje6uh");
+@import url("https://www.hplubricants.in/sites/all/themes/hpcl/css/animate.css?tje6uh");
+@import url("https://www.hplubricants.in/sites/all/themes/hpcl/css/owl.carousel.css?tje6uh");
+@import url("https://www.hplubricants.in/sites/all/themes/hpcl/css/style.css?tje6uh");
+@import url("https://www.hplubricants.in/sites/all/themes/hpcl/css/custom.css?tje6uh");
+</style>
+<style>
+@import url("https://www.hplubricants.in/sites/all/themes/hpcl/css/font-awesome.min.css?tje6uh");
+</style>
+<link type="text/css" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800&amp;tje6uh" media="all" />
+      <!-- HTML5 element support for IE6-8 -->
+      <!--[if lt IE 9]>
+        <script src="https://cdn.jsdelivr.net/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+      <![endif]-->
+        <!-- Google Tag Manager -->
+        <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','GTM-M5S63MZ');</script>
+        <!-- End Google Tag Manager -->
+      <script src="/sites/all/themes/hpcl/js/jquery.min.js?v=3.2.1"></script>
+<script src="https://www.hplubricants.in/misc/jquery.once.js?v=1.2"></script>
+<script src="https://www.hplubricants.in/misc/drupal.js?tje6uh"></script>
+<script src="https://www.hplubricants.in/misc/jquery.cookie.js?v=1.0"></script>
+<script src="/sites/all/themes/hpcl/js/jquery.form.min.js?v=4.2.2"></script>
+<script src="https://www.hplubricants.in/misc/ajax.js?v=7.72"></script>
+<script src="https://www.hplubricants.in/sites/all/modules/captcha/captcha.js?tje6uh"></script>
+<script src="https://www.hplubricants.in/misc/textarea.js?v=7.72"></script>
+<script src="https://www.hplubricants.in/sites/all/themes/bootstrap/js/misc/_progress.js?v=7.72"></script>
+<script src="https://www.hplubricants.in/sites/all/modules/webform/js/webform.js?tje6uh"></script>
+<script src="https://www.hplubricants.in/sites/all/themes/bootstrap/js/misc/ajax.js?tje6uh"></script>
+<script>jQuery.extend(Drupal.settings, {"basePath":"\/","pathPrefix":"","ajaxPageState":{"theme":"hpcl","theme_token":"2JpA7v6TDnJ1ToMeOXTIt8Z2mnke6PuQYKE_2oB1Fw4","js":{"sites\/all\/themes\/hpcl\/js\/swiper.js":1,"sites\/all\/themes\/hpcl\/js\/youtube.js":1,"sites\/all\/themes\/hpcl\/js\/youtube-videos.js":1,"sites\/all\/themes\/hpcl\/js\/jquery.slimscroll.js":1,"sites\/all\/themes\/hpcl\/js\/masonry.pkgd.min.js":1,"sites\/all\/themes\/hpcl\/js\/app.js":1,"sites\/all\/themes\/hpcl\/js\/wow.min.js":1,"sites\/all\/themes\/hpcl\/js\/jquery.filterizr.min.js":1,"sites\/all\/themes\/hpcl\/js\/jquery.animations.min.js":1,"sites\/all\/themes\/hpcl\/js\/jquery.animations-tile.js":1,"sites\/all\/themes\/hpcl\/js\/owl.carousel.js":1,"sites\/all\/themes\/hpcl\/js\/custom.js":1,"sites\/all\/themes\/hpcl\/js\/hpcl.js":1,"sites\/all\/themes\/bootstrap\/js\/bootstrap.js":1,"misc\/jquery.js":1,"misc\/jquery.once.js":1,"misc\/drupal.js":1,"misc\/jquery.cookie.js":1,"misc\/jquery.form.js":1,"misc\/ajax.js":1,"sites\/all\/modules\/captcha\/captcha.js":1,"misc\/textarea.js":1,"sites\/all\/themes\/bootstrap\/js\/misc\/_progress.js":1,"sites\/all\/modules\/webform\/js\/webform.js":1,"sites\/all\/themes\/bootstrap\/js\/misc\/ajax.js":1},"css":{"modules\/system\/system.base.css":1,"sites\/all\/modules\/date\/date_api\/date.css":1,"sites\/all\/modules\/date\/date_popup\/themes\/datepicker.1.7.css":1,"sites\/all\/modules\/date\/date_repeat_field\/date_repeat_field.css":1,"modules\/field\/theme\/field.css":1,"modules\/node\/node.css":1,"sites\/all\/modules\/views\/css\/views.css":1,"sites\/all\/modules\/ckeditor\/css\/ckeditor.css":1,"sites\/all\/modules\/ctools\/css\/ctools.css":1,"sites\/all\/modules\/panels\/css\/panels.css":1,"modules\/locale\/locale.css":1,"sites\/all\/modules\/webform\/css\/webform.css":1,"sites\/all\/themes\/hpcl\/css\/bootstrap.min.css":1,"sites\/all\/themes\/hpcl\/css\/swiper.css":1,"sites\/all\/themes\/hpcl\/css\/shortcodes.css":1,"sites\/all\/themes\/hpcl\/css\/youtube.css":1,"sites\/all\/themes\/hpcl\/css\/hover.css":1,"sites\/all\/themes\/hpcl\/css\/timeline.css":1,"sites\/all\/themes\/hpcl\/css\/animate.css":1,"sites\/all\/themes\/hpcl\/css\/owl.carousel.css":1,"sites\/all\/themes\/hpcl\/css\/style.css":1,"sites\/all\/themes\/hpcl\/css\/custom.css":1,"sites\/all\/themes\/hpcl\/css\/font-awesome.min.css":1,"https:\/\/fonts.googleapis.com\/css?family=Open+Sans:300,400,600,700,800":1}},"urlIsAjaxTrusted":{"\/sites\/default\/files\/styles\/inner_page_banner\/public\/about_hpcl_banner.jpg":true,"\/system\/ajax":true},"ajax":{"edit-webform-ajax-submit-25":{"callback":"webform_ajax_callback","wrapper":"webform-ajax-wrapper-25","progress":{"message":"","type":"throbber"},"event":"click","url":"\/system\/ajax","submit":{"_triggering_element_name":"op","_triggering_element_value":"Submit"}}},"bootstrap":{"anchorsFix":"0","anchorsSmoothScrolling":"0","formHasError":1,"popoverEnabled":1,"popoverOptions":{"animation":1,"html":0,"placement":"right","selector":"","trigger":"click","triggerAutoclose":1,"title":"","content":"","delay":0,"container":"body"},"tooltipEnabled":1,"tooltipOptions":{"animation":1,"html":0,"placement":"auto left","selector":"","trigger":"hover focus","delay":0,"container":"body"}}});</script>
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-109061219-1"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', 'UA-109061219-1');
+        </script>
+
+        <!-- Facebook Pixel Code -->
+        <script>
+        !function(f,b,e,v,n,t,s)
+        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+        n.queue=[];t=b.createElement(e);t.async=!0;
+        t.src=v;s=b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t,s)}(window,document,'script',
+        'https://connect.facebook.net/en_US/fbevents.js');
+         fbq('init', '2846273222053097'); 
+        fbq('track', 'PageView');
+        </script>
+        <noscript>
+         <img height="1" width="1" 
+        src="https://www.facebook.com/tr?id=2846273222053097&ev=PageView
+        &noscript=1"/>
+        </noscript>
+        <!-- End Facebook Pixel Code -->
+        <!-- SiteMap SEO Description -->
+                          <link rel="canonical" href="https://www.hplubricants.in/sites/default/files/styles/inner_page_banner/public/about_hpcl_banner.jpg">
+    </head>
+    <body class="html not-front not-logged-in one-sidebar sidebar-first page-sites page-sites-default page-sites-default-files page-sites-default-files-styles page-sites-default-files-styles-inner-page-banner page-sites-default-files-styles-inner-page-banner-public page-sites-default-files-styles-inner-page-banner-public-about-hpcl-bannerjpg i18n-en">
+<!-- Chat bot start -->
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+<!-- Chat bot end -->
+            
+                <!-- Google Tag Manager (noscript) -->
+        <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-M5S63MZ"
+        height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+        <!-- End Google Tag Manager (noscript) -->
+        <div id="skip-link">
+            <a href="#main-content" class="element-invisible element-focusable">Skip to main content</a>
+        </div>
+                
+<style>
+    .lang_dropdown_form{
+    margin-top: 12px;
+}
+
+.form-item-lang-dropdown-select .form-control{
+    padding: 3px 12px !important;
+        height: 28px !important;
+    border-radius: 0 !important;
+}
+
+.translation_en, .translation_hi{
+    display: none !important;
+}
+.form-type-item {
+    display: none;
+}
+#block-locale-language{
+    position: inherit !important;
+}
+</style>
+
+<!-- NAVBAR STARTS HERE -->
+<div class="top-header">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-12">
+                <ul class="nav navbar-nav navbar-right">
+<!--                    <li class=""><a href="#toggle-search" class=""><span class="glyphicon glyphicon-search"></span></a></li>-->
+                    <li class="">
+                    <form class="form-search content-search" action="/sites/default/files/styles/inner_page_banner/public/about_hpcl_banner.jpg" method="post" id="search-block-form" accept-charset="UTF-8"><div><div>
+      <h2 class="element-invisible">Search form</h2>
+    <div class="input-group"><input title="Enter the terms you wish to search for." placeholder="Search" class="form-control form-text" type="text" id="edit-search-block-form--2" name="search_block_form" value="" size="15" maxlength="128" /><span class="input-group-btn"><button type="submit" class="btn btn-primary"><span class="icon glyphicon glyphicon-search" aria-hidden="true"></span>
+</button></span></div><div class="form-actions form-wrapper form-group" id="edit-actions--2"><button class="element-invisible btn btn-primary form-submit" type="submit" id="edit-submit--2" name="op" value="Search">Search</button>
+</div><input type="hidden" name="form_build_id" value="form-Nh-MBPziHcdWlZsOLEmgmcrjOd5ZP5uwaWfv9Sg2O-A" />
+<input type="hidden" name="form_id" value="search_block_form" />
+</div>
+</div></form>                        <script>
+                        jQuery('#edit-search-block-form--2').attr('required', true);
+//                        jQuery('#edit-search-block-form--2').attr('oninvalid', "this.setCustomValidity('Enter term to search')");
+//                        jQuery('#edit-search-block-form--2').attr('oninput', "setCustomValidity('')");
+                        </script>
+                    </li>
+                    <li class="plus-minus">
+                        <a href="#">Text                            <i class="fa fa-plus bg-blue increaseFont"></i>
+                            <i class="fa fa-minus bg-blue decreaseFont"></i>
+                        </a>
+                    </li>
+                    <li>
+                          
+                                               
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="bootsnipp-search">
+        <div class="container-fluid">
+<!--
+            <form method="GET" role="search">
+                <div class="input-group">
+                    <input type="text" class="form-control" name="q" placeholder="Search">
+                    <span class="input-group-btn">
+                        <button class="btn" type="reset"><span class="glyphicon glyphicon-remove"></span></button>
+                    </span>
+                </div>
+            </form>
+-->
+        <form class="form-search content-search" action="/sites/default/files/styles/inner_page_banner/public/about_hpcl_banner.jpg" method="post" id="search-block-form--2" accept-charset="UTF-8"><div><div>
+      <h2 class="element-invisible">Search form</h2>
+    <div class="input-group"><input title="Enter the terms you wish to search for." placeholder="Search" class="form-control form-text" type="text" id="edit-search-block-form--4" name="search_block_form" value="" size="15" maxlength="128" /><span class="input-group-btn"><button type="submit" class="btn btn-primary"><span class="icon glyphicon glyphicon-search" aria-hidden="true"></span>
+</button></span></div><div class="form-actions form-wrapper form-group" id="edit-actions--3"><button class="element-invisible btn btn-primary form-submit" type="submit" id="edit-submit--3" name="op" value="Search">Search</button>
+</div><input type="hidden" name="form_build_id" value="form-bkFp5FYASqcWPAwty5Z-Tp9_sGczRlsBVtH0vDUcfqY" />
+<input type="hidden" name="form_id" value="search_block_form" />
+</div>
+</div></form>        </div>
+    </div>
+</div>
+<div class="main-header">
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span>
+                          <span class="icon-bar"></span>
+                          <span class="icon-bar"></span>
+                          <span class="icon-bar"></span>
+                    </span>
+                </button>
+                                    <a class="navbar-brand"  href="/" title="Home">
+                        <img src="https://www.hplubricants.in/sites/default/files/logo.png" alt="Home"/>
+                    </a>
+                            </div>
+
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                                                      <div class="region region-navigation">
+     <section id="block-locale-language" class="block block-locale clearfix">
+
+      
+  <ul class="language-switcher-locale-url"><li class="en first active"><a href="/sites/default/files/styles/inner_page_banner/public/about_hpcl_banner.jpg" class="language-link active" xml:lang="en">English</a></li>
+<li class="hi last"><a href="/hi/sites/default/files/styles/inner_page_banner/public/about_hpcl_banner.jpg" class="language-link" xml:lang="hi">हिन्दी</a></li>
+</ul>
+</section>
+  </div>
+                            </div>
+        </div><!-- /.container-fluid -->
+    </nav>
+</div>
+
+<div class="relative-wrapper">
+  <div class="region region-content">
+    The requested page "/sites/default/files/styles/inner_page_banner/public/about_hpcl_banner.jpg" could not be found.  </div>
+ <!-- ENQUIRY BUTTON STARTS HERE -->
+<!-- <div class="enquiry-button bg-red">
+    <button id="c" type="button" class="btn btn-enquiry bg-red bold " data-toggle="modal" data-target="#enquirymodal">
+        <i class="fa fa-envelope-o"></i>ENQUIRY
+    </button>
+</div> -->
+
+<div class="enquiry-button bg-red">
+    <a id="c" href="https://www.hindustanpetroleum.com/LubesComplaintandFeedback" target="_blank" class="btn btn-enquiry bg-red bold " >
+        <i class="fa fa-envelope-o"></i>ENQUIRY    </a>
+</div>
+
+<!-- <div class="enquiry-button bg-red">
+    <a id="c" href="https://crminterface.hpcl.co.in/CRMInterface/lubescomplaints.aspx" target="_blank" class="btn btn-enquiry bg-red bold " >
+        <i class="fa fa-envelope-o"></i>ENQUIRY    </a>
+</div>-->
+
+<!-- ENQUIRY MODAL BUTTON STARTS HERE -->
+<div class="modal fade" id="enquirymodal" tabindex="-1" role="dialog" aria-labelledby="enquiry-modal-label">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                 
+<div id="node-25" class="node node-webform clearfix" about="/node/25" typeof="sioc:Item foaf:Document">
+
+  
+        <h2><a href="/node/25">Enquiry</a></h2>
+    <span property="dc:title" content="Enquiry" class="rdf-meta element-hidden"></span><span property="sioc:num_replies" content="0" datatype="xsd:integer" class="rdf-meta element-hidden"></span>
+  
+  <div class="content">
+    <div class="form-item form-type-item form-group"> <label class="control-label">Language</label>
+Undefined</div><div id="webform-ajax-wrapper-25"><form class="webform-client-form webform-client-form-25" action="/sites/default/files/styles/inner_page_banner/public/about_hpcl_banner.jpg" method="post" id="webform-client-form-25" accept-charset="UTF-8"><div><div class="form-group form-item webform-component webform-component-textfield webform-component--name webform-container-inline form-group form-inline form-item form-item-submitted-name form-type-textfield form-group"> <label class="control-label" for="edit-submitted-name">Name <span class="form-required" title="This field is required.">*</span></label>
+<input required="required" placeholder="Full Name" class="form-control form-control form-text required" type="text" id="edit-submitted-name" name="submitted[name]" value="" size="60" maxlength="128" /></div><div class="form-group form-item webform-component webform-component-email webform-component--email webform-container-inline form-group form-inline form-item form-item-submitted-email form-type-webform-email form-group"> <label class="control-label" for="edit-submitted-email">Email <span class="form-required" title="This field is required.">*</span></label>
+<input required="required" class="email form-control form-control form-text form-email required" placeholder="Email" type="email" id="edit-submitted-email" name="submitted[email]" size="60" /></div><div class="form-item webform-component webform-component-select webform-component--country form-group form-item form-item-submitted-country form-type-select form-group"> <label class="control-label" for="edit-submitted-country">Country <span class="form-required" title="This field is required.">*</span></label>
+<select required="required" class="form-control form-select required" id="edit-submitted-country" name="submitted[country]"><option value="AF">Afghanistan</option><option value="AX">Aland Islands</option><option value="AL">Albania</option><option value="DZ">Algeria</option><option value="AS">American Samoa</option><option value="AD">Andorra</option><option value="AO">Angola</option><option value="AI">Anguilla</option><option value="AQ">Antarctica</option><option value="AG">Antigua and Barbuda</option><option value="AR">Argentina</option><option value="AM">Armenia</option><option value="AW">Aruba</option><option value="AU">Australia</option><option value="AT">Austria</option><option value="AZ">Azerbaijan</option><option value="BS">Bahamas</option><option value="BH">Bahrain</option><option value="BD">Bangladesh</option><option value="BB">Barbados</option><option value="BY">Belarus</option><option value="BE">Belgium</option><option value="BZ">Belize</option><option value="BJ">Benin</option><option value="BM">Bermuda</option><option value="BT">Bhutan</option><option value="BO">Bolivia</option><option value="BA">Bosnia and Herzegovina</option><option value="BW">Botswana</option><option value="BV">Bouvet Island</option><option value="BR">Brazil</option><option value="IO">British Indian Ocean Territory</option><option value="VG">British Virgin Islands</option><option value="BN">Brunei</option><option value="BG">Bulgaria</option><option value="BF">Burkina Faso</option><option value="BI">Burundi</option><option value="KH">Cambodia</option><option value="CM">Cameroon</option><option value="CA">Canada</option><option value="CV">Cape Verde</option><option value="BQ">Caribbean Netherlands</option><option value="KY">Cayman Islands</option><option value="CF">Central African Republic</option><option value="TD">Chad</option><option value="CL">Chile</option><option value="CN">China</option><option value="CX">Christmas Island</option><option value="CC">Cocos (Keeling) Islands</option><option value="CO">Colombia</option><option value="KM">Comoros</option><option value="CG">Congo (Brazzaville)</option><option value="CD">Congo (Kinshasa)</option><option value="CK">Cook Islands</option><option value="CR">Costa Rica</option><option value="HR">Croatia</option><option value="CU">Cuba</option><option value="CW">Curaçao</option><option value="CY">Cyprus</option><option value="CZ">Czech Republic</option><option value="DK">Denmark</option><option value="DJ">Djibouti</option><option value="DM">Dominica</option><option value="DO">Dominican Republic</option><option value="EC">Ecuador</option><option value="EG">Egypt</option><option value="SV">El Salvador</option><option value="GQ">Equatorial Guinea</option><option value="ER">Eritrea</option><option value="EE">Estonia</option><option value="ET">Ethiopia</option><option value="FK">Falkland Islands</option><option value="FO">Faroe Islands</option><option value="FJ">Fiji</option><option value="FI">Finland</option><option value="FR">France</option><option value="GF">French Guiana</option><option value="PF">French Polynesia</option><option value="TF">French Southern Territories</option><option value="GA">Gabon</option><option value="GM">Gambia</option><option value="GE">Georgia</option><option value="DE">Germany</option><option value="GH">Ghana</option><option value="GI">Gibraltar</option><option value="GR">Greece</option><option value="GL">Greenland</option><option value="GD">Grenada</option><option value="GP">Guadeloupe</option><option value="GU">Guam</option><option value="GT">Guatemala</option><option value="GG">Guernsey</option><option value="GN">Guinea</option><option value="GW">Guinea-Bissau</option><option value="GY">Guyana</option><option value="HT">Haiti</option><option value="HM">Heard Island and McDonald Islands</option><option value="HN">Honduras</option><option value="HK">Hong Kong S.A.R., China</option><option value="HU">Hungary</option><option value="IS">Iceland</option><option value="IN" selected="selected">India</option><option value="ID">Indonesia</option><option value="IR">Iran</option><option value="IQ">Iraq</option><option value="IE">Ireland</option><option value="IM">Isle of Man</option><option value="IL">Israel</option><option value="IT">Italy</option><option value="CI">Ivory Coast</option><option value="JM">Jamaica</option><option value="JP">Japan</option><option value="JE">Jersey</option><option value="JO">Jordan</option><option value="KZ">Kazakhstan</option><option value="KE">Kenya</option><option value="KI">Kiribati</option><option value="KW">Kuwait</option><option value="KG">Kyrgyzstan</option><option value="LA">Laos</option><option value="LV">Latvia</option><option value="LB">Lebanon</option><option value="LS">Lesotho</option><option value="LR">Liberia</option><option value="LY">Libya</option><option value="LI">Liechtenstein</option><option value="LT">Lithuania</option><option value="LU">Luxembourg</option><option value="MO">Macao S.A.R., China</option><option value="MK">Macedonia</option><option value="MG">Madagascar</option><option value="MW">Malawi</option><option value="MY">Malaysia</option><option value="MV">Maldives</option><option value="ML">Mali</option><option value="MT">Malta</option><option value="MH">Marshall Islands</option><option value="MQ">Martinique</option><option value="MR">Mauritania</option><option value="MU">Mauritius</option><option value="YT">Mayotte</option><option value="MX">Mexico</option><option value="FM">Micronesia</option><option value="MD">Moldova</option><option value="MC">Monaco</option><option value="MN">Mongolia</option><option value="ME">Montenegro</option><option value="MS">Montserrat</option><option value="MA">Morocco</option><option value="MZ">Mozambique</option><option value="MM">Myanmar</option><option value="NA">Namibia</option><option value="NR">Nauru</option><option value="NP">Nepal</option><option value="NL">Netherlands</option><option value="AN">Netherlands Antilles</option><option value="NC">New Caledonia</option><option value="NZ">New Zealand</option><option value="NI">Nicaragua</option><option value="NE">Niger</option><option value="NG">Nigeria</option><option value="NU">Niue</option><option value="NF">Norfolk Island</option><option value="MP">Northern Mariana Islands</option><option value="KP">North Korea</option><option value="NO">Norway</option><option value="OM">Oman</option><option value="PK">Pakistan</option><option value="PW">Palau</option><option value="PS">Palestinian Territory</option><option value="PA">Panama</option><option value="PG">Papua New Guinea</option><option value="PY">Paraguay</option><option value="PE">Peru</option><option value="PH">Philippines</option><option value="PN">Pitcairn</option><option value="PL">Poland</option><option value="PT">Portugal</option><option value="PR">Puerto Rico</option><option value="QA">Qatar</option><option value="RE">Reunion</option><option value="RO">Romania</option><option value="RU">Russia</option><option value="RW">Rwanda</option><option value="BL">Saint Barthélemy</option><option value="SH">Saint Helena</option><option value="KN">Saint Kitts and Nevis</option><option value="LC">Saint Lucia</option><option value="MF">Saint Martin (French part)</option><option value="PM">Saint Pierre and Miquelon</option><option value="VC">Saint Vincent and the Grenadines</option><option value="WS">Samoa</option><option value="SM">San Marino</option><option value="ST">Sao Tome and Principe</option><option value="SA">Saudi Arabia</option><option value="SN">Senegal</option><option value="RS">Serbia</option><option value="SC">Seychelles</option><option value="SL">Sierra Leone</option><option value="SG">Singapore</option><option value="SX">Sint Maarten</option><option value="SK">Slovakia</option><option value="SI">Slovenia</option><option value="SB">Solomon Islands</option><option value="SO">Somalia</option><option value="ZA">South Africa</option><option value="GS">South Georgia and the South Sandwich Islands</option><option value="KR">South Korea</option><option value="SS">South Sudan</option><option value="ES">Spain</option><option value="LK">Sri Lanka</option><option value="SD">Sudan</option><option value="SR">Suriname</option><option value="SJ">Svalbard and Jan Mayen</option><option value="SZ">Swaziland</option><option value="SE">Sweden</option><option value="CH">Switzerland</option><option value="SY">Syria</option><option value="TW">Taiwan</option><option value="TJ">Tajikistan</option><option value="TZ">Tanzania</option><option value="TH">Thailand</option><option value="TL">Timor-Leste</option><option value="TG">Togo</option><option value="TK">Tokelau</option><option value="TO">Tonga</option><option value="TT">Trinidad and Tobago</option><option value="TN">Tunisia</option><option value="TR">Turkey</option><option value="TM">Turkmenistan</option><option value="TC">Turks and Caicos Islands</option><option value="TV">Tuvalu</option><option value="VI">U.S. Virgin Islands</option><option value="UG">Uganda</option><option value="UA">Ukraine</option><option value="AE">United Arab Emirates</option><option value="GB">United Kingdom</option><option value="US">United States</option><option value="UM">United States Minor Outlying Islands</option><option value="UY">Uruguay</option><option value="UZ">Uzbekistan</option><option value="VU">Vanuatu</option><option value="VA">Vatican</option><option value="VE">Venezuela</option><option value="VN">Vietnam</option><option value="WF">Wallis and Futuna</option><option value="EH">Western Sahara</option><option value="YE">Yemen</option><option value="ZM">Zambia</option><option value="ZW">Zimbabwe</option></select></div><div class="form-item webform-component webform-component-textfield webform-component--state form-group form-item form-item-submitted-state form-type-textfield form-group"> <label class="control-label" for="edit-submitted-state">State <span class="form-required" title="This field is required.">*</span></label>
+<input required="required" class="form-control form-text required" type="text" id="edit-submitted-state" name="submitted[state]" value="" size="60" maxlength="128" /></div><div class="form-item webform-component webform-component-textfield webform-component--city form-group form-item form-item-submitted-city form-type-textfield form-group"> <label class="control-label" for="edit-submitted-city">City <span class="form-required" title="This field is required.">*</span></label>
+<input required="required" class="form-control form-text required" type="text" id="edit-submitted-city" name="submitted[city]" value="" size="60" maxlength="128" /></div><div class="form-group form-item webform-component webform-component-textfield webform-component--phone-number webform-container-inline form-group form-inline form-item form-item-submitted-phone-number form-type-textfield form-group"> <label class="control-label" for="edit-submitted-phone-number">Phone Number <span class="form-required" title="This field is required.">*</span></label>
+<input required="required" placeholder="Phone Number" class="form-control form-control form-text required" type="text" id="edit-submitted-phone-number" name="submitted[phone_number]" value="" size="60" maxlength="15" /></div><div class="form-group form-item webform-component webform-component-select webform-component--enquiry-type webform-container-inline form-group form-inline form-item form-item-submitted-enquiry-type form-type-select form-group"> <label class="control-label" for="edit-submitted-enquiry-type">Enquiry Type <span class="form-required" title="This field is required.">*</span></label>
+<select required="required" class="form-control form-control form-select required" id="edit-submitted-enquiry-type" name="submitted[enquiry_type]"><option value="" selected="selected">- Select Enquiry Type -</option><option value="hp lubricates products">HP Lubricants Products</option><option value="complaints">Complaints</option><option value="dealership query">Dealership Query</option><option value="technical query">Technical Query</option><option value="testing,crm,pt and nmi stds">Testing, CRM, PT &amp; NMI Stds</option><option value="other">Others</option></select></div><div class="form-group form-item webform-component webform-component-textarea webform-component--comments webform-container-inline form-group form-inline form-item form-item-submitted-comments form-type-textarea form-group"> <label class="control-label" for="edit-submitted-comments">Comments if any <span class="form-required" title="This field is required.">*</span></label>
+<div class="form-textarea-wrapper resizable"><textarea required="required" placeholder="Comments" class="form-control form-control form-textarea required" id="edit-submitted-comments" name="submitted[comments]" cols="60" rows="5"></textarea></div></div><div class="form-item webform-component webform-component-textfield webform-component--last-name form-group form-item form-item-submitted-last-name form-type-textfield form-group"> <label class="control-label" for="edit-submitted-last-name">Last Name</label>
+<input class="form-control form-text" type="text" id="edit-submitted-last-name" name="submitted[last_name]" value="" size="60" maxlength="128" /></div><div class="form-item webform-component webform-component-hidden webform-component--form-source form-item form-item-submitted-form-source form-type-hidden" style="display: none"><input type="hidden" name="submitted[form_source]" value="enquiry button" />
+</div><input type="hidden" name="details[sid]" />
+<input type="hidden" name="details[page_num]" value="1" />
+<input type="hidden" name="details[page_count]" value="1" />
+<input type="hidden" name="details[finished]" value="0" />
+<input type="hidden" name="form_build_id" value="form-oCkJaskzmZzwKDTQ4AlgeLcE4Fi0dDTZLvA65DyYPDk" />
+<input type="hidden" name="form_id" value="webform_client_form_25" />
+<input type="hidden" name="webform_ajax_wrapper_id" value="webform-ajax-wrapper-25" />
+<fieldset  class="captcha panel panel-default form-wrapper" id="bootstrap-panel">
+          <legend class="panel-heading">
+      <span class="panel-title fieldset-legend">CAPTCHA</span>
+    </legend>
+        <div class="panel-body" id="bootstrap-panel-body">
+    <div class="help-block">This question is for testing whether or not you are a human visitor and to prevent automated spam submissions.</div>    <input type="hidden" name="captcha_sid" value="36906432" />
+<input type="hidden" name="captcha_token" value="3c7e2be77a7046dc964e052ffbe0f1a2" />
+<input type="hidden" name="captcha_response" value="Google no captcha" />
+<div class="g-recaptcha" data-sitekey="6LeaUmsUAAAAABzCJWmXcEjvAFFRe-4NS_xWQQCT" data-theme="light" data-type="image"></div><input type="hidden" name="captcha_cacheable" value="1" />
+  </div>
+</fieldset>
+<div class="form-actions"><button class="webform-submit button-primary btn btn-primary form-submit" type="submit" id="edit-webform-ajax-submit-25" name="op" value="Submit">Submit</button>
+</div></div></form></div>  </div>
+
+  
+  
+</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="bg-blue pt20 pb20 mob-pt20 mob-pb20">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-3 col-md-3 col-sm-5 col-xs-12">
+                <p class="pt15">&copy; 2026 HP Lubricants. All rights reserved.</p>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 footer-links">
+                            </div>
+
+            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 footer-links footer-hpcl-logo">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="footer-hpcl-logo-left">
+                            <a href="http://www.hindustanpetroleum.com" target="_blank">
+                                <img src="/sites/all/themes/hpcl/images/hpcl_logo.jpg">
+                            </a>
+                        </div>
+                        <div class="footer-hpcl-logo-right">
+                           <a href="http://india.gov.in"  target="_blank">
+                               <img src="/sites/all/themes/hpcl/images/nic_logobt.jpg">
+                            </a>
+                            <a href="http://www.unglobalcompact.org/NetworksAroundTheWorld/local_network_sheet/IN.html"  target="_blank">
+                               <img src="/sites/all/themes/hpcl/images/globalcompactlogo_img.jpg" class="global-img">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                <ul class="nav navbar-nav navbar-right footer-social-links">
+                                            <li><a href="https://www.facebook.com/hindustanpetroleumcorporateltd" class="social-facebook" target="_blank"><i class="fa fa-facebook"></i></a></li>
+                                            <li><a href="https://www.youtube.com/@HPLubricants" class="social-youtube-play" target="_blank"><i class="fa fa-youtube-play"></i></a></li>
+                                            <li><a href="https://www.instagram.com/hplubricants_hpcl/" class="social-instagram" target="_blank"><i class="fa fa-instagram"></i></a></li>
+                                    </ul>
+            </div>
+                    </div>
+    </div>
+</footer>
+<script>
+jQuery('#c').click(function(){
+    jQuery('#webform-client-form-25')[0].reset();
+});
+</script></div>
+        <script defer="defer" src="https://www.hplubricants.in/sites/all/themes/hpcl/js/swiper.js?tje6uh"></script>
+<script defer="defer" src="https://www.hplubricants.in/sites/all/themes/hpcl/js/youtube.js?tje6uh"></script>
+<script defer="defer" src="https://www.hplubricants.in/sites/all/themes/hpcl/js/youtube-videos.js?tje6uh"></script>
+<script defer="defer" src="https://www.hplubricants.in/sites/all/themes/hpcl/js/jquery.slimscroll.js?tje6uh"></script>
+<script defer="defer" src="https://www.hplubricants.in/sites/all/themes/hpcl/js/masonry.pkgd.min.js?tje6uh"></script>
+<script defer="defer" src="https://www.hplubricants.in/sites/all/themes/hpcl/js/app.js?tje6uh"></script>
+<script defer="defer" src="https://www.hplubricants.in/sites/all/themes/hpcl/js/wow.min.js?tje6uh"></script>
+<script defer="defer" src="https://www.hplubricants.in/sites/all/themes/hpcl/js/jquery.filterizr.min.js?tje6uh"></script>
+<script defer="defer" src="https://www.hplubricants.in/sites/all/themes/hpcl/js/jquery.animations.min.js?tje6uh"></script>
+<script defer="defer" src="https://www.hplubricants.in/sites/all/themes/hpcl/js/jquery.animations-tile.js?tje6uh"></script>
+<script defer="defer" src="https://www.hplubricants.in/sites/all/themes/hpcl/js/owl.carousel.js?tje6uh"></script>
+<script defer="defer" src="https://www.hplubricants.in/sites/all/themes/hpcl/js/custom.js?tje6uh"></script>
+<script defer="defer" src="https://www.hplubricants.in/sites/all/themes/hpcl/js/hpcl.js?tje6uh"></script>
+<script src="/sites/all/themes/hpcl/js/bootstrap.min.js?v=3.3.7"></script>
+
+        <!-- HPCL GPT Chatbot (mascot + chat window) -->
+        <script
+          src="https://gpt.hpcl.co.in/hpchatbot/embedded-bot/integration/fluid-gpt.js"
+          chatBotUrl="https://gpt.hpcl.co.in/hpchatbot/embedded-bot/?tenant=hpcl-vigilance"
+          welcomeMsg="Hi, I am a HPCL GPT"
+          logoUrl="https://gpt.hpcl.co.in/hpchatbot/embedded-bot/images/logo.png"
+          showReferences="true"
+          showFeedback="true"
+          tenant="hpcl-vigilance"
+          accessPrivateFolder="false"
+          chatBotGreetingMsg="Hi, how may I help you?"
+          workflowName="HP_Pay_Lubes_Workflow"
+          headerColor="#004e8f"
+          baseUrl="https://gpt.hpcl.co.in/hpchatbot/backend/hpcl-vigilance/public-embed"
+          darkHeadercolor="#1C3150"
+          headerTextColor="#FFFFFF"
+          darkHeaderTextColor="rgb(249 250 251)"
+          footerColor="#F2F2F2"
+          darkFooterColor="#1C3150"
+          footerTextColor="#858585"
+          darkFooterTextColor="rgb(249 250 251)"
+          bodyBackgroundColor="#FFFFFF"
+          darkBodyBackgroundColor="rgb(17 24 39)"
+          botMessageBackgroundColor="#F8F8F8"
+          darkBotMessageBackgroundColor="#3A4D6A"
+          botMessageTextColor="#037CC2"
+          darkBotMessageTextColor="rgb(243 244 246)"
+          userMessageTextColor="#FFFFFF"
+          darkUserMessageTextColor="rgb(243 244 246)"
+          userMessageBackgroundColor="#037CC2"
+          darkUserMessageBackgroundColor="#3A4D6A"
+          sendButtonColor="#c11032"
+          darkSendButtonColor="rgb(249 250 251)"
+          crossorigin="anonymous"
+          autoOpen="false"
+          floaterBot="true"
+          hpLubesBot="true"
+          chatInterfaceHeight="430px"
+          chatInterfaceWidth="370px"
+          sessionTimeoutSeconds="300"
+          hidePoweredBy="true"
+          workflowStreamResponse="true"
+          botName="Customer Service Assistant"
+          botHorizontalAnchor="98%"
+          botVerticalAnchor="95%"
+        ></script>
+        <!-- End HPCL GPT Chatbot -->
+    </body>
+</html>
