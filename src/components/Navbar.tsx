@@ -55,7 +55,7 @@ export default function Navbar({
       link: "/events",
     },
     { name: "BLOGS", link: "#blogs" },
-    { name: "CONTACT US", link: "#contact" },
+    { name: "CONTACT US", link: "/contact-us" },
   ];
 
   const checkIsActive = (item: { name: string; link: string }) => {
