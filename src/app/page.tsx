@@ -1,28 +1,26 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import Navbar from '@/components/Navbar';
-import HeroSlider from '@/components/HeroSlider';
-import AboutSection from '@/components/AboutSection';
-import ProductsServicesSection from '@/components/ProductsServicesSection';
-import EnterpriseSection from '@/components/EnterpriseSection';
-import TestimonialsSection from '@/components/TestimonialsSection';
-import LatestVideosSection from '@/components/LatestVideosSection';
-import DistributorBanner from '@/components/DistributorBanner';
-import LocateDistributorContactSection from '@/components/LocateDistributorContactSection';
-import Footer from '@/components/Footer';
-import EnquiryModal from '@/components/EnquiryModal';
+import React, { useState } from "react";
+import Navbar from "@/components/Navbar";
+import HeroSlider from "@/components/HeroSlider";
+import AboutSection from "@/components/AboutSection";
+import ProductsServicesSection from "@/components/ProductsServicesSection";
+import TestimonialsSection from "@/components/TestimonialsSection";
+import DistributorBanner from "@/components/DistributorBanner";
+import LocateDistributorContactSection from "@/components/LocateDistributorContactSection";
+import Footer from "@/components/Footer";
+import EnquiryModal from "@/components/EnquiryModal";
 
 export default function Home() {
   const [fontSizeMultiplier, setFontSizeMultiplier] = useState(1);
-  const [language, setLanguage] = useState<'EN' | 'HI'>('EN');
+  const [language, setLanguage] = useState<"EN" | "HI">("EN");
 
   const [isEnquiryOpen, setIsEnquiryOpen] = useState(false);
-  const [enquiryProduct, setEnquiryProduct] = useState('');
+  const [enquiryProduct, setEnquiryProduct] = useState("");
 
   const handleOpenEnquiry = (productName?: string) => {
     if (productName) setEnquiryProduct(productName);
-    else setEnquiryProduct('');
+    else setEnquiryProduct("");
     setIsEnquiryOpen(true);
   };
 
@@ -50,22 +48,16 @@ export default function Home() {
       {/* 4. Our Products and Services Section */}
       <ProductsServicesSection onSelectCategory={() => handleOpenEnquiry()} />
 
-      {/* 5. A Future Ready Enterprise Section */}
-      <EnterpriseSection />
-
       {/* 6. Client Testimonials Section */}
       <TestimonialsSection />
 
-      {/* 7. Latest Videos Section */}
-      <LatestVideosSection />
-
-      {/* 8. Full-Width Red Distributor Banner */}
+      {/* 7. Full-Width Red Distributor Banner */}
       <DistributorBanner onOpenEnquiry={handleOpenEnquiry} />
 
-      {/* 9. Locate Distributor Form & Contact Details Grid */}
+      {/* 8. Locate Distributor Form & Contact Details Grid */}
       <LocateDistributorContactSection onOpenEnquiry={handleOpenEnquiry} />
 
-      {/* 10. Dark Navy Footer & Sticky Enquiry / Chat Bot Mascot */}
+      {/* 9. Dark Navy Footer & Sticky Enquiry / Chat Bot Mascot */}
       <Footer onOpenEnquiry={handleOpenEnquiry} />
 
       {/* Enquiry Modal */}

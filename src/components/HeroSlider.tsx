@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import React, { useState, useEffect } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 export default function HeroSlider() {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -9,39 +9,63 @@ export default function HeroSlider() {
   const slides = [
     {
       id: 1,
-      title: 'FUTUR-X ULTRA-SYNTHETIC PREMIUM ENGINE OILS',
-      img: 'https://www.hplubricants.in/sites/default/files/FuturX-1.jpg',
-      link: '#products',
+      title: "HP Lubricants No. 1 Banner",
+      img: "/Banner No 1.png",
+      link: "#products",
     },
     {
       id: 2,
-      title: 'FUTUR-X NEXT GEN ENGINE PROTECTION',
-      img: 'https://www.hplubricants.in/sites/default/files/FuturX-2.jpg',
-      link: '#products',
+      title: "FUTUR-X ULTRA-SYNTHETIC PREMIUM ENGINE OILS",
+      img: "/FuturX-1.jpg",
+      link: "#products",
     },
     {
       id: 3,
-      title: 'HP RACER GEN6 2-WHEELER ENGINE OIL',
-      img: 'https://www.hplubricants.in/sites/default/files/Racer-Gen6.jpg',
-      link: '#products',
+      title: "FUTUR-X NEXT GEN ENGINE PROTECTION",
+      img: "/FuturX-2.jpg",
+      link: "#products",
     },
     {
       id: 4,
-      title: 'HIGH PERFORMANCE INDUSTRIAL & SECTORIAL LUBRICANTS',
-      img: 'https://www.hplubricants.in/sites/default/files/HPL-Sectorial-Web-Banner-1920x715-pix[9].jpg',
-      link: '#products',
+      title: "HP Lube New Banner",
+      img: "/HP_Lube_Banner_new.png",
+      link: "#products",
     },
     {
       id: 5,
-      title: 'HP MILCY FLEET HEAVY DUTY DIESEL ENGINE OIL',
-      img: 'https://www.hplubricants.in/sites/default/files/New%201.jpg',
-      link: '#products',
+      title: "HP Racer New Banner",
+      img: "/HP-Racer-new-1929-x715 copy (1) (1).jpg",
+      link: "#products",
     },
     {
       id: 6,
-      title: 'INDIA\'S LEADING LUBE MARKETER',
-      img: 'https://www.hplubricants.in/sites/default/files/Lubricants.jpg',
-      link: '#products',
+      title: "HIGH PERFORMANCE INDUSTRIAL & SECTORIAL LUBRICANTS",
+      img: "/HPL-Sectorial-Web-Banner-1920x715-pix[9].jpg",
+      link: "#products",
+    },
+    {
+      id: 7,
+      title: "INDIA'S LEADING LUBE MARKETER",
+      img: "/Lubricants.jpg",
+      link: "#products",
+    },
+    {
+      id: 8,
+      title: "HP MILCY FLEET HEAVY DUTY DIESEL ENGINE OIL",
+      img: "/New 1.jpg",
+      link: "#products",
+    },
+    {
+      id: 9,
+      title: "HP NEOSYNTH ENGINE OIL",
+      img: "/New 2.jpg",
+      link: "#products",
+    },
+    {
+      id: 10,
+      title: "HP RACER GEN6 2-WHEELER ENGINE OIL",
+      img: "/Racer-Gen6.jpg",
+      link: "#products",
     },
   ];
 
@@ -52,7 +76,8 @@ export default function HeroSlider() {
     return () => clearInterval(timer);
   }, [slides.length]);
 
-  const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
+  const prevSlide = () =>
+    setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
   const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % slides.length);
 
   return (
@@ -63,7 +88,7 @@ export default function HeroSlider() {
           key={slide.id}
           href={slide.link}
           className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${
-            idx === currentSlide ? 'opacity-100 z-10' : 'opacity-0 z-0'
+            idx === currentSlide ? "opacity-100 z-10" : "opacity-0 z-0"
           }`}
         >
           <img
@@ -72,7 +97,7 @@ export default function HeroSlider() {
             className="w-full h-full object-cover object-center"
             onError={(e) => {
               (e.target as HTMLImageElement).src =
-                'https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&w=1600&q=80';
+                "https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&w=1600&q=80";
             }}
           />
         </a>
@@ -80,19 +105,19 @@ export default function HeroSlider() {
 
       {/* Prev / Next Arrows */}
       <button
+        className=" absolute left-3 top-1/2 text-white -translate-y-1/2 z-20 font-extrabold"
         onClick={prevSlide}
-        className="absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-black/40 hover:bg-[#eb1e25] text-white p-2.5 rounded-full transition flex items-center justify-center"
         aria-label="Previous Slide"
       >
-        <ChevronLeft size={28} />
+        <ChevronLeft size={36} strokeWidth={3.5} className="drop-shadow-md" />
       </button>
 
       <button
         onClick={nextSlide}
-        className="absolute right-4 top-1/2 -translate-y-1/2 z-20 bg-black/40 hover:bg-[#eb1e25] text-white p-2.5 rounded-full transition flex items-center justify-center"
+        className=" absolute right-3 top-1/2 text-white -translate-y-1/2 z-20 font-extrabold"
         aria-label="Next Slide"
       >
-        <ChevronRight size={28} />
+        <ChevronRight size={36} strokeWidth={3.5} className="drop-shadow-md" />
       </button>
 
       {/* Bottom Dot Pagination */}
@@ -102,7 +127,7 @@ export default function HeroSlider() {
             key={idx}
             onClick={() => setCurrentSlide(idx)}
             className={`w-3 h-3 rounded-full transition-all ${
-              idx === currentSlide ? 'bg-[#eb1e25] w-6' : 'bg-white/60 hover:bg-white'
+              idx === currentSlide ? "bg-[#eb1e25] w-3" : "bg-white"
             }`}
             aria-label={`Slide ${idx + 1}`}
           />
