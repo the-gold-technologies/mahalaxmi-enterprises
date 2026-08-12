@@ -8,11 +8,11 @@ export default function AboutSection() {
       <div className="max-w-4xl mx-auto px-4">
         {/* Section Heading with dark blue underline */}
         <h1 className="text-3xl md:text-4xl font-extrabold text-[#002b5c] uppercase tracking-wide section-underline">
-          About <span className="text-[#002b5c]">HP Lubricants</span>
+          About <span className="text-[#002b5c]">Mahalaxmi Enterprises</span>
         </h1>
 
-        <p className="mt-6 text-gray-700 text-sm md:text-base leading-relaxed max-w-3xl mx-auto">
-          HP Lubricants is an integral part of Hindustan Petroleum Corporation Limited, one of India's frontline oil majors, committed to providing energy and fueling growth in every significant area of development. In pursuit of this vision, there is a sustained emphasis on environment protection and preserving the cultural heritage of India.
+        <p className="mt-6 text-gray-700 text-sm md:text-base leading-relaxed max-w-3xl mx-auto font-sans">
+          <strong>Mahalaxmi Enterprises</strong> is an Authorized Industrial Lubricants Division (ILD) of HP Lubricants (Hindustan Petroleum Corporation Ltd.), offering a comprehensive range of industrial lubricants, greases, metalworking fluids, and industrial maintenance solutions. Backed by HP Lubricant’s trusted quality, we deliver high-performance products that enhance equipment reliability, reduce downtime, and improve operational efficiency across industries.
         </p>
 
         <div className="mt-8">

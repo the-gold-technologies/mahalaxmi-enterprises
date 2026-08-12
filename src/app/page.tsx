@@ -6,6 +6,7 @@ import HeroSlider from "@/components/HeroSlider";
 import AboutSection from "@/components/AboutSection";
 import ProductsServicesSection from "@/components/ProductsServicesSection";
 import TestimonialsSection from "@/components/TestimonialsSection";
+import TrustedClientsSection from "@/components/TrustedClientsSection";
 import DistributorBanner from "@/components/DistributorBanner";
 import LocateDistributorContactSection from "@/components/LocateDistributorContactSection";
 import Footer from "@/components/Footer";
@@ -50,6 +51,9 @@ export default function Home() {
 
       {/* 6. Client Testimonials Section */}
       <TestimonialsSection />
+
+      {/* 6.5. Trusted Clients & Partners Infinite Marquee Section */}
+      <TrustedClientsSection />
 
       {/* 7. Full-Width Red Distributor Banner */}
       <DistributorBanner onOpenEnquiry={handleOpenEnquiry} />

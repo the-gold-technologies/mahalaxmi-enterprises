@@ -11,13 +11,6 @@ export default function ProductsServicesSection({ onSelectCategory }: ProductsSe
 
   const items = [
     {
-      id: 'automotive',
-      name: 'Automotive Oils',
-      link: '#products',
-      img: '/automotive-1.png',
-      hoverImg: '/automotive-2.png',
-    },
-    {
       id: 'industrial',
       name: 'Industrial Oils',
       link: '#products',
@@ -25,32 +18,11 @@ export default function ProductsServicesSection({ onSelectCategory }: ProductsSe
       hoverImg: '/industrial-2.png',
     },
     {
-      id: 'specialties',
-      name: 'Specialties',
-      link: '#products',
-      img: '/specialities-1.png',
-      hoverImg: '/specialities-2.png',
-    },
-    {
       id: 'greases',
       name: 'Greases',
       link: '#products',
       img: '/greases-1.png',
       hoverImg: '/greases-2.png',
-    },
-    {
-      id: 'marine',
-      name: 'Marine Oils',
-      link: '#products',
-      img: '/marine-oils-1.png',
-      hoverImg: '/marine-oils-2.png',
-    },
-    {
-      id: 'futurx',
-      name: 'FUTURX',
-      link: '#products',
-      img: '/automotive-1.png',
-      hoverImg: '/automotive-2.png',
     },
   ];
 
@@ -66,8 +38,8 @@ export default function ProductsServicesSection({ onSelectCategory }: ProductsSe
           HP Lubricants has always been in the forefront developing and marketing of technology advanced lubricants as per the market trends
         </p>
 
-        {/* 6 Category Items Grid */}
-        <div className="mt-12 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-6 md:gap-8 justify-items-center">
+        {/* 2 Category Items Centered */}
+        <div className="mt-12 flex justify-center items-center gap-12 sm:gap-20 flex-wrap">
           {items.map((item) => {
             const isHovered = hoveredId === item.id;
             const bgImage = isHovered ? item.hoverImg : item.img;
