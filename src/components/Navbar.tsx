@@ -51,31 +51,8 @@ export default function Navbar({
       ],
     },
     {
-      name: "INTERNATIONAL",
-      link: "#international",
-      sub: [
-        { name: "HP International", link: "#international" },
-        { name: "HMEF Middle East", link: "#international" },
-      ],
-    },
-    {
-      name: "HP CONNECT",
-      link: "#connect",
-      sub: [
-        { name: "HP Impact", link: "#enterprise" },
-        { name: "FAQ's", link: "#connect" },
-        { name: "High Performance Tips", link: "#connect" },
-        { name: "Videos", link: "#videos" },
-      ],
-    },
-    {
-      name: "LUBE DISTRIBUTOR",
-      link: "#distributor",
-      sub: [
-        { name: "Become a Lube Distributor", link: "#distributor" },
-        { name: "Locate a Lube Distributor", link: "#distributor" },
-        { name: "Become a Developer", link: "#distributor" },
-      ],
+      name: "EVENTS & GALLERY",
+      link: "/events",
     },
     { name: "BLOGS", link: "#blogs" },
     { name: "CONTACT US", link: "#contact" },
