@@ -1,9 +1,19 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Search, ChevronDown, Menu, X, Plus, Minus } from "lucide-react";
+import {
+  Search,
+  ChevronDown,
+  ChevronRight,
+  Menu,
+  X,
+  Plus,
+  Minus,
+  Layers,
+} from "lucide-react";
+import { productsData } from "@/data/productsData";
 
 interface NavbarProps {
   fontSizeMultiplier: number;
@@ -21,6 +31,9 @@ export default function Navbar({
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  const [activeHoverCategory, setActiveHoverCategory] = useState<string>(
+    productsData[0]?.slug || "automotive-oils",
+  );
   const [activeTab, setActiveTab] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -34,26 +47,13 @@ export default function Navbar({
 
   const navItems = [
     { name: "HOME", link: "/" },
-    {
-      name: "ABOUT US",
-      link: "/about-us",
-    },
+    { name: "ABOUT US", link: "/about-us" },
     {
       name: "PRODUCTS & SERVICES",
-      link: "#products",
-      sub: [
-        { name: "FUTUR-X", link: "#products" },
-        { name: "Automotive Oils", link: "#products" },
-        { name: "Industrial Oils", link: "#products" },
-        { name: "Specialties", link: "#products" },
-        { name: "Greases", link: "#products" },
-        { name: "Marine Oils", link: "#products" },
-      ],
+      link: "/products",
+      isMegaMenu: true,
     },
-    {
-      name: "EVENTS & GALLERY",
-      link: "/events",
-    },
+    { name: "EVENTS & GALLERY", link: "/events" },
     { name: "BLOGS", link: "/blogs" },
     { name: "CONTACT US", link: "/contact-us" },
   ];
@@ -62,18 +62,21 @@ export default function Navbar({
     if (item.link === "/") {
       return pathname === "/" && (!activeTab || activeTab === "HOME");
     }
-    if (item.link.startsWith("/")) {
+    if (item.link.startsWith("/") && item.link !== "/") {
       return pathname === item.link || pathname.startsWith(item.link + "/");
     }
     return activeTab === item.name;
   };
 
+  const activeCategoryData =
+    productsData.find((c) => c.slug === activeHoverCategory) || productsData[0];
+
   return (
     <header className="relative z-50 bg-white shadow-md">
       {/* Top Header Utility Bar */}
-      <div className=" absolute right-10 top-4">
-        <div className=" flex items-center gap-3">
-          <form className=" flex items-center font-sans">
+      <div className="absolute right-10 top-4">
+        <div className="flex items-center gap-3">
+          <form className="flex items-center font-sans">
             <input
               type="text"
               placeholder="Search"
@@ -83,7 +86,7 @@ export default function Navbar({
             />
             <button
               type="submit"
-              className="bg-[#eb1e25] text-white h-[32px] px-2.5 border border-[#eb1e25] flex items-center justify-center hover:bg-[#c4141a] transition-colors"
+              className="bg-[#eb1e25] text-white h-[32px] px-2.5 border border-[#eb1e25] flex items-center justify-center hover:bg-[#c4141a] transition-colors cursor-pointer"
               aria-label="Search"
             >
               <Search size={15} className="font-bold stroke-[2.5]" />
@@ -94,7 +97,7 @@ export default function Navbar({
             <span className="text-gray-600 text-md font-sans">Text</span>
             <button
               onClick={increaseFont}
-              className="bg-[#002b5c] text-white p-0.5  flex items-center justify-center hover:bg-opacity-90"
+              className="bg-[#002b5c] text-white p-0.5 flex items-center justify-center hover:bg-opacity-90 cursor-pointer"
               title="Increase Font Size"
               type="button"
             >
@@ -102,7 +105,7 @@ export default function Navbar({
             </button>
             <button
               onClick={decreaseFont}
-              className="bg-[#002b5c] text-white p-0.5  flex items-center justify-center hover:bg-opacity-90"
+              className="bg-[#002b5c] text-white p-0.5 flex items-center justify-center hover:bg-opacity-90 cursor-pointer"
               title="Decrease Font Size"
               type="button"
             >
@@ -113,9 +116,9 @@ export default function Navbar({
       </div>
 
       {/* Main Navbar */}
-      <div className="flex justify-between items-end py-0.5 px-10 pt-4 ">
+      <div className="flex justify-between items-end py-0.5 px-10 pt-4">
         {/* Logo */}
-        <Link href="/" className="flex items-end gap-10 ">
+        <Link href="/" className="flex items-end gap-10">
           <img
             src="/logo.png"
             alt="HP Lubricants - Power to Perform"
@@ -129,14 +132,14 @@ export default function Navbar({
           <div className="flex items-start flex-col gap-0.5 mb-4">
             <button
               onClick={() => setLanguage("EN")}
-              className={`text-[15px] text-[#337ab7] tracking-wide font-sans`}
+              className={`text-[15px] text-[#337ab7] tracking-wide font-sans cursor-pointer ${language === "EN" ? "font-bold" : ""}`}
             >
               English
             </button>
 
             <button
               onClick={() => setLanguage("HI")}
-              className={`text-[15px] text-[#337ab7] tracking-wide font-sans`}
+              className={`text-[15px] text-[#337ab7] tracking-wide font-sans cursor-pointer ${language === "HI" ? "font-bold" : ""}`}
             >
               हिन्दी
             </button>
@@ -144,13 +147,13 @@ export default function Navbar({
         </Link>
 
         {/* Desktop Menu */}
-        <nav className="hidden lg:flex items-center gap-5 mb-6">
+        <nav className="hidden lg:flex items-center gap-6 mb-6">
           {navItems.map((item, idx) => {
             const isActive = checkIsActive(item);
             return (
               <div
                 key={idx}
-                className="relative group py-2"
+                className="relative py-2"
                 onMouseEnter={() => setOpenDropdown(item.name)}
                 onMouseLeave={() => setOpenDropdown(null)}
               >
@@ -164,7 +167,7 @@ export default function Navbar({
                   }`}
                 >
                   {item.name}
-                  {item.sub && (
+                  {item.isMegaMenu && (
                     <ChevronDown
                       size={14}
                       className={
@@ -176,19 +179,81 @@ export default function Navbar({
                   )}
                 </Link>
 
-                {/* Submenu Dropdown */}
-                {item.sub && openDropdown === item.name && (
-                  <div className="absolute top-full left-0 w-52 bg-white shadow-lg border border-gray-100 rounded-b py-2 z-50 animate-fadeIn">
-                    {item.sub.map((s, sIdx) => (
-                      <Link
-                        key={sIdx}
-                        href={s.link}
-                        onClick={() => setActiveTab(item.name)}
-                        className="block px-4 py-2 text-xs font-semibold text-gray-700 hover:bg-gray-50 hover:text-[#eb1e25] transition"
+                {/* Clean 2-Column Mega Menu (Pre-populated with first category, zero empty boxes) */}
+                {item.isMegaMenu && openDropdown === item.name && (
+                  <div className="absolute top-full left-0 -ml-12 w-[560px] bg-white shadow-2xl border border-gray-100 rounded-2xl p-4 z-50 grid grid-cols-12 gap-4 animate-in fade-in zoom-in-95 duration-150">
+                    {/* Left Column: Categories List */}
+                    <div className="col-span-5 border-r border-gray-100 pr-2.5 space-y-1">
+                      <div className="text-[11px] font-extrabold text-gray-400 uppercase tracking-wider px-3 py-1 mb-1 flex items-center gap-1.5">
+                        <Layers size={13} className="text-[#eb1e25]" />{" "}
+                        Categories
+                      </div>
+                      {productsData.map((cat) => {
+                        const isCatActive = activeHoverCategory === cat.slug;
+                        return (
+                          <div
+                            key={cat.slug}
+                            onMouseEnter={() =>
+                              setActiveHoverCategory(cat.slug)
+                            }
+                            className="block"
+                          >
+                            <Link
+                              href={`/products/${cat.slug}`}
+                              className={`flex items-center justify-between px-3 py-2.5 text-xs font-bold transition-all duration-150 cursor-pointer ${
+                                isCatActive
+                                  ? "bg-[#002b5c] text-white border-l-4 border-[#eb1e25] rounded-r-lg rounded-l-xs shadow-xs"
+                                  : "text-gray-700 hover:bg-gray-50 hover:text-[#eb1e25] rounded-lg"
+                              }`}
+                            >
+                              <span>{cat.name}</span>
+                              <ChevronRight
+                                size={14}
+                                className={
+                                  isCatActive
+                                    ? "text-[#eb1e25]"
+                                    : "text-gray-400"
+                                }
+                              />
+                            </Link>
+                          </div>
+                        );
+                      })}
+
+                    </div>
+
+                    {/* Right Column: Pre-populated Sub-Products List */}
+                    <div className="col-span-7 pl-1 flex flex-col justify-between">
+                      <div
+                        key={activeCategoryData.slug}
+                        className="animate-in fade-in duration-150 space-y-2"
                       >
-                        {s.name}
-                      </Link>
-                    ))}
+                        <div className="text-[11px] font-extrabold text-[#002b5c] uppercase tracking-wider px-2 py-1 border-b border-gray-100 flex items-center justify-between">
+                          <span>{activeCategoryData.name}</span>
+                          <span className="text-[10px] text-[#eb1e25] font-bold bg-red-50 px-2 py-0.5 rounded">
+                            {activeCategoryData.products.length} Products
+                          </span>
+                        </div>
+                        <div className="space-y-1 max-h-56 overflow-y-auto pr-1">
+                          {activeCategoryData.products.map((prod) => (
+                            <Link
+                              key={prod.id}
+                              href={`/products/${prod.categorySlug}/${prod.slug}`}
+                              className="block px-3 py-2 text-xs font-medium text-gray-700 hover:bg-red-50 hover:text-[#eb1e25] rounded-lg transition-all duration-150 group border border-transparent hover:border-red-100"
+                            >
+                              <div className="font-bold text-[#002b5c] group-hover:text-[#eb1e25] transition-colors">
+                                {prod.name}
+                              </div>
+                              {prod.subtitle && (
+                                <div className="text-[10px] text-gray-500 font-normal">
+                                  {prod.subtitle}
+                                </div>
+                              )}
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 )}
               </div>
@@ -199,7 +264,7 @@ export default function Navbar({
         {/* Mobile Hamburger Toggle */}
         <button
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="lg:hidden text-gray-800 p-2 focus:outline-none"
+          className="lg:hidden text-gray-800 p-2 focus:outline-none cursor-pointer"
           aria-label="Toggle Menu"
         >
           {mobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
@@ -220,24 +285,23 @@ export default function Navbar({
                     setMobileMenuOpen(false);
                   }}
                   className={`block text-sm font-bold py-1.5 ${
-                    isActive ? "text-[#eb1e25]" : "text-gray-800 hover:text-[#eb1e25]"
+                    isActive
+                      ? "text-[#eb1e25]"
+                      : "text-gray-800 hover:text-[#eb1e25]"
                   }`}
                 >
                   {item.name}
                 </Link>
-                {item.sub && (
+                {item.isMegaMenu && (
                   <div className="pl-4 flex flex-col gap-1 border-l-2 border-red-500 my-1">
-                    {item.sub.map((s, sIdx) => (
+                    {productsData.map((cat) => (
                       <Link
-                        key={sIdx}
-                        href={s.link}
-                        onClick={() => {
-                          setActiveTab(item.name);
-                          setMobileMenuOpen(false);
-                        }}
-                        className="text-xs text-gray-600 hover:text-[#eb1e25] py-1"
+                        key={cat.slug}
+                        href={`/products/${cat.slug}`}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="text-xs text-gray-600 hover:text-[#eb1e25] py-1 font-semibold"
                       >
-                        {s.name}
+                        {cat.name}
                       </Link>
                     ))}
                   </div>
