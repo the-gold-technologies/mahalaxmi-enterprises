@@ -7,7 +7,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import EnquiryModal from "@/components/EnquiryModal";
 import DownloadModal from "@/components/DownloadModal";
-import { getProductBySlug, getCategoryBySlug, productsData } from "@/data/productsData";
+import { getProductBySlug, getCategoryBySlug } from "@/data/productsData";
 import { ArrowLeft, FileText, Droplet, Search } from "lucide-react";
 
 export default function ProductDetailPage() {
@@ -58,7 +58,7 @@ export default function ProductDetailPage() {
     group.products.some((p) => p.slug === product.slug)
   );
 
-  // If current group has multiple products use them, else show top products in category
+  // Sibling products from current sub-category group
   const groupProducts = currentGroup ? currentGroup.products : [];
   const siblingProducts =
     groupProducts.length > 1
@@ -77,6 +77,9 @@ export default function ProductDetailPage() {
     else setEnquiryProduct(product.name);
     setIsEnquiryOpen(true);
   };
+
+  const hasMultiCols = Boolean(product.tableHeaders && product.tableHeaders.length > 0);
+  const colCount = hasMultiCols ? product.tableHeaders!.length : 1;
 
   return (
     <main
@@ -155,7 +158,7 @@ export default function ProductDetailPage() {
                 <p className="text-xs text-gray-700 leading-relaxed font-sans">
                   {product.specsText}
                 </p>
-                <div className="w-14 h-1 bg-[#002b5c] my-3" />
+                <div className="w-16 h-[3px] bg-[#002b5c] my-3" />
               </div>
             )}
           </div>
@@ -181,8 +184,20 @@ export default function ProductDetailPage() {
           </div>
         </div>
 
-        {/* Lower Main Sections: Application Areas, Performance Benefits, Special Features */}
+        {/* Lower Main Sections: Description, Application Areas, Performance Benefits, Special Features */}
         <div className="max-w-4xl space-y-8 mb-12">
+          {/* Description / Overview */}
+          {product.description && (
+            <div className="space-y-2">
+              <h3 className="text-lg md:text-xl font-bold text-[#eb1e25]">
+                Description:
+              </h3>
+              <p className="text-xs md:text-sm text-gray-700 leading-relaxed font-sans">
+                {product.description}
+              </p>
+            </div>
+          )}
+
           {/* Application Areas */}
           {product.applicationAreas && (
             <div className="space-y-2">
@@ -226,7 +241,7 @@ export default function ProductDetailPage() {
             </div>
           )}
 
-          {/* Physico-Chemical Properties Table (Replicating exact table from HP Lubricants screenshot) */}
+          {/* Physico-Chemical Properties Table (Matching HP Lubricants multi-column UI 100%) */}
           {product.propertiesTable && product.propertiesTable.length > 0 && (
             <div className="space-y-3 pt-4">
               <h3 className="text-lg md:text-xl font-bold text-[#eb1e25]">
@@ -236,10 +251,26 @@ export default function ProductDetailPage() {
                 <table className="w-full text-left text-xs font-sans border-collapse">
                   <thead>
                     <tr className="bg-[#002b5c] text-white">
-                      <th colSpan={2} className="py-3 px-4 text-center font-extrabold uppercase border-b border-[#002b5c]">
+                      <th
+                        colSpan={hasMultiCols ? colCount + 1 : 2}
+                        className="py-3 px-4 text-center font-extrabold uppercase border-b border-[#002b5c]"
+                      >
                         {product.name}
                       </th>
                     </tr>
+                    {hasMultiCols && (
+                      <tr className="bg-[#002b5c] text-white border-t border-white/20">
+                        <th className="py-2 px-4 border-r border-white/20"></th>
+                        {product.tableHeaders!.map((hdr, hIdx) => (
+                          <th
+                            key={hIdx}
+                            className="py-2 px-4 text-center font-bold border-r border-white/20 last:border-r-0"
+                          >
+                            {hdr}
+                          </th>
+                        ))}
+                      </tr>
+                    )}
                   </thead>
                   <tbody>
                     {product.propertiesTable.map((row, rIdx) => (
@@ -250,9 +281,30 @@ export default function ProductDetailPage() {
                         <td className="py-2.5 px-4 font-semibold text-gray-700 border-b border-r border-gray-200">
                           {row.property}
                         </td>
-                        <td className="py-2.5 px-4 text-gray-900 font-bold border-b border-gray-200 text-center">
-                          {row.value}
-                        </td>
+
+                        {hasMultiCols ? (
+                          row.values ? (
+                            row.values.map((v, vIdx) => (
+                              <td
+                                key={vIdx}
+                                className="py-2.5 px-4 text-gray-900 font-bold border-b border-r border-gray-200 last:border-r-0 text-center"
+                              >
+                                {v}
+                              </td>
+                            ))
+                          ) : (
+                            <td
+                              colSpan={colCount}
+                              className="py-2.5 px-4 text-gray-900 font-bold border-b border-gray-200 text-center"
+                            >
+                              {row.value}
+                            </td>
+                          )
+                        ) : (
+                          <td className="py-2.5 px-4 text-gray-900 font-bold border-b border-gray-200 text-center">
+                            {row.value}
+                          </td>
+                        )}
                       </tr>
                     ))}
                   </tbody>
@@ -286,37 +338,40 @@ export default function ProductDetailPage() {
           </div>
         </div>
 
-        {/* Sub-Category Teardrop Navigation Grid (Matching HP Lubricants Screenshot 100%) */}
-        <div className="mt-20 pt-8">
+        {/* Sub-Category Teardrop Navigation Grid with Reduced Top Gap & Slightly Larger Font Size */}
+        <div className="mt-8 pt-2">
           <div className="border-t border-gray-200">
             {Array.from({ length: Math.ceil(category.subCategoryGroups.length / 4) }).map((_, rIdx) => {
               const rowItems = category.subCategoryGroups.slice(rIdx * 4, rIdx * 4 + 4);
               return (
                 <div
                   key={rIdx}
-                  className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-6 items-center py-3.5 border-b border-gray-200"
+                  className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 items-center py-5 border-b border-gray-200"
                 >
                   {rowItems.map((subGroup, cIdx) => {
-                    const isCurrentGroup = subGroup.title.toLowerCase() === currentGroup?.title.toLowerCase();
+                    const isCurrentGroup = Boolean(
+                      currentGroup?.title &&
+                        subGroup.title.trim().toLowerCase() === currentGroup.title.trim().toLowerCase()
+                    );
                     return (
                       <Link
                         key={cIdx}
                         href={`/products/${category.slug}#subcat-${rIdx * 4 + cIdx}`}
-                        className="flex items-center gap-2.5 group transition-colors py-0.5"
+                        className="flex items-center gap-3.5 group transition-colors py-1.5"
                       >
                         <Droplet
-                          size={15}
+                          size={21}
                           className={`shrink-0 transition-colors ${
                             isCurrentGroup
                               ? "text-[#eb1e25] fill-[#eb1e25]"
-                              : "text-[#555555] fill-[#555555] group-hover:text-[#eb1e25] group-hover:fill-[#eb1e25]"
+                              : "text-[#475569] fill-[#475569] group-hover:text-[#eb1e25] group-hover:fill-[#eb1e25]"
                           }`}
                         />
                         <span
-                          className={`text-[11px] font-bold uppercase tracking-wide leading-tight transition-colors ${
+                          className={`text-sm md:text-[15px] font-normal uppercase tracking-normal leading-relaxed transition-colors ${
                             isCurrentGroup
-                              ? "text-[#eb1e25]"
-                              : "text-[#555555] group-hover:text-[#eb1e25]"
+                              ? "text-[#eb1e25] font-semibold"
+                              : "text-[#334155] group-hover:text-[#eb1e25]"
                           }`}
                         >
                           {subGroup.title}

@@ -36,8 +36,12 @@ export default function CategoryProductsPage() {
           setLanguage={setLanguage}
         />
         <div className="max-w-4xl mx-auto px-4 py-20 text-center">
-          <h1 className="text-3xl font-extrabold text-[#002b5c] mb-4">Category Not Found</h1>
-          <p className="text-gray-600 mb-8">The requested product category could not be found.</p>
+          <h1 className="text-3xl font-extrabold text-[#002b5c] mb-4">
+            Category Not Found
+          </h1>
+          <p className="text-gray-600 mb-8">
+            The requested product category could not be found.
+          </p>
           <Link
             href="/products/industrial-oils"
             className="inline-flex items-center gap-2 bg-[#002b5c] text-white font-bold px-6 py-3 rounded-lg hover:bg-[#eb1e25] transition"
@@ -93,12 +97,20 @@ export default function CategoryProductsPage() {
             const remainingWords = words.slice(1).join(" ");
 
             return (
-              <div key={idx} id={`subcat-${idx}`} className="flex flex-col space-y-5 scroll-mt-24">
+              <div
+                key={idx}
+                id={`subcat-${idx}`}
+                className="flex flex-col space-y-5 scroll-mt-24"
+              >
                 {/* Header Title with Dark Blue Underline on First Word */}
                 <div className="border-b border-gray-200 pb-2">
                   <h2 className="text-lg md:text-xl font-extrabold text-[#002b5c] tracking-wide uppercase inline-block relative">
-                    <span className="border-b-4 border-[#002b5c] pb-2">{firstWord}</span>
-                    {remainingWords && <span className="ml-2">{remainingWords}</span>}
+                    <span className="border-b-4 border-[#002b5c] pb-2">
+                      {firstWord}
+                    </span>
+                    {remainingWords && (
+                      <span className="ml-2">{remainingWords}</span>
+                    )}
                   </h2>
                 </div>
 
@@ -144,40 +156,6 @@ export default function CategoryProductsPage() {
               </div>
             );
           })}
-        </div>
-
-        {/* Sub-Category Teardrop Navigation Grid (Matching HP Lubricants Screenshot 100%) */}
-        <div className="mt-20 pt-8">
-          <div className="border-t border-gray-200">
-            {Array.from({ length: rowsCount }).map((_, rIdx) => {
-              const rowItems = category.subCategoryGroups.slice(rIdx * 4, rIdx * 4 + 4);
-              return (
-                <div
-                  key={rIdx}
-                  className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-6 items-center py-3.5 border-b border-gray-200"
-                >
-                  {rowItems.map((subGroup, cIdx) => {
-                    const itemIdx = rIdx * 4 + cIdx;
-                    return (
-                      <a
-                        key={cIdx}
-                        href={`#subcat-${itemIdx}`}
-                        className="flex items-center gap-2.5 group transition-colors py-0.5"
-                      >
-                        <Droplet
-                          size={15}
-                          className="text-[#555555] fill-[#555555] group-hover:text-[#eb1e25] group-hover:fill-[#eb1e25] transition-colors shrink-0"
-                        />
-                        <span className="text-[11px] font-bold text-[#555555] group-hover:text-[#eb1e25] uppercase tracking-wide leading-tight transition-colors">
-                          {subGroup.title}
-                        </span>
-                      </a>
-                    );
-                  })}
-                </div>
-              );
-            })}
-          </div>
         </div>
       </div>
 

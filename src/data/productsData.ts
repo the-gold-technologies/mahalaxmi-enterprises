@@ -1,6 +1,7 @@
 export interface PhysicoChemicalProperty {
   property: string;
   value: string;
+  values?: string[];
 }
 
 export interface ProductItem {
@@ -12,10 +13,12 @@ export interface ProductItem {
   categoryName: string;
   subCategoryTitle?: string;
   containerImage: string;
+  description?: string;
   applicationAreas: string;
   performanceBenefits: string[];
   specialFeatures?: string[];
   specsText?: string;
+  tableHeaders?: string[];
   propertiesTable: PhysicoChemicalProperty[];
   pdfUrl: string;
   msdsUrl: string;
@@ -166,7 +169,7 @@ const cylinderGroup: SubCategoryGroup = {
       categoryName: "Industrial Oils",
       subCategoryTitle: "CYLINDER OIL",
       containerImage: OFFICIAL_BARREL_IMG,
-      applicationAreas: "Steam engine cylinders and worm gear drives.",
+      applicationAreas: "Steam engine cylinders and worm gear drives operating under heavy wet steam conditions.",
       performanceBenefits: ["Compounded with fatty oils", "Resists water washing"],
       propertiesTable: [{ property: "Viscosity @ 100°C", value: "30 - 45 cSt" }],
       pdfUrl: "/docs/TDS.pdf",
@@ -176,7 +179,7 @@ const cylinderGroup: SubCategoryGroup = {
 };
 
 // ----------------------------------------------------
-// 3. FILM OIL
+// 3. FILM OIL (Matching live site 100%)
 // ----------------------------------------------------
 const filmGroup: SubCategoryGroup = {
   title: "FILM OIL",
@@ -186,16 +189,34 @@ const filmGroup: SubCategoryGroup = {
       id: "hp-film-oil",
       slug: "hp-film-oil",
       name: "HP FILM OIL",
-      subtitle: "FILM OIL",
+      subtitle: "FILM OILS & STEEL MILL BEARING OILS",
       categorySlug: "industrial-oils",
       categoryName: "Industrial Oils",
       subCategoryTitle: "FILM OIL",
       containerImage: OFFICIAL_BARREL_IMG,
-      applicationAreas: "Steel rolling mill Morgoil sleeve bearings.",
-      performanceBenefits: ["High demulsibility", "Heavy load carrying capacity"],
-      propertiesTable: [{ property: "ISO VG", value: "220 / 320 / 460" }],
-      pdfUrl: "/docs/TDS.pdf",
-      msdsUrl: "/docs/MSDS.pdf"
+      specsText: "HP FILM OIL grades meet IPSS 1-09-001-95 GRADE 1 TO 6 & IS : 6552-1987",
+      applicationAreas: "HP FILM OIL grades are recommended for use in anti-friction bearings, plain bearings, drive gears and pinion of steel mills, where operating conditions are moderate. They are also suitable for use in circulation systems, where oils with high demulsibility characteristics are required.",
+      performanceBenefits: [
+        "Excellent oxidation stability",
+        "High demulsibility",
+        "Non-corrosive to materials"
+      ],
+      specialFeatures: [
+        "HP FILM OILS are highly refined mineral oils suitable for oil film bearings used in steel plants. The product is blended from solvent extracted high viscosity index base stocks having excellent demulsibility characteristics. They also possess good oxidation and thermal stability."
+      ],
+      tableHeaders: ["46", "68", "100", "150", "220"],
+      propertiesTable: [
+        { property: "Appearance", value: "Bright & Clear" },
+        { property: "Kinematic, Viscosity, cSt, @ 40°C", value: "", values: ["46", "68", "100", "150", "220"] },
+        { property: "Kinematic, Viscosity, cSt, @ 100°C", value: "", values: ["4.0", "5.0", "6.1", "7.8", "10.1"] },
+        { property: "Viscosity Index, Min", value: "", values: ["90", "90", "90", "90", "90"] },
+        { property: "Flash Point, COC,°C, Min.", value: "", values: ["160", "190", "200", "210", "230"] },
+        { property: "Pour Point, °C, Max.", value: "", values: ["(-)18", "(-)18", "(-)15", "(-)12", "(-)12"] },
+        { property: "Copper Strip Corrosion, @ 100°C For 3 Hrs.", value: "Pass" },
+        { property: "Emulsion Characteristics, In 20 Minutes,ml, At 54°C At 82°C", value: "", values: ["40-37-3", "40-37-3", "-", "-", "-"] }
+      ],
+      pdfUrl: "/docs/HP_FILM_OIL_TDS.pdf",
+      msdsUrl: "/docs/HP_FILM_OIL_MSDS.pdf"
     },
     {
       id: "hp-steel-320",
