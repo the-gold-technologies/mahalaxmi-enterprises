@@ -54,7 +54,7 @@ export default function Navbar({
       name: "EVENTS & GALLERY",
       link: "/events",
     },
-    { name: "BLOGS", link: "#blogs" },
+    { name: "BLOGS", link: "/blogs" },
     { name: "CONTACT US", link: "/contact-us" },
   ];
 
