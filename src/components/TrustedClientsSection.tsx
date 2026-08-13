@@ -8,25 +8,25 @@ export default function TrustedClientsSection() {
       id: 'haldiram',
       name: "Haldiram's",
       category: 'Food Processing Giant',
-      logo: '/client-haldiram.svg',
+      logo: '/Haldirams.jpeg',
     },
     {
       id: 'thdc',
       name: 'THDC Khurja',
       category: 'Power & Thermal Energy',
-      logo: '/client-thdc.svg',
+      logo: '/THDC.jpeg',
     },
     {
       id: 'ordnance',
       name: 'Ordnance Factories',
       category: 'Ministry of Defence, Govt of India',
-      logo: '/client-ordnance.svg',
+      logo: '/Ordnan.jpeg',
     },
     {
       id: 'indian-army',
       name: 'Indian Army',
       category: 'Armed Forces of India',
-      logo: '/client-indian-army.svg',
+      logo: '/Indian_Army.jpeg',
     },
   ];
 

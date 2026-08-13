@@ -74,34 +74,51 @@ export default function Navbar({
   return (
     <header className="relative z-50 bg-white shadow-md">
       {/* Top Header Utility Bar */}
-      <div className="absolute right-10 top-4">
-        <div className="flex items-center gap-3">
+      <div className="absolute right-10 top-3 z-10">
+        <div className="flex items-center gap-4">
+          {/* Language Selector */}
+          <div className="flex items-center gap-1.5 text-xs text-[#337ab7]">
+            <button
+              onClick={() => setLanguage("EN")}
+              className={`hover:underline cursor-pointer ${language === "EN" ? "font-bold text-[#eb1e25]" : ""}`}
+            >
+              English
+            </button>
+            <span className="text-gray-400">|</span>
+            <button
+              onClick={() => setLanguage("HI")}
+              className={`hover:underline cursor-pointer ${language === "HI" ? "font-bold text-[#eb1e25]" : ""}`}
+            >
+              हिन्दी
+            </button>
+          </div>
+
           <form className="flex items-center font-sans">
             <input
               type="text"
               placeholder="Search"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="outline-none border font-sans border-[#CCCCCC] border-r-0 px-2.5 text-[14px] py-1 h-[32px]"
+              className="outline-none border font-sans border-[#CCCCCC] border-r-0 px-2.5 text-[13px] py-1 h-[30px] w-[140px] focus:w-[180px] transition-all"
             />
             <button
               type="submit"
-              className="bg-[#eb1e25] text-white h-[32px] px-2.5 border border-[#eb1e25] flex items-center justify-center hover:bg-[#c4141a] transition-colors cursor-pointer"
+              className="bg-[#eb1e25] text-white h-[30px] px-2.5 border border-[#eb1e25] flex items-center justify-center hover:bg-[#c4141a] transition-colors cursor-pointer"
               aria-label="Search"
             >
-              <Search size={15} className="font-bold stroke-[2.5]" />
+              <Search size={14} className="font-bold stroke-[2.5]" />
             </button>
           </form>
 
-          <div className="flex items-center gap-2">
-            <span className="text-gray-600 text-md font-sans">Text</span>
+          <div className="flex items-center gap-1.5">
+            <span className="text-gray-600 text-xs font-sans">Text</span>
             <button
               onClick={increaseFont}
               className="bg-[#002b5c] text-white p-0.5 flex items-center justify-center hover:bg-opacity-90 cursor-pointer"
               title="Increase Font Size"
               type="button"
             >
-              <Plus size={13} strokeWidth={3} />
+              <Plus size={12} strokeWidth={3} />
             </button>
             <button
               onClick={decreaseFont}
@@ -109,45 +126,29 @@ export default function Navbar({
               title="Decrease Font Size"
               type="button"
             >
-              <Minus size={13} strokeWidth={3} />
+              <Minus size={12} strokeWidth={3} />
             </button>
           </div>
         </div>
       </div>
 
       {/* Main Navbar */}
-      <div className="flex justify-between items-end py-0.5 px-10 pt-4">
+      <div className="flex justify-between items-center py-4 px-10 pt-10">
         {/* Logo */}
-        <Link href="/" className="flex items-end gap-10">
+        <Link href="/" className="flex items-center">
           <img
-            src="/logo.png"
-            alt="HP Lubricants - Power to Perform"
-            className="w-[200px] -ml-10"
+            src="/mahalaxmi png logo .png"
+            alt="Mahalaxmi Enterprises - HP Lubricants Authorized Partner"
+            className="h-14 sm:h-16 w-auto object-contain"
             onError={(e) => {
               (e.target as HTMLImageElement).src =
                 "https://www.hplubricants.in/sites/default/files/fevicon.png";
             }}
           />
-
-          <div className="flex items-start flex-col gap-0.5 mb-4">
-            <button
-              onClick={() => setLanguage("EN")}
-              className={`text-[15px] text-[#337ab7] tracking-wide font-sans cursor-pointer ${language === "EN" ? "font-bold" : ""}`}
-            >
-              English
-            </button>
-
-            <button
-              onClick={() => setLanguage("HI")}
-              className={`text-[15px] text-[#337ab7] tracking-wide font-sans cursor-pointer ${language === "HI" ? "font-bold" : ""}`}
-            >
-              हिन्दी
-            </button>
-          </div>
         </Link>
 
         {/* Desktop Menu */}
-        <nav className="hidden lg:flex items-center gap-6 mb-6">
+        <nav className="hidden lg:flex items-center gap-6">
           {navItems.map((item, idx) => {
             const isActive = checkIsActive(item);
             return (
@@ -219,7 +220,6 @@ export default function Navbar({
                           </div>
                         );
                       })}
-
                     </div>
 
                     {/* Right Column: Pre-populated Sub-Products List */}

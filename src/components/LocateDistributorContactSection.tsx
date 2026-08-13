@@ -132,13 +132,14 @@ export default function LocateDistributorContactSection({
               <div className="w-[110px] h-[4px] bg-[#002b5c] mt-3 mb-6" />
 
               {/* Logo Banner Graphic */}
-              <div className="my-6 flex justify-start">
+              <div className="my-10 flex justify-start">
                 <img
-                  src="/logo.png"
-                  alt="HP Lubricants Logo"
-                  className="h-24 object-contain"
+                  src="/mahalaxmi png logo .png"
+                  alt="Mahalaxmi Enterprises Logo"
+                  className="h-16 w-auto object-contain"
                   onError={(e) => {
-                    (e.target as HTMLImageElement).src = "/logo.png";
+                    (e.target as HTMLImageElement).src =
+                      "https://www.hplubricants.in/sites/default/files/fevicon.png";
                   }}
                 />
               </div>

@@ -1,7 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" width="200" height="100">
-  <rect width="200" height="100" rx="8" fill="#FFFFFF"/>
-  <path d="M 15 20 L 55 20 L 35 80 Z" fill="#002B5C"/>
-  <circle cx="35" cy="50" r="12" fill="#EB1E25"/>
-  <text x="65" y="48" fill="#002B5C" font-family="Arial, sans-serif" font-size="22" font-weight="900">THDC</text>
-  <text x="65" y="68" fill="#EB1E25" font-family="Arial, sans-serif" font-size="11" font-weight="bold">INDIA LIMITED</text>
-</svg>

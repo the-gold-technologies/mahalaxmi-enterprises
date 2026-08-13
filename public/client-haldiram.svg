@@ -1,5 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" width="200" height="100">
-  <rect width="200" height="100" rx="12" fill="#D32F2F"/>
-  <ellipse cx="100" cy="50" rx="90" ry="40" fill="none" stroke="#FFD54F" stroke-width="3"/>
-  <text x="100" y="62" fill="#FFFFFF" font-family="Georgia, serif" font-size="32" font-weight="900" text-anchor="middle">Haldiram&apos;s</text>
-</svg>
