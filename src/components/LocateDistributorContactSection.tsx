@@ -30,37 +30,37 @@ export default function LocateDistributorContactSection({
   };
 
   return (
-    <section id="contact" className="py-12 md:py-16 bg-white font-sans">
+    <section id="contact" className="py-8 sm:py-12 lg:py-16 bg-white font-sans">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col lg:flex-row items-start gap-6">
           {/* Left Column: LOCATE AN INDUSTRIAL LUBE DISTRIBUTOR (ILD)/ BAZAAR LUBE DISTRIBUTOR (BLD) */}
-          <div className="bg-[#ECEEF2] w-[70%] border-[#D1D1D1] border py-6">
+          <div className="bg-[#ECEEF2] w-full lg:w-[70%] border-[#D1D1D1] border p-4 sm:p-6 lg:py-6 lg:px-8">
             <div>
-              <h2 className="text-[#002749]  font-bold text-4xl uppercase leading-[1.25] pr-24">
+              <h2 className="text-[#002749] font-bold text-2xl sm:text-3xl lg:text-4xl uppercase leading-[1.25] pr-0 lg:pr-24">
                 LOCATE AN INDUSTRIAL LUBE DISTRIBUTOR (ILD)/ BAZAAR LUBE
                 DISTRIBUTOR (BLD)
               </h2>
-              <div className="w-[110px] h-[4px] bg-[#002b5c] mt-3 mb-8" />
+              <div className="w-[110px] h-[4px] bg-[#002b5c] mt-3 mb-6 sm:mb-8" />
 
-              <p className="text-sm  text-[#4b5563] mb-8 font-medium tracking-wide">
+              <p className="text-sm text-[#4b5563] mb-6 sm:mb-8 font-medium tracking-wide">
                 Find the dealer of HP products in your area by selecting your
                 options below.
               </p>
 
               <form
                 onSubmit={handleSearch}
-                className="flex flex-col gap-4 px-6"
+                className="flex flex-col gap-4 px-0 sm:px-6"
               >
                 {/* Type Selection */}
-                <div className="flex flex-col sm:flex-row sm:items-center">
-                  <label className="w-40 text-sm font-bold text-[#002b5c] flex-shrink-0">
+                <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-0">
+                  <label className="w-full sm:w-40 text-sm font-bold text-[#002b5c] flex-shrink-0">
                     Type<span className="text-[#eb1e25]">*</span>:
                   </label>
                   <div className="relative flex-1 w-full">
                     <select
                       value={lubeType}
                       onChange={(e) => setLubeType(e.target.value)}
-                      className="w-full bg-white border border-[#d1d5db] rounded px-4 py-1 text-sm text-gray-700 focus:outline-none shadow-sm cursor-pointer"
+                      className="w-full bg-white border border-[#d1d5db] rounded px-4 py-1.5 sm:py-1 text-sm text-gray-700 focus:outline-none shadow-sm cursor-pointer"
                     >
                       <option value="ILD">
                         Industrial Lube Distributor (ILD)
@@ -73,15 +73,15 @@ export default function LocateDistributorContactSection({
                 </div>
 
                 {/* Country Selection */}
-                <div className="flex flex-col sm:flex-row sm:items-center">
-                  <label className="w-40 text-sm font-bold text-[#002b5c] flex-shrink-0">
+                <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-0">
+                  <label className="w-full sm:w-40 text-sm font-bold text-[#002b5c] flex-shrink-0">
                     Country<span className="text-[#eb1e25]">*</span>:
                   </label>
-                  <div className="relative flex-1  w-full">
+                  <div className="relative flex-1 w-full">
                     <select
                       value={country}
                       onChange={(e) => setCountry(e.target.value)}
-                      className="w-full bg-white border border-[#d1d5db] rounded px-4 py-1 text-sm text-gray-700 focus:outline-none shadow-sm cursor-pointer"
+                      className="w-full bg-white border border-[#d1d5db] rounded px-4 py-1.5 sm:py-1 text-sm text-gray-700 focus:outline-none shadow-sm cursor-pointer"
                     >
                       <option value="India">India</option>
                       <option value="International">International</option>
@@ -90,10 +90,10 @@ export default function LocateDistributorContactSection({
                 </div>
 
                 {/* Submit Search Button */}
-                <div className="sm:ml-40 mt-4">
+                <div className="ml-0 sm:ml-40 mt-2 sm:mt-4">
                   <button
                     type="submit"
-                    className="bg-[#eb1e25] hover:bg-[#d0171d] text-white font-extrabold px-4 py-2.5 rounded text-sm uppercase tracking-wider shadow-none transition-all inline-block"
+                    className="bg-[#eb1e25] hover:bg-[#d0171d] text-white font-extrabold px-4 py-2.5 rounded text-sm uppercase tracking-wider shadow-none transition-all inline-block cursor-pointer"
                   >
                     SEARCH
                   </button>
@@ -124,7 +124,7 @@ export default function LocateDistributorContactSection({
           </div>
 
           {/* Right Column: CONTACT DETAILS */}
-          <div className="bg-[#ECEEF2] w-[30%] border-[#D1D1D1] border p-4">
+          <div className="bg-[#ECEEF2] w-full lg:w-[30%] border-[#D1D1D1] border p-4 sm:p-6">
             <div>
               <h2 className="text-2xl sm:text-3xl lg:text-[32px] font-extrabold text-[#002b5c] uppercase leading-tight tracking-tight">
                 CONTACT DETAILS
@@ -132,11 +132,11 @@ export default function LocateDistributorContactSection({
               <div className="w-[110px] h-[4px] bg-[#002b5c] mt-3 mb-6" />
 
               {/* Logo Banner Graphic */}
-              <div className="my-10 flex justify-start">
+              <div className="my-6 lg:my-10 flex justify-start">
                 <img
                   src="/mahalaxmi png logo .png"
                   alt="Mahalaxmi Enterprises Logo"
-                  className="h-16 w-auto object-contain"
+                  className="h-14 sm:h-16 w-auto object-contain"
                   onError={(e) => {
                     (e.target as HTMLImageElement).src =
                       "https://www.hplubricants.in/sites/default/files/fevicon.png";
@@ -145,7 +145,7 @@ export default function LocateDistributorContactSection({
               </div>
 
               {/* Contact Information List */}
-              <div className="mt-6 flex flex-col gap-8 text-sm text-[#374151] leading-relaxed">
+              <div className="mt-6 flex flex-col gap-6 sm:gap-8 text-sm text-[#374151] leading-relaxed">
                 {/* Address Item */}
                 <div className="flex gap-3.5 items-start">
                   <HomeIcon className="text-gray-800 w-5 h-5 flex-shrink-0 mt-0.5" />
@@ -166,7 +166,7 @@ export default function LocateDistributorContactSection({
                         18001214725
                       </span>
                     </p>
-                    <p className="text-xs sm:text-sm text-gray-600 mt-4 leading-relaxed">
+                    <p className="text-xs sm:text-sm text-gray-600 mt-3 sm:mt-4 leading-relaxed">
                       Working Hours Monday to Saturday from 9.00 am to 6.00pm
                       except for Public Holidays.
                     </p>
@@ -186,10 +186,10 @@ export default function LocateDistributorContactSection({
               </div>
 
               {/* Contact Us Action Button */}
-              <div className="mt-8 mb-4">
+              <div className="mt-6 sm:mt-8 mb-4">
                 <button
                   onClick={() => onOpenEnquiry("Direct Contact Support")}
-                  className="bg-[#eb1e25] hover:bg-[#d0171d] text-white font-extrabold px-8 py-2.5 rounded text-sm uppercase tracking-wider shadow-none transition-all inline-block"
+                  className="bg-[#eb1e25] hover:bg-[#d0171d] text-white font-extrabold px-8 py-2.5 rounded text-sm uppercase tracking-wider shadow-none transition-all inline-block cursor-pointer"
                 >
                   CONTACT US
                 </button>
