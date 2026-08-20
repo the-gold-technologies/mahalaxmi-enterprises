@@ -18,27 +18,23 @@ export default function EventsContent() {
       </div>
 
       {/* Intro Description */}
-      <p className="text-gray-700 text-sm md:text-base leading-relaxed mb-16 max-w-5xl font-sans">
-        HP Lubricants has always nurtured a deep relationship with their
-        stakeholders by frequently hosting meetings and events with them. This
-        includes meeting their business partners, strategic partners,
-        distributors, OEMs, agencies, mechanics and customers amongst many
-        others.
+      <p className="text-gray-700 text-sm md:text-base leading-relaxed mb-12 max-w-5xl font-sans">
+        Mahalaxmi Enterprises actively engages with their stakeholders by frequently hosting meetings and events with them. This includes meeting business partners, strategic partners, distributors, OEMs, agencies, mechanics, and industrial clients.
       </p>
 
-      {/* Photo Gallery Grid (3 columns) */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-14">
+      {/* Photo Gallery Grid (3 columns with rounded corners) */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         {galleryItems.map((item) => (
           <div
             key={item.id}
             onClick={() => setLightboxImage(item)}
-            className="group bg-white overflow-hidden shadow-xs hover:shadow-2xl transition-all duration-300 border border-gray-200 cursor-pointer hover:scale-[1.04] hover:-translate-y-1"
+            className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-200 cursor-pointer hover:-translate-y-1"
           >
-            <div className="relative overflow-hidden aspect-[4/3] bg-gray-100">
+            <div className="relative overflow-hidden aspect-[4/3] bg-gray-100 rounded-2xl">
               <img
                 src={item.image}
                 alt={item.altText}
-                className="w-full h-full object-cover group-hover:scale-115 transition-transform duration-500 ease-out"
+                className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-500 ease-out"
                 loading="lazy"
               />
             </div>

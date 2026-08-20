@@ -83,7 +83,7 @@ export default function TestimonialsSection() {
       org: "Tex Corp Ltd",
       location: "Gurgaon - Haryana",
       quote:
-        "Satisfied customer of Hytherm S. HP Lubricants has delivered superior performance across all our manufacturing operations.",
+        "Satisfied customer of Hytherm S. Mahalaxmi Enterprises has delivered superior performance across all our manufacturing operations.",
       image: "/hp-testimonial-7.png",
     },
     {
@@ -93,7 +93,7 @@ export default function TestimonialsSection() {
       org: "Real Strips Ltd.",
       location: "Ahmedabad - Gujarat",
       quote:
-        "HP Rolmet 40 & HP Rolmet 7 are best grades for cold rolling of stainless steel. Response of HPCL TS and Sales Team is very good.",
+        "HP Rolmet 40 & HP Rolmet 7 are best grades for cold rolling of stainless steel. Response of technical team and sales team is very good.",
       image: "/hp-testimonial-8.png",
     },
     {
@@ -113,7 +113,7 @@ export default function TestimonialsSection() {
       org: "Diesel Loco Shed GPR",
       location: "Pune - Maharashtra",
       quote:
-        "HP Lubricants is most trusted brand for Indian Railways and the only approved supplier for coolant.",
+        "Mahalaxmi Enterprises is most trusted partner for Indian Railways and the only approved supplier for coolant.",
       image: "/hp-testimonial-10.jpg",
     },
     {
@@ -123,7 +123,7 @@ export default function TestimonialsSection() {
       org: "Diesel Loco Shed GPR",
       location: "Pune - Maharashtra",
       quote:
-        "HPCL cares its customer for timely delivery and uninterrupted supply of its products. Customer service is prompt and efficient.",
+        "Mahalaxmi Enterprises cares its customer for timely delivery and uninterrupted supply of its products. Customer service is prompt and efficient.",
       image: "/hp-testimonial-11.jpg",
     },
     {
@@ -133,7 +133,7 @@ export default function TestimonialsSection() {
       org: "Sunbeam Auto Pvt Ltd",
       location: "Gurugram - Delhi NCR",
       quote:
-        "We are using HPCLs Hydraulic and Cutting oil for more than 20 years now. Performance is very good and technical support is exceptional.",
+        "We are using Hydraulic and Cutting oil for more than 20 years now. Performance is very good and technical support is exceptional.",
       image: "/hp-testimonial-12.jpg",
     },
     {
@@ -143,7 +143,7 @@ export default function TestimonialsSection() {
       org: "CEAT",
       location: "Mumbai - Maharashtra",
       quote:
-        "HPCL has been a reliable and strategic partner. We expect to continue this relationship and grow together for many years to come.",
+        "Mahalaxmi Enterprises has been a reliable and strategic partner. We expect to continue this relationship and grow together for many years to come.",
       image: "/hp-testimonial-13.png",
     },
     {
@@ -153,7 +153,7 @@ export default function TestimonialsSection() {
       org: "Amit Tractors",
       location: "Naubagh - Fatehpur",
       quote:
-        "HP Lubricants Star Retailer Program is best. Great rewards program for retailers and dealers across India.",
+        "Mahalaxmi Enterprises Retailer Program is best. Great rewards program for retailers and dealers across India.",
       image: "/hp-testimonial-14.png",
     },
     {
@@ -163,7 +163,7 @@ export default function TestimonialsSection() {
       org: "JCB Alliance Industrial Marketing",
       location: "New Delhi",
       quote:
-        "HPCL always deserves appreciation for their prompt action and technical support services.",
+        "Mahalaxmi Enterprises always deserves appreciation for their prompt action and technical support services.",
       image: "/hp-testimonial-3.png",
     },
     {
@@ -173,7 +173,7 @@ export default function TestimonialsSection() {
       org: "Vintage Car & Motorcycle Club",
       location: "Kolkata - West Bengal",
       quote:
-        "Even for our Vintage Cars and Motorcycles, we bank upon HP Lubricants for maximum performance.",
+        "Even for our Vintage Cars and Motorcycles, we bank upon Mahalaxmi Enterprises for maximum performance.",
       image: "/hp-testimonial-4.png",
     },
     {
@@ -203,7 +203,7 @@ export default function TestimonialsSection() {
       org: "Metro Auto Center",
       location: "Jamshedpur - Jharkhand",
       quote:
-        "HP Lubricants is best in the Market. Superior quality and price structure for customers.",
+        "Mahalaxmi Enterprises is best in the Market. Superior quality and price structure for customers.",
       image: "/hp-testimonial-7.png",
     },
     {
@@ -213,7 +213,7 @@ export default function TestimonialsSection() {
       org: "Mihir Traders",
       location: "Bhuj - Gujarat",
       quote:
-        "HP lubricant is excellent product with best price and Milcy is best success product of HP.",
+        "Mahalaxmi Enterprises is excellent with best price and Milcy is best success product.",
       image: "/hp-testimonial-9.jpg",
     },
     {
@@ -223,7 +223,7 @@ export default function TestimonialsSection() {
       org: "Samir Auto Garage",
       location: "Bhuj - Gujarat",
       quote:
-        "HP Lubricants is best product and performance, good grade wise performance like Milcy and Racer4.",
+        "Mahalaxmi Enterprises products give top performance, good grade wise performance like Milcy and Racer4.",
       image: "/hp-testimonial-10.jpg",
     },
     {
@@ -233,7 +233,7 @@ export default function TestimonialsSection() {
       org: "Smita Motors",
       location: "Unnao - Uttar Pradesh",
       quote:
-        "We sell Milcy. HP Lubricants are good, no complaints so far from mechanics or end-users.",
+        "We sell lubricants from Mahalaxmi Enterprises. High quality products with no complaints so far from mechanics or end-users.",
       image: "/hp-testimonial-11.jpg",
     },
     {
@@ -243,7 +243,7 @@ export default function TestimonialsSection() {
       org: "Natraj JCB",
       location: "Jhansi - Uttar Pradesh",
       quote:
-        "We are dealing with HP Lubricants for last 4 years. Customers using your lubricants are fully satisfied.",
+        "We are dealing with Mahalaxmi Enterprises for last 4 years. Customers using your lubricants are fully satisfied.",
       image: "/hp-testimonial-12.jpg",
     },
     {
@@ -290,8 +290,8 @@ export default function TestimonialsSection() {
         </h2>
 
         <p className="mt-4 text-gray-600 text-sm md:text-base max-w-3xl mx-auto font-medium">
-          HP Lubricants has always been in the forefront developing and
-          marketing of technology advanced lubricants as per the market trends
+          Mahalaxmi Enterprises has always been in the forefront supplying and
+          delivering technology advanced lubricants as per industrial market trends
         </p>
 
         {/* Carousel Slider Outer Wrapper (Hover to Pause) */}

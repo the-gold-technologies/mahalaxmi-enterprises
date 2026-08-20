@@ -12,7 +12,7 @@ export default function AboutSection() {
         </h1>
 
         <p className="mt-6 text-gray-700 text-sm md:text-base leading-relaxed max-w-3xl mx-auto font-sans">
-          <strong>Mahalaxmi Enterprises</strong> is an Authorized Industrial Lubricants Division (ILD) of HP Lubricants (Hindustan Petroleum Corporation Ltd.), offering a comprehensive range of industrial lubricants, greases, metalworking fluids, and industrial maintenance solutions. Backed by HP Lubricant’s trusted quality, we deliver high-performance products that enhance equipment reliability, reduce downtime, and improve operational efficiency across industries.
+          <strong>Mahalaxmi Enterprises</strong> is an Authorized Industrial Lubricants Division (ILD), offering a comprehensive range of industrial lubricants, greases, metalworking fluids, and industrial maintenance solutions. Backed by trusted quality, we deliver high-performance products that enhance equipment reliability, reduce downtime, and improve operational efficiency across industries.
         </p>
 
         <div className="mt-8">

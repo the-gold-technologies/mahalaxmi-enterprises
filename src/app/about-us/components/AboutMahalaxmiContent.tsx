@@ -71,17 +71,21 @@ export default function AboutMahalaxmiContent() {
           <strong className="text-gray-900 font-semibold">
             Industrial Lubricants Distributor (ILD)
           </strong>{" "}
-          for <strong className="text-gray-900 font-semibold">HP Lubricants</strong>,
-          serving the <strong className="text-gray-900 font-semibold">Baghpat region</strong>.
-          With over a decade of experience in the lubricants industry, she has
+          for{" "}
+          <strong className="text-gray-900 font-semibold">MAHALAXMI ENTERPRISES</strong>
+          , serving the{" "}
+          <strong className="text-gray-900 font-semibold">
+            Baghpat region
+          </strong>
+          . With over a decade of experience in the lubricants industry, she has
           developed extensive expertise in providing reliable lubrication
           solutions across a wide range of industrial applications.
         </p>
 
         <p>
           Since establishing Mahalaxmi Enterprises in{" "}
-          <strong className="text-gray-900 font-semibold">2023</strong>, she has been
-          committed to delivering high-quality HP Lubricants, backed by
+          <strong className="text-gray-900 font-semibold">2023</strong>, she has
+          been committed to delivering high-quality industrial lubricants, backed by
           technical knowledge, prompt service, and a customer-centric approach.
           Under her leadership, the company has earned the trust of more than{" "}
           <strong className="text-gray-900 font-semibold">
@@ -90,7 +94,8 @@ export default function AboutMahalaxmiContent() {
           and has successfully supplied lubricants to various{" "}
           <strong className="text-gray-900 font-semibold">
             government departments
-          </strong>.
+          </strong>
+          .
         </p>
 
         <p>

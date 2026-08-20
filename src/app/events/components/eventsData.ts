@@ -29,15 +29,15 @@ export const galleryItems: GalleryItem[] = [
   },
   {
     id: 4,
-    title: "Excon 2017 HP Lubricants Stall Sideview",
+    title: "Excon 2017 Mahalaxmi Enterprises Stall Sideview",
     image: "https://www.hplubricants.in/sites/default/files/b4.jpg",
-    altText: "Excon 2017 HP Lubricants Stall Sideview",
+    altText: "Excon 2017 Mahalaxmi Enterprises Stall Sideview",
   },
   {
     id: 5,
-    title: "Excon 2017 HP Lubricants Stall",
+    title: "Excon 2017 Mahalaxmi Enterprises Stall",
     image: "https://www.hplubricants.in/sites/default/files/b3.jpg",
-    altText: "Excon 2017 HP Lubricants Stall",
+    altText: "Excon 2017 Mahalaxmi Enterprises Stall",
   },
   {
     id: 6,
@@ -113,15 +113,15 @@ export const galleryItems: GalleryItem[] = [
   },
   {
     id: 18,
-    title: "HP Lubricants ConMac 2017 Showcase",
+    title: "Mahalaxmi Enterprises ConMac 2017 Showcase",
     image: "https://www.hplubricants.in/sites/default/files/8.jpg",
-    altText: "HP Lubricants ConMac 2017 Showcase",
+    altText: "Mahalaxmi Enterprises ConMac 2017 Showcase",
   },
   {
     id: 19,
-    title: "HP Lubricants ConMac 2017",
+    title: "Mahalaxmi Enterprises ConMac 2017",
     image: "https://www.hplubricants.in/sites/default/files/7.jpg",
-    altText: "HP Lubricants ConMac 2017",
+    altText: "Mahalaxmi Enterprises ConMac 2017",
   },
   {
     id: 20,

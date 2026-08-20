@@ -171,11 +171,10 @@ export default function BlogDetailPage() {
         {post.content.recommendedProducts && (
           <div className="my-12 bg-gradient-to-r from-[#002b5c] to-[#004085] text-white rounded-2xl p-6 md:p-8 shadow-md">
             <h3 className="text-lg md:text-xl font-bold mb-3 flex items-center gap-2">
-              <Tag size={20} className="text-[#eb1e25]" /> Recommended HP
-              Lubricants
+              <Tag size={20} className="text-[#eb1e25]" /> Recommended Industrial Lubricants
             </h3>
             <p className="text-xs md:text-sm text-gray-200 mb-4">
-              Mahalaxmi Enterprises supplies genuine HP Lubricants for
+              Mahalaxmi Enterprises supplies genuine industrial lubricants for
               industrial & fleet operations across Baghpat and Uttar Pradesh.
             </p>
             <div className="flex flex-wrap items-center gap-3">

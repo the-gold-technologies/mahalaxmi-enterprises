@@ -181,7 +181,7 @@ export const blogsData: BlogPost[] = [
           ],
           bulletPoints: [
             "API Standards (CK-4 / CI-4 Plus): Look for API donut marks. API CK-4 and CJ-4 low-SAPS oils are mandatory for modern BS-VI engines equipped with DPF and SCR systems, while API CI-4 Plus is ideal for BS-IV fleets.",
-            "OEM Approvals: Top HP Lubricants carry OEM approvals from major vehicle manufacturers (Tata Motors, Ashok Leyland, Mahindra, Cummins), giving extra assurance of performance."
+            "OEM Approvals: Top lubricants distributed by MAHALAXMI ENTERPRISES carry OEM approvals from major vehicle manufacturers (Tata Motors, Ashok Leyland, Mahindra, Cummins), giving extra assurance of performance."
           ]
         },
         {
@@ -218,7 +218,7 @@ export const blogsData: BlogPost[] = [
         {
           heading: "8. Cost vs. Performance",
           paragraphs: [
-            "Weigh short-term lubricant costs against long-term fuel efficiency, reduced maintenance, and engine overhaul prevention. Investing in high-grade HP Lubricants saves significant operating costs over time."
+            "Weigh short-term lubricant costs against long-term fuel efficiency, reduced maintenance, and engine overhaul prevention. Investing in high-grade lubricants from MAHALAXMI ENTERPRISES saves significant operating costs over time."
           ]
         }
       ],
@@ -388,7 +388,7 @@ export const blogsData: BlogPost[] = [
           ]
         },
         {
-          heading: "3. Advanced HP Lubricants Technology",
+          heading: "3. Advanced Lubrication Technology by MAHALAXMI ENTERPRISES",
           paragraphs: [
             "HP RACER 4T oils are blended with premium Group II base stocks and synthetic additives. They deliver exceptional thermal stability, preventing oil breakdown when idling in dense Indian city traffic."
           ]
@@ -470,7 +470,7 @@ export const blogsData: BlogPost[] = [
       "https://www.hplubricants.in/sites/default/files/The-best-engine-oil-for-your-bike-thumb.jpg",
     content: {
       intro:
-        "Choosing the right engine oil for your bike is crucial for maintaining performance, efficiency, and engine longevity. HP Lubricants’ Two Wheeler Engine Oil range is engineered to meet the stringent demands of modern motorcycles, commuters, and scooters across Indian road conditions.",
+        "Choosing the right engine oil for your bike is crucial for maintaining performance, efficiency, and engine longevity. MAHALAXMI ENTERPRISES' Two Wheeler Engine Oil range is engineered to meet the stringent demands of modern motorcycles, commuters, and scooters across Indian road conditions.",
       sections: [
         {
           heading: "1. Enhanced Engine Durability",

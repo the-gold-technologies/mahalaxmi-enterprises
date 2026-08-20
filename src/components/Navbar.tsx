@@ -208,7 +208,7 @@ export default function Navbar({
         <Link href="/" className="flex items-center py-1">
           <img
             src="/mahalaxmi png logo .png"
-            alt="Mahalaxmi Enterprises - HP Lubricants Authorized Partner"
+            alt="MAHALAXMI ENTERPRISES"
             className="h-11 sm:h-14 lg:h-16 w-auto object-contain"
             onError={(e) => {
               (e.target as HTMLImageElement).src =
@@ -382,7 +382,9 @@ export default function Navbar({
                       <div key={idx} className="border-b border-gray-100 pb-2">
                         <button
                           type="button"
-                          onClick={() => setMobileProductsOpen(!mobileProductsOpen)}
+                          onClick={() =>
+                            setMobileProductsOpen(!mobileProductsOpen)
+                          }
                           className={`w-full flex items-center justify-between text-base font-extrabold py-2.5 transition-colors text-left cursor-pointer ${
                             isActive || mobileProductsOpen
                               ? "text-[#eb1e25]"
@@ -391,9 +393,15 @@ export default function Navbar({
                         >
                           <span>{item.name}</span>
                           {mobileProductsOpen ? (
-                            <ChevronDown size={20} className="text-[#eb1e25] transition-transform" />
+                            <ChevronDown
+                              size={20}
+                              className="text-[#eb1e25] transition-transform"
+                            />
                           ) : (
-                            <ChevronRight size={20} className="text-gray-400 transition-transform" />
+                            <ChevronRight
+                              size={20}
+                              className="text-gray-400 transition-transform"
+                            />
                           )}
                         </button>
 
@@ -414,7 +422,10 @@ export default function Navbar({
                                 className="text-xs text-gray-700 hover:text-[#eb1e25] font-semibold py-1.5 px-2 rounded hover:bg-white flex items-center justify-between transition-colors"
                               >
                                 <span>{cat.name}</span>
-                                <ChevronRight size={14} className="text-gray-400" />
+                                <ChevronRight
+                                  size={14}
+                                  className="text-gray-400"
+                                />
                               </Link>
                             ))}
                           </div>
@@ -456,7 +467,8 @@ export default function Navbar({
                 CONTACT US / LOCATE DEALER
               </Link>
               <div className="text-center text-xs text-gray-500 font-medium">
-                Direct Contact: <span className="font-bold text-gray-800">+91 98765 43210</span>
+                Direct Contact:{" "}
+                <span className="font-bold text-gray-800">+91 98765 43210</span>
               </div>
             </div>
           </div>

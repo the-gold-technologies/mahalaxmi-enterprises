@@ -37,7 +37,7 @@ export default function ProductsServicesSection({
         </h2>
 
         <p className="mt-4 text-gray-600 text-sm md:text-base max-w-3xl mx-auto font-medium">
-          HP Lubricants has always been in the forefront developing and
+          Mahalaxmi Enterprises has always been in the forefront developing and
           marketing of technology advanced lubricants as per the market trends
         </p>
 

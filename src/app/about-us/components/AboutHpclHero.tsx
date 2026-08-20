@@ -7,7 +7,7 @@ export default function AboutHpclHero() {
     <section className="w-full relative overflow-hidden leading-none">
       <img
         src="/About-HPCL.jpg"
-        alt="About HPCL - HP Lubricants Banner"
+        alt="About MAHALAXMI ENTERPRISES Banner"
         className="w-full h-auto object-cover block"
       />
     </section>

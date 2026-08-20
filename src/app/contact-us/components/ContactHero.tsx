@@ -7,7 +7,7 @@ export default function ContactHero() {
     <section className="w-full relative overflow-hidden leading-none">
       <img
         src="/contact-us-banner.jpg"
-        alt="Contact Us - Mahalaxmi Enterprises HP Lubricants"
+        alt="Contact Us - MAHALAXMI ENTERPRISES"
         className="w-full h-auto object-cover block"
         onError={(e) => {
           (e.target as HTMLImageElement).src =

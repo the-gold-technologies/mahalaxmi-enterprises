@@ -1030,7 +1030,7 @@ export const productsData: ProductCategory[] = [
     slug: "industrial-oils",
     name: "Industrial Oils",
     shortDesc: "High performance hydraulic, compressor, turbine, transformer, gear, film, and machinery lubricants.",
-    fullDesc: "Discover HP Lubricants' industrial oils tailored for hydraulic systems, gearboxes, compressors, sugar mills, and more. Trusted for quality, innovation, and reliability.",
+    fullDesc: "Discover MAHALAXMI ENTERPRISES' industrial oils tailored for hydraulic systems, gearboxes, compressors, sugar mills, and more. Trusted for quality, innovation, and reliability.",
     coverImage: OFFICIAL_COMPRESSOR_IMG,
     subCategoryGroups: industrialGroups,
     products: industrialGroups.flatMap(g => g.products)
@@ -1039,7 +1039,7 @@ export const productsData: ProductCategory[] = [
     slug: "industrial-greases",
     name: "Industrial Greases",
     shortDesc: "Extreme pressure lithium, complex, wheel bearing, and specialty temperature resistant greases.",
-    fullDesc: "HP Lubricants produces premium industrial greases formulated for heavy machinery bearings, steel mills, and high temperature applications.",
+    fullDesc: "MAHALAXMI ENTERPRISES supplies premium industrial greases formulated for heavy machinery bearings, steel mills, and high temperature applications.",
     coverImage: OFFICIAL_GREASE_IMG,
     subCategoryGroups: [greaseGroup],
     products: greaseGroup.products
@@ -1048,7 +1048,7 @@ export const productsData: ProductCategory[] = [
     slug: "automotive-oils",
     name: "Automotive Oils",
     shortDesc: "High-quality automotive, agricultural, passenger car, and engine oils.",
-    fullDesc: "Explore HP Lubricants' range of automotive, agricultural, and commercial engine oils offering superior quality and performance for all your vehicles.",
+    fullDesc: "Explore MAHALAXMI ENTERPRISES' range of automotive, agricultural, and commercial engine oils offering superior quality and performance for all your vehicles.",
     coverImage: OFFICIAL_AUTOMOTIVE_IMG,
     subCategoryGroups: [agGroup, brakeGroup],
     products: [...agGroup.products, ...brakeGroup.products]

@@ -7,7 +7,7 @@ export default function EventsHero() {
     <section className="w-full relative overflow-hidden leading-none">
       <img
         src="/events-banner.jpg"
-        alt="HP Lubricants Events & Activities Gallery Banner"
+        alt="MAHALAXMI ENTERPRISES Events & Activities Gallery Banner"
         className="w-full h-auto object-cover block"
         onError={(e) => {
           (e.target as HTMLImageElement).src =

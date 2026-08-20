@@ -2,11 +2,11 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Mahalaxmi Enterprises | Authorized Industrial Lubricants Distributor - HP Lubricants',
+  title: 'MAHALAXMI ENTERPRISES | Industrial Lubricants & Greases Distributor',
   description:
-    'Mahalaxmi Enterprises is an Authorized Industrial Lubricants Division (ILD) of HP Lubricants (HPCL), offering industrial oils, greases, metalworking fluids, and machinery solutions.',
+    'MAHALAXMI ENTERPRISES is a leading Industrial Lubricants Division (ILD) supplier, offering high-performance industrial oils, greases, metalworking fluids, and machinery solutions.',
   keywords:
-    'Mahalaxmi Enterprises, HP Lubricants, Industrial Oils, Greases, HPCL Distributor, Engine Oil Dealer, Baghpat, Uttar Pradesh',
+    'MAHALAXMI ENTERPRISES, Mahalaxmi Enterprises, Industrial Oils, Greases, Engine Oil Dealer, Baghpat, Uttar Pradesh',
   icons: {
     icon: '/favicon.png',
     shortcut: '/favicon.ico',

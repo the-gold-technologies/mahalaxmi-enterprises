@@ -56,7 +56,7 @@ export default function EnquiryModal({
             {/* Simple Clean Header */}
             <div className="mb-5 pr-6">
               <span className="text-[11px] font-extrabold text-[#eb1e25] uppercase tracking-wider block mb-1">
-                HP LUBRICANTS ENQUIRY
+                MAHALAXMI ENTERPRISES ENQUIRY
               </span>
               <h2 className="text-2xl font-black text-[#002b5c]">
                 Request Product Quote
@@ -137,7 +137,7 @@ export default function EnquiryModal({
               Enquiry Submitted!
             </h3>
             <p className="text-xs text-gray-600 mb-6 leading-relaxed">
-              Thank you <strong>{name}</strong>. Our HP Lubricants representative will contact you at <strong>{mobile}</strong> shortly.
+              Thank you <strong>{name}</strong>. Our Mahalaxmi Enterprises representative will contact you at <strong>{mobile}</strong> shortly.
             </p>
             <button
               onClick={() => {
