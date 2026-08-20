@@ -286,7 +286,7 @@ export default function TestimonialsSection() {
       <div className="max-w-7xl mx-auto px-4 relative">
         {/* Section Title */}
         <h2 className="text-3xl md:text-4xl font-extrabold text-[#002b5c] uppercase tracking-wide section-underline">
-          Testimonials
+          Our Prominent Customers
         </h2>
 
         <p className="mt-4 text-gray-600 text-sm md:text-base max-w-3xl mx-auto font-medium">

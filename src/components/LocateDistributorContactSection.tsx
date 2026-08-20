@@ -18,13 +18,13 @@ export default function LocateDistributorContactSection({
     e.preventDefault();
     setSearchResults([
       {
-        name: "Mahalaxmi Enterprises - Authorized Lube Stockist",
+        name: "Mahalaxmi Enterprises - Authorized Industrial Lubricants Distributor",
         type:
           lubeType === "ILD"
-            ? "Industrial Lube Distributor"
-            : "Bazaar Lube Distributor",
-        address: "Hindustan Petroleum Depot, Lower Parel (E), Mumbai - 400013",
-        phone: "18001214725 / +91 98765 43210",
+            ? "Industrial Lube Distributor (ILD)"
+            : "Bazaar Lube Distributor (BLD)",
+        address: "Baghpat Region & Surrounding Industrial Belts, Uttar Pradesh",
+        phone: "+91 98765 43210",
       },
     ]);
   };
@@ -145,28 +145,28 @@ export default function LocateDistributorContactSection({
               </div>
 
               {/* Contact Information List */}
-              <div className="mt-6 flex flex-col gap-6 sm:gap-8 text-sm text-[#374151] leading-relaxed">
+              <div className="mt-8 flex flex-col gap-7 text-[15px] text-[#333333] leading-relaxed font-sans">
                 {/* Address Item */}
-                <div className="flex gap-3.5 items-start">
-                  <HomeIcon className="text-gray-800 w-5 h-5 flex-shrink-0 mt-0.5" />
-                  <p className="text-gray-700">
-                    Hindustan Petroleum, 10th Floor, A Wing, Marathon Futurex
-                    Building, N. M. Joshi Marg, Lower Parel (E),Mumbai-400013,
-                    Maharashtra India.
+                <div className="flex gap-4 items-start">
+                  <HomeIcon className="text-[#002b5c] w-6 h-6 flex-shrink-0 mt-0.5" strokeWidth={1.8} />
+                  <p className="text-[#333333] text-[15px] leading-relaxed">
+                    <strong className="font-bold text-[#002b5c]">Mahalaxmi Enterprises</strong>
+                    <br />
+                    Baghpat Region & Surrounding Industrial Belts, Uttar Pradesh, India.
                   </p>
                 </div>
 
-                {/* Toll Free Phone & Hours */}
-                <div className="flex gap-3.5 items-start">
-                  <Phone className="text-gray-800 w-5 h-5 flex-shrink-0 mt-0.5" />
+                {/* Direct Contact Phone & Hours */}
+                <div className="flex gap-4 items-start">
+                  <Phone className="text-[#002b5c] w-6 h-6 flex-shrink-0 mt-0.5" strokeWidth={1.8} />
                   <div>
-                    <p className="text-gray-700">
-                      Toll Free:{" "}
-                      <span className="font-medium text-gray-900">
-                        18001214725
-                      </span>
+                    <p className="text-[#333333] text-[15px]">
+                      Direct Contact:{" "}
+                      <strong className="font-bold text-[#002b5c]">
+                        +91 98765 43210
+                      </strong>
                     </p>
-                    <p className="text-xs sm:text-sm text-gray-600 mt-3 sm:mt-4 leading-relaxed">
+                    <p className="text-sm text-[#555555] mt-2 leading-relaxed">
                       Working Hours Monday to Saturday from 9.00 am to 6.00pm
                       except for Public Holidays.
                     </p>
@@ -174,13 +174,16 @@ export default function LocateDistributorContactSection({
                 </div>
 
                 {/* Email Item */}
-                <div className="flex gap-3.5 items-center">
-                  <Mail className="text-gray-800 w-5 h-5 flex-shrink-0" />
-                  <p className="text-gray-700">
+                <div className="flex gap-4 items-center">
+                  <Mail className="text-[#002b5c] w-6 h-6 flex-shrink-0" strokeWidth={1.8} />
+                  <p className="text-[#333333] text-[15px]">
                     Email:{" "}
-                    <span className="font-medium text-gray-900">
-                      lubescare@hpcl.in
-                    </span>
+                    <a
+                      href="mailto:sales@mahalaxmienterprises.com"
+                      className="font-bold text-[#002b5c] hover:text-[#eb1e25] transition-colors"
+                    >
+                      sales@mahalaxmienterprises.com
+                    </a>
                   </p>
                 </div>
               </div>

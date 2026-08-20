@@ -456,7 +456,7 @@ export default function Navbar({
                 CONTACT US / LOCATE DEALER
               </Link>
               <div className="text-center text-xs text-gray-500 font-medium">
-                Toll Free: <span className="font-bold text-gray-800">18001214725</span>
+                Direct Contact: <span className="font-bold text-gray-800">+91 98765 43210</span>
               </div>
             </div>
           </div>

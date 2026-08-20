@@ -114,41 +114,48 @@ export default function CategoryProductsPage() {
                   </h2>
                 </div>
 
-                {/* Sub-category Row Layout: Left Circular Cutout Image Frame & VIEW MORE Button + Right Pills List */}
+                {/* Sub-category Row Layout: Left Square Image Frame & VIEW MORE Button + Right Pills List */}
                 <div className="flex flex-col sm:flex-row gap-6 items-start">
-                  {/* Left Column: Dark Blue Box with Center Circle Image + VIEW MORE Button */}
-                  <div className="flex flex-col space-y-3 shrink-0">
-                    <div className="w-[230px] h-[230px] bg-gradient-to-tr from-[#0a2550] via-[#104886] to-[#0275d8] rounded-xs p-3 flex items-center justify-center relative overflow-hidden shadow-xs">
-                      <div className="w-44 h-44 rounded-full overflow-hidden border-2 border-white/20 shadow-md">
+                  {/* Left Column: Dark Blue Box with Center Rounded Square Image + VIEW MORE Button */}
+                  <div className="flex flex-col space-y-3 shrink-0 w-full sm:w-auto">
+                    <div className="group w-full sm:w-[230px] h-[210px] sm:h-[230px] bg-gradient-to-br from-[#002b5c] via-[#0d3b66] to-[#0275d8] rounded-2xl p-2.5 flex items-center justify-center relative overflow-hidden shadow-md border border-blue-900/40">
+                      {/* Rounded Square Inner Container with Subtle Border */}
+                      <div className="w-full h-full rounded-xl overflow-hidden border border-white/25 shadow-inner relative bg-slate-900/20">
                         <img
                           src={group.coverImage}
                           alt={group.title}
-                          className="w-full h-full object-cover"
+                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-108"
                           onError={(e) => {
                             (e.target as HTMLImageElement).src =
                               "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&q=80&w=600";
                           }}
                         />
+                        {/* Subtle bottom gradient tint */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#002b5c]/40 via-transparent to-transparent opacity-60 pointer-events-none" />
                       </div>
                     </div>
 
                     <Link
                       href={`/products/${category.slug}/${group.products[0]?.slug || ""}`}
-                      className="bg-[#eb1e25] hover:bg-[#c4141a] text-white text-xs font-bold uppercase tracking-wider py-2.5 px-6 rounded-xs text-center transition-colors shadow-xs inline-block min-w-[130px]"
+                      className="bg-[#eb1e25] hover:bg-[#c4141a] text-white text-xs font-bold uppercase tracking-wider py-2.5 px-6 rounded-lg text-center transition-all shadow-sm hover:shadow-md inline-flex items-center justify-center gap-1.5 w-full sm:w-[230px]"
                     >
-                      VIEW MORE
+                      <span>VIEW MORE</span>
+                      <span className="text-sm">→</span>
                     </Link>
                   </div>
 
                   {/* Right Column: Uniform Fixed Height Product Pills Container with Vertical Scrollbar */}
-                  <div className="flex-1 max-h-[230px] w-full overflow-y-auto space-y-2.5 pr-1.5 scrollbar-visible">
+                  <div className="flex-1 max-h-[230px] w-full overflow-y-auto space-y-2 pr-1.5 scrollbar-visible">
                     {group.products.map((prod) => (
                       <Link
                         key={prod.id}
                         href={`/products/${category.slug}/${prod.slug}`}
-                        className="bg-[#e9ecef] hover:bg-[#dee2e6] text-[#333333] text-xs font-semibold px-4 py-2.5 rounded-xs block transition-colors uppercase tracking-tight leading-snug"
+                        className="group/item bg-slate-100/80 hover:bg-white text-slate-700 hover:text-[#002b5c] text-xs font-semibold px-4 py-2.5 rounded-lg border border-slate-200/90 hover:border-sky-400/60 hover:shadow-sm flex items-center justify-between transition-all uppercase tracking-tight leading-snug"
                       >
-                        {prod.name}
+                        <span className="truncate pr-2">{prod.name}</span>
+                        <span className="text-slate-400 group-hover/item:text-[#eb1e25] transition-transform duration-200 group-hover/item:translate-x-0.5 text-xs">
+                          →
+                        </span>
                       </Link>
                     ))}
                   </div>

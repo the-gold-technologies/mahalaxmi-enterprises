@@ -1,28 +1,30 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 interface ProductsServicesProps {
   onSelectCategory?: (category: string) => void;
 }
 
-export default function ProductsServicesSection({ onSelectCategory }: ProductsServicesProps) {
+export default function ProductsServicesSection({
+  onSelectCategory,
+}: ProductsServicesProps) {
   const [hoveredId, setHoveredId] = useState<string | null>(null);
 
   const items = [
     {
-      id: 'industrial',
-      name: 'Industrial Oils',
-      link: '#products',
-      img: '/industrial-1.png',
-      hoverImg: '/industrial-2.png',
+      id: "industrial",
+      name: "Industrial Oils",
+      link: "/products/industrial-oils",
+      hoverImg: "/industrial-1.png",
+      img: "/industrial-2.png",
     },
     {
-      id: 'greases',
-      name: 'Greases',
-      link: '#products',
-      img: '/greases-1.png',
-      hoverImg: '/greases-2.png',
+      id: "greases",
+      name: "Greases",
+      link: "/products/industrial-greases",
+      hoverImg: "/greases-1.png",
+      img: "/greases-2.png",
     },
   ];
 
@@ -35,7 +37,8 @@ export default function ProductsServicesSection({ onSelectCategory }: ProductsSe
         </h2>
 
         <p className="mt-4 text-gray-600 text-sm md:text-base max-w-3xl mx-auto font-medium">
-          HP Lubricants has always been in the forefront developing and marketing of technology advanced lubricants as per the market trends
+          HP Lubricants has always been in the forefront developing and
+          marketing of technology advanced lubricants as per the market trends
         </p>
 
         {/* 2 Category Items Centered */}
@@ -72,4 +75,3 @@ export default function ProductsServicesSection({ onSelectCategory }: ProductsSe
     </section>
   );
 }
-

@@ -14,8 +14,8 @@ export default function Footer({ onOpenEnquiry }: FooterProps) {
       <footer className="bg-[#002749] text-white py-5 px-4 sm:px-8 border-t border-[#002b5c]">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 text-xs sm:text-sm font-medium">
           {/* Left Copyright */}
-          <div className="text-center -ml-10">
-            <p>© 2026 HP Lubricants. All rights reserved.</p>
+          <div className="text-center md:text-left">
+            <p>© 2026 Mahalaxmi Enterprises. All rights reserved.</p>
           </div>
 
           {/* Middle Links */}

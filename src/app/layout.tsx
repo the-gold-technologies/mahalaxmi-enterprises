@@ -2,11 +2,16 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'HP Lubricants: Buy Engine Oils & Lubricants Online | Mahalaxmi Enterprises',
+  title: 'Mahalaxmi Enterprises | Authorized Industrial Lubricants Distributor - HP Lubricants',
   description:
-    'HP Lubricants: Buy lubrication oils for bike, car, trucks & electric vehicle (EV) from the largest lube marketer. Direct supply via Mahalaxmi Enterprises.',
+    'Mahalaxmi Enterprises is an Authorized Industrial Lubricants Division (ILD) of HP Lubricants (HPCL), offering industrial oils, greases, metalworking fluids, and machinery solutions.',
   keywords:
-    'HP Lubricants, HPCL, Racer, Milcy, NeoSynth, Futur-X, Mahalaxmi Enterprises, Engine Oil Dealer Mumbai, Industrial Oil',
+    'Mahalaxmi Enterprises, HP Lubricants, Industrial Oils, Greases, HPCL Distributor, Engine Oil Dealer, Baghpat, Uttar Pradesh',
+  icons: {
+    icon: '/favicon.png',
+    shortcut: '/favicon.ico',
+    apple: '/favicon.png',
+  },
 };
 
 export default function RootLayout({
@@ -17,7 +22,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <link rel="icon" href="https://www.hplubricants.in/sites/default/files/fevicon.png" />
+        <link rel="icon" href="/favicon.png" />
+        <link rel="shortcut icon" href="/favicon.ico" />
+        <link rel="apple-touch-icon" href="/favicon.png" />
       </head>
       <body>{children}</body>
     </html>
