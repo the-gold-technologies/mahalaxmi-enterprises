@@ -112,142 +112,180 @@ export default function ProductDetailPage() {
 
       {/* Main Content Area */}
       <div className="max-w-6xl mx-auto px-4 md:px-8 py-8 md:py-12 w-full">
-        {/* Category Title with Dark Blue Underline Bar (e.g. FILM OIL / COMPRESSOR OILS) */}
-        <div className="mb-10 border-b border-gray-200 pb-2">
-          <h1 className="text-2xl md:text-3xl font-black text-[#002b5c] uppercase tracking-wider inline-block relative">
-            <span className="border-b-4 border-[#002b5c] pb-2">
+        {/* Category Title with Dark Blue Underline Bar */}
+        <div className="mb-8 border-b border-gray-200 pb-3 flex items-center justify-between">
+          <h1 className="text-2xl md:text-3xl font-extrabold text-[#002b5c] uppercase tracking-wider inline-block relative">
+            <span className="border-b-4 border-[#002b5c] pb-3 inline-block">
               {currentGroup?.title || product.subtitle || category.name}
             </span>
           </h1>
+          <span className="text-xs font-bold uppercase tracking-widest text-[#eb1e25] bg-red-50 px-3 py-1 rounded-full border border-red-100 hidden sm:inline-block">
+            Industrial Grade
+          </span>
         </div>
 
-        {/* Top 3-Column Layout: Left Drum Box, Center Details & Specs, Right Sibling Products Sidebar */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12 items-start">
-          {/* Left Column: Product Barrel Frame Container with Zoom Icon */}
-          <div className="lg:col-span-5 border border-gray-200 rounded-xs p-6 bg-white shadow-xs relative text-center flex items-center justify-center min-h-[320px]">
-            <img
-              src={product.containerImage}
-              alt={product.name}
-              className="max-h-72 object-contain mx-auto"
-              onError={(e) => {
-                (e.target as HTMLImageElement).src =
-                  "https://www.hplubricants.in/sites/default/files/15-W-40-Final-Graphic.jpg";
-              }}
-            />
-            <div className="absolute bottom-3 right-3 bg-gray-100 p-1.5 rounded-xs border border-gray-200 text-gray-500">
-              <Search size={14} />
-            </div>
-          </div>
-
-          {/* Center Column: Product Name, Subtitle, Specifications */}
-          <div className="lg:col-span-4 space-y-4">
-            <div>
-              <h2 className="text-2xl md:text-3xl font-black text-[#eb1e25] mb-1">
-                {product.name}
-              </h2>
-              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                {product.subtitle || category.name}
-              </p>
-            </div>
-
-            {product.specsText && (
-              <div className="pt-2">
-                <h3 className="text-base font-bold text-[#eb1e25] mb-1">
-                  Meets specifications:
-                </h3>
-                <p className="text-xs text-gray-700 leading-relaxed font-sans">
-                  {product.specsText}
-                </p>
-                <div className="w-16 h-[3px] bg-[#002b5c] my-3" />
+        {/* Top Product Showcase Card */}
+        <div className="bg-white rounded-3xl border border-slate-200/90 shadow-sm p-6 sm:p-8 mb-10">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            {/* Left Column: Product Image Frame Container */}
+            <div className="lg:col-span-5 rounded-2xl bg-gradient-to-b from-slate-50 via-slate-50/60 to-slate-100/90 border border-slate-200/80 p-6 relative flex items-center justify-center min-h-[320px] group shadow-inner">
+              <img
+                src={product.containerImage}
+                alt={product.name}
+                className="max-h-72 object-contain mx-auto transition-transform duration-300 group-hover:scale-105"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).src =
+                    "https://www.hplubricants.in/sites/default/files/15-W-40-Final-Graphic.jpg";
+                }}
+              />
+              <div className="absolute bottom-3.5 right-3.5 bg-white/90 backdrop-blur-sm p-2 rounded-lg border border-slate-200 text-slate-500 shadow-xs">
+                <Search size={15} />
               </div>
-            )}
-          </div>
+            </div>
 
-          {/* Right Column: Clean Height-Constrained Sibling Sidebar with Scrollbar */}
-          <div className="lg:col-span-3 space-y-2 max-h-[320px] overflow-y-auto pr-1 scrollbar-visible">
-            {siblingProducts.map((sib) => {
-              const isCurrent = sib.slug === product.slug;
-              return (
-                <Link
-                  key={sib.id}
-                  href={`/products/${category.slug}/${sib.slug}`}
-                  className={`block px-4 py-2.5 text-xs rounded-xs font-bold uppercase transition-all ${
-                    isCurrent
-                      ? "bg-[#002b5c] text-white shadow-xs"
-                      : "bg-[#e9ecef] hover:bg-gray-300 text-gray-700"
-                  }`}
+            {/* Center Column: Product Name, Subtitle, Specifications & Quick CTAs */}
+            <div className="lg:col-span-4 flex flex-col justify-center space-y-4">
+              <div>
+                <span className="text-[11px] font-extrabold text-[#eb1e25] uppercase tracking-wider block mb-1">
+                  {product.subtitle || currentGroup?.title || category.name}
+                </span>
+                <h2 className="text-2xl sm:text-3xl font-extrabold text-[#002b5c] tracking-tight mb-2">
+                  {product.name}
+                </h2>
+                <div className="w-12 h-1 bg-[#002b5c] rounded-full mb-4" />
+
+                {/* Specifications or Key Highlights */}
+                {product.specsText ? (
+                  <div className="bg-slate-50 border-l-4 border-[#eb1e25] rounded-r-xl p-3.5 shadow-xs mb-4">
+                    <h3 className="text-[11px] font-bold uppercase tracking-wider text-[#eb1e25] mb-1">
+                      Meets Specifications:
+                    </h3>
+                    <p className="text-xs text-slate-700 leading-relaxed font-sans font-medium">
+                      {product.specsText}
+                    </p>
+                  </div>
+                ) : (
+                  <div className="bg-slate-50 border-l-4 border-[#002b5c] rounded-r-xl p-3.5 shadow-xs mb-4">
+                    <h3 className="text-[11px] font-bold uppercase tracking-wider text-[#002b5c] mb-1">
+                      Key Application:
+                    </h3>
+                    <p className="text-xs text-slate-700 leading-relaxed font-sans font-medium">
+                      {product.applicationAreas}
+                    </p>
+                  </div>
+                )}
+
+                {/* Quick Info Badges */}
+                <div className="flex flex-wrap gap-2 text-[11px] text-slate-600 font-medium">
+                  <span className="bg-slate-100 px-2.5 py-1 rounded-md border border-slate-200">
+                    📦 20L / 50L / 210L Barrel
+                  </span>
+                  <span className="bg-emerald-50 text-emerald-700 px-2.5 py-1 rounded-md border border-emerald-200 font-semibold">
+                    ✓ In Stock & Ready to Dispatch
+                  </span>
+                </div>
+              </div>
+
+              {/* Quick Action Buttons */}
+              <div className="flex flex-wrap items-center gap-3 pt-2">
+                <button
+                  onClick={() => handleOpenEnquiry(product.name)}
+                  className="bg-[#eb1e25] hover:bg-[#c4141a] text-white text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-lg shadow-sm hover:shadow-md transition-all cursor-pointer"
                 >
-                  {sib.name}
-                </Link>
-              );
-            })}
+                  Inquire Product
+                </button>
+                <button
+                  onClick={() => handleOpenDownload("TDS")}
+                  className="bg-[#002b5c] hover:bg-[#001f42] text-white text-xs font-bold uppercase tracking-wider px-4 py-2.5 rounded-lg transition-all flex items-center gap-1.5 cursor-pointer"
+                >
+                  <FileText size={14} /> TDS
+                </button>
+              </div>
+            </div>
+
+            {/* Right Column: Sibling Products Sidebar */}
+            <div className="lg:col-span-3 bg-slate-50/80 border border-slate-200/80 rounded-2xl p-4">
+              <span className="text-[11px] font-extrabold uppercase tracking-wider text-[#002b5c] block mb-3 pb-2 border-b border-slate-200">
+                In This Series ({siblingProducts.length})
+              </span>
+              <div className="space-y-1.5 max-h-[260px] overflow-y-auto pr-1 scrollbar-visible">
+                {siblingProducts.map((sib) => {
+                  const isCurrent = sib.slug === product.slug;
+                  return (
+                    <Link
+                      key={sib.id}
+                      href={`/products/${category.slug}/${sib.slug}`}
+                      className={`block px-3.5 py-2 text-xs rounded-xl font-bold uppercase transition-all flex items-center justify-between ${
+                        isCurrent
+                          ? "bg-[#002b5c] text-white shadow-xs"
+                          : "bg-white hover:bg-slate-200 text-slate-700 border border-slate-100"
+                      }`}
+                    >
+                      <span className="truncate">{sib.name}</span>
+                      {isCurrent && <span className="text-xs text-sky-300">●</span>}
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* Lower Main Sections: Description, Application Areas, Performance Benefits, Special Features */}
-        <div className="max-w-4xl space-y-8 mb-12">
-          {/* Description / Overview */}
+        {/* Lower Main Sections: Description, Application Areas, Performance Benefits */}
+        <div className="space-y-6 mb-12">
+          {/* Description */}
           {product.description && (
-            <div className="space-y-2">
-              <h3 className="text-lg md:text-xl font-bold text-[#eb1e25]">
-                Description:
+            <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs">
+              <h3 className="text-base sm:text-lg font-bold text-[#002b5c] mb-2 flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-[#eb1e25]" /> Description
               </h3>
-              <p className="text-xs md:text-sm text-gray-700 leading-relaxed font-sans">
+              <p className="text-xs sm:text-sm text-slate-700 leading-relaxed font-sans">
                 {product.description}
               </p>
             </div>
           )}
 
-          {/* Application Areas */}
-          {product.applicationAreas && (
-            <div className="space-y-2">
-              <h3 className="text-lg md:text-xl font-bold text-[#eb1e25]">
-                Application areas:
-              </h3>
-              <p className="text-xs md:text-sm text-gray-700 leading-relaxed font-sans">
-                {product.applicationAreas}
-              </p>
-            </div>
-          )}
-
-          {/* Performance Benefits */}
-          {product.performanceBenefits && product.performanceBenefits.length > 0 && (
-            <div className="space-y-2">
-              <h3 className="text-lg md:text-xl font-bold text-[#eb1e25]">
-                Performance benefits:
-              </h3>
-              <ul className="space-y-2 pl-1">
-                {product.performanceBenefits.map((benefit, bIdx) => (
-                  <li key={bIdx} className="flex items-start gap-2 text-xs md:text-sm text-gray-700">
-                    <span className="text-gray-900 font-bold">•</span>
-                    <span>{benefit}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-
-          {/* Special Features */}
-          {product.specialFeatures && product.specialFeatures.length > 0 && (
-            <div className="space-y-2">
-              <h3 className="text-lg md:text-xl font-bold text-[#eb1e25]">
-                Special Features
-              </h3>
-              <div className="space-y-2 text-xs md:text-sm text-gray-700 leading-relaxed">
-                {product.specialFeatures.map((feat, fIdx) => (
-                  <p key={fIdx}>{feat}</p>
-                ))}
+          {/* Application Areas & Performance Benefits Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Application Areas */}
+            {product.applicationAreas && (
+              <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs flex flex-col">
+                <h3 className="text-base sm:text-lg font-bold text-[#eb1e25] mb-3 flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-[#002b5c]" /> Application Areas:
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-700 leading-relaxed font-sans">
+                  {product.applicationAreas}
+                </p>
               </div>
-            </div>
-          )}
+            )}
 
-          {/* Physico-Chemical Properties Table (Matching HP Lubricants multi-column UI 100%) */}
+            {/* Performance Benefits */}
+            {product.performanceBenefits && product.performanceBenefits.length > 0 && (
+              <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs flex flex-col">
+                <h3 className="text-base sm:text-lg font-bold text-[#eb1e25] mb-3 flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-[#002b5c]" /> Performance Benefits:
+                </h3>
+                <ul className="space-y-2.5">
+                  {product.performanceBenefits.map((benefit, bIdx) => (
+                    <li key={bIdx} className="flex items-start gap-2.5 text-xs sm:text-sm text-slate-700">
+                      <span className="text-[#eb1e25] font-bold text-sm leading-none mt-0.5">•</span>
+                      <span>{benefit}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+
+          {/* Physico-Chemical Properties Table */}
           {product.propertiesTable && product.propertiesTable.length > 0 && (
-            <div className="space-y-3 pt-4">
-              <h3 className="text-lg md:text-xl font-bold text-[#eb1e25]">
-                Physico-chemical properties
-              </h3>
-              <div className="overflow-x-auto border border-gray-300 rounded-xs">
+            <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-xs pt-4">
+              <div className="px-6 pb-3">
+                <h3 className="text-base sm:text-lg font-bold text-[#002b5c] flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-[#eb1e25]" /> Physico-Chemical Properties
+                </h3>
+              </div>
+              <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs font-sans border-collapse">
                   <thead>
                     <tr className="bg-[#002b5c] text-white">
@@ -276,9 +314,9 @@ export default function ProductDetailPage() {
                     {product.propertiesTable.map((row, rIdx) => (
                       <tr
                         key={rIdx}
-                        className={rIdx % 2 === 0 ? "bg-white" : "bg-gray-50"}
+                        className={rIdx % 2 === 0 ? "bg-white" : "bg-slate-50"}
                       >
-                        <td className="py-2.5 px-4 font-semibold text-gray-700 border-b border-r border-gray-200">
+                        <td className="py-2.5 px-4 font-semibold text-slate-700 border-b border-r border-slate-200">
                           {row.property}
                         </td>
 
@@ -287,7 +325,7 @@ export default function ProductDetailPage() {
                             row.values.map((v, vIdx) => (
                               <td
                                 key={vIdx}
-                                className="py-2.5 px-4 text-gray-900 font-bold border-b border-r border-gray-200 last:border-r-0 text-center"
+                                className="py-2.5 px-4 text-slate-900 font-bold border-b border-r border-slate-200 last:border-r-0 text-center"
                               >
                                 {v}
                               </td>
@@ -295,13 +333,13 @@ export default function ProductDetailPage() {
                           ) : (
                             <td
                               colSpan={colCount}
-                              className="py-2.5 px-4 text-gray-900 font-bold border-b border-gray-200 text-center"
+                              className="py-2.5 px-4 text-slate-900 font-bold border-b border-slate-200 text-center"
                             >
                               {row.value}
                             </td>
                           )
                         ) : (
-                          <td className="py-2.5 px-4 text-gray-900 font-bold border-b border-gray-200 text-center">
+                          <td className="py-2.5 px-4 text-slate-900 font-bold border-b border-slate-200 text-center">
                             {row.value}
                           </td>
                         )}
@@ -313,27 +351,27 @@ export default function ProductDetailPage() {
             </div>
           )}
 
-          {/* Red Download PDF & Download MSDS PDF Action Buttons */}
-          <div className="pt-6 flex flex-wrap items-center gap-4">
+          {/* Action Buttons: TDS, MSDS, & Inquire */}
+          <div className="pt-4 flex flex-wrap items-center gap-3">
             <button
               onClick={() => handleOpenDownload("TDS")}
-              className="bg-[#eb1e25] hover:bg-[#c4141a] text-white text-xs font-bold uppercase tracking-wider px-6 py-3 rounded-xs flex items-center gap-2 shadow-xs transition cursor-pointer"
+              className="bg-[#eb1e25] hover:bg-[#c4141a] text-white text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-lg flex items-center gap-2 shadow-xs transition cursor-pointer"
             >
-              <FileText size={15} /> DOWNLOAD PDF
+              <FileText size={15} /> Download PDF (TDS)
             </button>
 
             <button
               onClick={() => handleOpenDownload("MSDS")}
-              className="bg-[#eb1e25] hover:bg-[#c4141a] text-white text-xs font-bold uppercase tracking-wider px-6 py-3 rounded-xs flex items-center gap-2 shadow-xs transition cursor-pointer"
+              className="bg-[#002b5c] hover:bg-[#001f42] text-white text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-lg flex items-center gap-2 shadow-xs transition cursor-pointer"
             >
-              <FileText size={15} /> DOWNLOAD MSDS PDF
+              <FileText size={15} /> Download MSDS PDF
             </button>
 
             <button
               onClick={() => handleOpenEnquiry(product.name)}
-              className="bg-[#002b5c] hover:bg-[#001f42] text-white text-xs font-bold uppercase tracking-wider px-6 py-3 rounded-xs transition cursor-pointer"
+              className="bg-slate-800 hover:bg-black text-white text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-lg transition cursor-pointer"
             >
-              INQUIRE PRODUCT
+              Inquire Product
             </button>
           </div>
         </div>

@@ -6,7 +6,9 @@ interface ContactFormSectionProps {
   onOpenEnquiry?: (productName?: string) => void;
 }
 
-export default function ContactFormSection({ onOpenEnquiry }: ContactFormSectionProps) {
+export default function ContactFormSection({
+  onOpenEnquiry,
+}: ContactFormSectionProps) {
   const [selectedRegion, setSelectedRegion] = useState<string>("ALL");
   const [searchQuery, setSearchQuery] = useState<string>("");
 
@@ -31,13 +33,16 @@ export default function ContactFormSection({ onOpenEnquiry }: ContactFormSection
       </div>
 
       <p className="text-gray-700 text-sm md:text-base leading-relaxed mb-12 max-w-5xl font-sans">
-        We strive to make ourselves better for our patrons, and so, would love to hear from you. Please contact us via the form below, email or over the telephone.
+        We strive to make ourselves better for our patrons, and so, would love
+        to hear from you. Please contact us via the form below, email or over
+        the telephone.
       </p>
 
       {/* 2. MAHALAXMI ENTERPRISES AUTHORIZED DISTRIBUTOR */}
       <div className="mb-14">
         <h2 className="text-2xl md:text-3xl font-extrabold text-[#002b5c] uppercase leading-snug mb-4 tracking-wide">
-          MAHALAXMI ENTERPRISES<br />
+          MAHALAXMI ENTERPRISES
+          <br />
           <span className="border-b-[3px] border-[#002b5c] pb-1 inline-block">
             AUTHORIZED INDUSTRIAL LUBRICANTS DISTRIBUTOR (ILD)
           </span>
@@ -45,16 +50,20 @@ export default function ContactFormSection({ onOpenEnquiry }: ContactFormSection
 
         <div className="text-gray-700 text-sm md:text-base leading-relaxed space-y-1 font-normal font-sans">
           <p>
-            <strong className="font-bold text-gray-900">Proprietor:</strong> Neha Goyal
+            <strong className="font-bold text-gray-900">Proprietor:</strong>{" "}
+            Neha Goyal
           </p>
           <p>
-            <strong className="font-bold text-gray-900">Serving Region:</strong> Baghpat Region & Surrounding Industrial Belts, Uttar Pradesh
+            <strong className="font-bold text-gray-900">Serving Region:</strong>{" "}
+            Baghpat Region & Surrounding Industrial Belts, Uttar Pradesh
           </p>
           <p>
-            <strong className="font-bold text-gray-900">Establishment:</strong> Est. 2023 | 100+ Industrial Clients & Government Department Supplier
+            <strong className="font-bold text-gray-900">Establishment:</strong>{" "}
+            Est. 2023 | 100+ Industrial Clients & Government Department Supplier
           </p>
           <p className="pt-2">
-            <strong className="font-bold text-gray-900">Direct Contact:</strong> +91 98765 43210 |{" "}
+            <strong className="font-bold text-gray-900">Direct Contact:</strong>{" "}
+            +91 98765 43210 |{" "}
             <a
               href="mailto:sales@mahalaxmienterprises.com"
               className="text-[#002b5c] hover:text-[#eb1e25] font-normal transition-colors"
@@ -74,7 +83,8 @@ export default function ContactFormSection({ onOpenEnquiry }: ContactFormSection
               REGIONAL OFFICES
             </span>
             <span className="text-xs text-gray-300 ml-2 font-normal">
-              (Working Hours: Monday to Friday from 9.00 am to 5.00pm except for Public Holidays)
+              (Working Hours: Monday to Friday from 9.00 am to 5.00pm except for
+              Public Holidays)
             </span>
           </div>
 
@@ -127,10 +137,12 @@ export default function ContactFormSection({ onOpenEnquiry }: ContactFormSection
                 <div className="text-xs md:text-sm text-[#555555] space-y-1.5 font-sans leading-relaxed">
                   <p className="uppercase text-gray-600">{office.address}</p>
                   <p>
-                    Contact number: <span className="text-gray-800">{office.contactNo}</span>
+                    Contact number:{" "}
+                    <span className="text-gray-800">{office.contactNo}</span>
                   </p>
                   <p className="pt-2">
-                    Contact Name: <span className="text-gray-800">{office.contactName}</span>
+                    Contact Name:{" "}
+                    <span className="text-gray-800">{office.contactName}</span>
                   </p>
                   <p>
                     Email:{" "}
@@ -170,7 +182,8 @@ export default function ContactFormSection({ onOpenEnquiry }: ContactFormSection
           }
           className="inline-block bg-[#eb1e25] hover:bg-[#c4141a] text-white text-xs md:text-sm lg:text-base font-extrabold uppercase tracking-wide px-6 md:px-10 py-3.5 rounded shadow-md hover:shadow-lg transition-all"
         >
-          LOCATE INDUSTRIAL LUBE DISTRIBUTOR (ILD)/ BAZAAR LUBE DISTRIBUTOR (BLD)
+          LOCATE INDUSTRIAL LUBE DISTRIBUTOR (ILD)/ BAZAAR LUBE DISTRIBUTOR
+          (BLD)
         </button>
       </div>
     </section>

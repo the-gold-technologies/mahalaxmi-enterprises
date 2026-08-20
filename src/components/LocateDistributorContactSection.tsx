@@ -148,17 +148,26 @@ export default function LocateDistributorContactSection({
               <div className="mt-8 flex flex-col gap-7 text-[15px] text-[#333333] leading-relaxed font-sans">
                 {/* Address Item */}
                 <div className="flex gap-4 items-start">
-                  <HomeIcon className="text-[#002b5c] w-6 h-6 flex-shrink-0 mt-0.5" strokeWidth={1.8} />
+                  <HomeIcon
+                    className="text-[#002b5c] w-6 h-6 flex-shrink-0 mt-0.5"
+                    strokeWidth={1.8}
+                  />
                   <p className="text-[#333333] text-[15px] leading-relaxed">
-                    <strong className="font-bold text-[#002b5c]">Mahalaxmi Enterprises</strong>
+                    <strong className="font-bold text-[#002b5c]">
+                      Mahalaxmi Enterprises
+                    </strong>
                     <br />
-                    Baghpat Region & Surrounding Industrial Belts, Uttar Pradesh, India.
+                    Baghpat Region & Surrounding Industrial Belts, Uttar
+                    Pradesh, India.
                   </p>
                 </div>
 
                 {/* Direct Contact Phone & Hours */}
                 <div className="flex gap-4 items-start">
-                  <Phone className="text-[#002b5c] w-6 h-6 flex-shrink-0 mt-0.5" strokeWidth={1.8} />
+                  <Phone
+                    className="text-[#002b5c] w-6 h-6 flex-shrink-0 mt-0.5"
+                    strokeWidth={1.8}
+                  />
                   <div>
                     <p className="text-[#333333] text-[15px]">
                       Direct Contact:{" "}
@@ -175,7 +184,10 @@ export default function LocateDistributorContactSection({
 
                 {/* Email Item */}
                 <div className="flex gap-4 items-center">
-                  <Mail className="text-[#002b5c] w-6 h-6 flex-shrink-0" strokeWidth={1.8} />
+                  <Mail
+                    className="text-[#002b5c] w-6 h-6 flex-shrink-0"
+                    strokeWidth={1.8}
+                  />
                   <p className="text-[#333333] text-[15px]">
                     Email:{" "}
                     <a
