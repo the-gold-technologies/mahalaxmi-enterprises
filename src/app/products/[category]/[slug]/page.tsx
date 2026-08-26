@@ -1,13 +1,12 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import EnquiryModal from "@/components/EnquiryModal";
 import DownloadModal from "@/components/DownloadModal";
-import { getProductBySlug, getCategoryBySlug } from "@/data/productsData";
 import { ArrowLeft, FileText, Droplet, Search } from "lucide-react";
 import { useCMSStore } from "@/store/useCMSStore";
 
@@ -27,7 +26,13 @@ export default function ProductDetailPage() {
   const [downloadPdfType, setDownloadPdfType] = useState<"TDS" | "MSDS">("TDS");
   const [downloadPdfUrl, setDownloadPdfUrl] = useState("");
 
-  const { productDetails, fetchProductBySlug, fetchProducts } = useCMSStore();
+  const {
+    productDetails,
+    products,
+    productCategories,
+    fetchProductBySlug,
+    fetchProducts,
+  } = useCMSStore();
 
   useEffect(() => {
     if (productSlug) {
@@ -38,13 +43,68 @@ export default function ProductDetailPage() {
     }
   }, [productSlug, categorySlug, fetchProductBySlug, fetchProducts]);
 
-  const cmsProduct = productDetails[productSlug];
-  const staticProduct = getProductBySlug(productSlug);
-  const product: any = cmsProduct || staticProduct;
+  const product: any =
+    productDetails[productSlug] ||
+    products?.find((p) => p.slug === productSlug);
 
-  const category = getCategoryBySlug(categorySlug);
+  const category = useMemo(() => {
+    const found = productCategories?.find((c) => c.slug === categorySlug);
+    if (found) return found;
+    return {
+      slug: categorySlug,
+      name: categorySlug
+        ? categorySlug
+            .replace(/-/g, " ")
+            .replace(/\b\w/g, (l) => l.toUpperCase())
+        : "Products",
+      shortDesc: "",
+      fullDesc: "",
+    };
+  }, [productCategories, categorySlug]);
 
-  if (!product || !category) {
+  const siblingProducts = useMemo(() => {
+    if (!products) return [];
+    return products.filter(
+      (p) =>
+        (!categorySlug || p.categorySlug === categorySlug) &&
+        p.slug !== productSlug,
+    );
+  }, [products, categorySlug, productSlug]);
+
+  const subCategoryList = useMemo(() => {
+    if (!products) return [];
+    const catProducts = products.filter(
+      (p) => !categorySlug || p.categorySlug === categorySlug,
+    );
+    const titles = Array.from(
+      new Set(
+        catProducts
+          .map((p) => p.subCategoryTitle || (p as any).subtitle || p.name)
+          .filter(Boolean),
+      ),
+    );
+    return titles.map((title) => ({ title }));
+  }, [products, categorySlug]);
+
+  const handleOpenDownload = (pdfType: "TDS" | "MSDS") => {
+    if (!product) return;
+    setDownloadProductName(product.name);
+    setDownloadPdfType(pdfType);
+    setDownloadPdfUrl(
+      pdfType === "TDS"
+        ? product.tdsPdfUrl || product.pdfUrl
+        : product.msdsPdfUrl || product.msdsUrl || product.pdfUrl,
+    );
+    setIsDownloadOpen(true);
+  };
+
+  const handleOpenEnquiry = (prodName?: string) => {
+    if (prodName) setEnquiryProduct(prodName);
+    else if (product) setEnquiryProduct(product.name);
+    setIsEnquiryOpen(true);
+  };
+
+  if (!product) {
     return (
       <main className="min-h-screen bg-white text-gray-800 font-sans flex flex-col justify-between">
         <Navbar
@@ -54,8 +114,12 @@ export default function ProductDetailPage() {
           setLanguage={setLanguage}
         />
         <div className="max-w-4xl mx-auto px-4 py-20 text-center">
-          <h1 className="text-3xl font-extrabold text-[#002b5c] mb-4">Product Not Found</h1>
-          <p className="text-gray-600 mb-8">The requested lubricant product could not be located.</p>
+          <h1 className="text-3xl font-extrabold text-[#002b5c] mb-4">
+            Product Not Found
+          </h1>
+          <p className="text-gray-600 mb-8">
+            The requested lubricant product could not be located.
+          </p>
           <Link
             href="/products/industrial-oils"
             className="inline-flex items-center gap-2 bg-[#002b5c] text-white font-bold px-6 py-3 rounded-lg hover:bg-[#eb1e25] transition"
@@ -68,28 +132,14 @@ export default function ProductDetailPage() {
     );
   }
 
-  // Find sub-category group for current product
-  const currentGroup = category.subCategoryGroups.find((group) =>
-    group.products.some((p) => p.slug === product.slug)
+  const currentGroup = {
+    title:
+      product.subCategoryTitle || (product as any).subtitle || category.name,
+  };
+
+  const hasMultiCols = Boolean(
+    product.tableHeaders && product.tableHeaders.length > 0,
   );
-
-  // Sibling products in the same series
-  const siblingProducts = currentGroup?.products || category.products.slice(0, 5);
-
-  const handleOpenDownload = (pdfType: "TDS" | "MSDS") => {
-    setDownloadProductName(product.name);
-    setDownloadPdfType(pdfType);
-    setDownloadPdfUrl(pdfType === "TDS" ? (product.tdsPdfUrl || product.pdfUrl) : (product.msdsPdfUrl || product.msdsUrl || product.pdfUrl));
-    setIsDownloadOpen(true);
-  };
-
-  const handleOpenEnquiry = (prodName?: string) => {
-    if (prodName) setEnquiryProduct(prodName);
-    else setEnquiryProduct(product.name);
-    setIsEnquiryOpen(true);
-  };
-
-  const hasMultiCols = Boolean(product.tableHeaders && product.tableHeaders.length > 0);
   const colCount = hasMultiCols ? product.tableHeaders!.length : 1;
 
   return (
@@ -113,7 +163,10 @@ export default function ProductDetailPage() {
             Home
           </Link>
           <span className="text-gray-400">/</span>
-          <Link href={`/products/${category.slug}`} className="text-[#337ab7] hover:underline">
+          <Link
+            href={`/products/${category.slug}`}
+            className="text-[#337ab7] hover:underline"
+          >
             {category.name}
           </Link>
           <span className="text-gray-400">/</span>
@@ -233,7 +286,9 @@ export default function ProductDetailPage() {
                       }`}
                     >
                       <span className="truncate">{sib.name}</span>
-                      {isCurrent && <span className="text-xs text-sky-300">●</span>}
+                      {isCurrent && (
+                        <span className="text-xs text-sky-300">●</span>
+                      )}
                     </Link>
                   );
                 })}
@@ -248,7 +303,8 @@ export default function ProductDetailPage() {
           {product.description && (
             <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs">
               <h3 className="text-base sm:text-lg font-bold text-[#002b5c] mb-2 flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-[#eb1e25]" /> Description
+                <span className="w-2 h-2 rounded-full bg-[#eb1e25]" />{" "}
+                Description
               </h3>
               <p className="text-xs sm:text-sm text-slate-700 leading-relaxed font-sans font-normal">
                 {product.description}
@@ -262,7 +318,8 @@ export default function ProductDetailPage() {
             {product.applicationAreas && (
               <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs flex flex-col">
                 <h3 className="text-base sm:text-lg font-bold text-[#eb1e25] mb-3 flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-[#002b5c]" /> Application Areas:
+                  <span className="w-2 h-2 rounded-full bg-[#002b5c]" />{" "}
+                  Application Areas:
                 </h3>
                 <p className="text-xs sm:text-sm text-slate-700 leading-relaxed font-sans">
                   {product.applicationAreas}
@@ -271,28 +328,38 @@ export default function ProductDetailPage() {
             )}
 
             {/* Performance Benefits */}
-            {product.performanceBenefits && product.performanceBenefits.length > 0 && (
-              <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs flex flex-col">
-                <h3 className="text-base sm:text-lg font-bold text-[#eb1e25] mb-3 flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-[#002b5c]" /> Performance Benefits:
-                </h3>
-                <ul className="space-y-2.5">
-                  {product.performanceBenefits.map((benefit: string, bIdx: number) => (
-                    <li key={bIdx} className="flex items-start gap-2.5 text-xs sm:text-sm text-slate-700">
-                      <span className="text-[#eb1e25] font-bold text-sm leading-none mt-0.5">•</span>
-                      <span>{benefit}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
+            {product.performanceBenefits &&
+              product.performanceBenefits.length > 0 && (
+                <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs flex flex-col">
+                  <h3 className="text-base sm:text-lg font-bold text-[#eb1e25] mb-3 flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-[#002b5c]" />{" "}
+                    Performance Benefits:
+                  </h3>
+                  <ul className="space-y-2.5">
+                    {product.performanceBenefits.map(
+                      (benefit: string, bIdx: number) => (
+                        <li
+                          key={bIdx}
+                          className="flex items-start gap-2.5 text-xs sm:text-sm text-slate-700"
+                        >
+                          <span className="text-[#eb1e25] font-bold text-sm leading-none mt-0.5">
+                            •
+                          </span>
+                          <span>{benefit}</span>
+                        </li>
+                      ),
+                    )}
+                  </ul>
+                </div>
+              )}
           </div>
 
           {/* Special Features */}
           {product.specialFeatures && product.specialFeatures.length > 0 && (
             <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs">
               <h3 className="text-base sm:text-lg font-bold text-[#002b5c] mb-3 flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-[#eb1e25]" /> Special Features:
+                <span className="w-2 h-2 rounded-full bg-[#eb1e25]" /> Special
+                Features:
               </h3>
               <ul className="space-y-2">
                 {product.specialFeatures.map((feat: string, fIdx: number) => (
@@ -309,7 +376,8 @@ export default function ProductDetailPage() {
             <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-xs pt-4">
               <div className="px-6 pb-3">
                 <h3 className="text-base sm:text-lg font-bold text-[#002b5c] flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-[#eb1e25]" /> Physico-Chemical Properties
+                  <span className="w-2 h-2 rounded-full bg-[#eb1e25]" />{" "}
+                  Physico-Chemical Properties
                 </h3>
               </div>
               <div className="overflow-x-auto">
@@ -326,14 +394,16 @@ export default function ProductDetailPage() {
                     {hasMultiCols && (
                       <tr className="bg-[#002b5c] text-white border-t border-white/20">
                         <th className="py-2 px-4 border-r border-white/20"></th>
-                        {product.tableHeaders!.map((hdr: string, hIdx: number) => (
-                          <th
-                            key={hIdx}
-                            className="py-2 px-4 text-center font-bold border-r border-white/20 last:border-r-0"
-                          >
-                            {hdr}
-                          </th>
-                        ))}
+                        {product.tableHeaders!.map(
+                          (hdr: string, hIdx: number) => (
+                            <th
+                              key={hIdx}
+                              className="py-2 px-4 text-center font-bold border-r border-white/20 last:border-r-0"
+                            >
+                              {hdr}
+                            </th>
+                          ),
+                        )}
                       </tr>
                     )}
                   </thead>
@@ -404,51 +474,56 @@ export default function ProductDetailPage() {
         </div>
 
         {/* Sub-Category Teardrop Navigation Grid */}
-        <div className="mt-8 pt-2">
-          <div className="border-t border-gray-200">
-            {Array.from({ length: Math.ceil(category.subCategoryGroups.length / 4) }).map((_, rIdx) => {
-              const rowItems = category.subCategoryGroups.slice(rIdx * 4, rIdx * 4 + 4);
-              return (
-                <div
-                  key={rIdx}
-                  className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 items-center py-5 border-b border-gray-200"
-                >
-                  {rowItems.map((subGroup, cIdx) => {
-                    const isCurrentGroup = Boolean(
-                      currentGroup?.title &&
-                        subGroup.title.trim().toLowerCase() === currentGroup.title.trim().toLowerCase()
-                    );
-                    return (
-                      <Link
-                        key={cIdx}
-                        href={`/products/${category.slug}#subcat-${rIdx * 4 + cIdx}`}
-                        className="flex items-center gap-3.5 group transition-colors py-1.5"
-                      >
-                        <Droplet
-                          size={21}
-                          className={`shrink-0 transition-colors ${
-                            isCurrentGroup
-                              ? "text-[#eb1e25] fill-[#eb1e25]"
-                              : "text-[#475569] fill-[#475569] group-hover:text-[#eb1e25] group-hover:fill-[#eb1e25]"
-                          }`}
-                        />
-                        <span
-                          className={`text-sm md:text-[15px] font-normal uppercase tracking-normal leading-relaxed transition-colors ${
-                            isCurrentGroup
-                              ? "text-[#eb1e25] font-semibold"
-                              : "text-[#334155] group-hover:text-[#eb1e25]"
-                          }`}
+        {subCategoryList.length > 0 && (
+          <div className="mt-8 pt-2">
+            <div className="border-t border-gray-200">
+              {Array.from({
+                length: Math.ceil(subCategoryList.length / 4),
+              }).map((_, rIdx) => {
+                const rowItems = subCategoryList.slice(rIdx * 4, rIdx * 4 + 4);
+                return (
+                  <div
+                    key={rIdx}
+                    className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 items-center py-5 border-b border-gray-200"
+                  >
+                    {rowItems.map((subGroup, cIdx) => {
+                      const isCurrentGroup = Boolean(
+                        currentGroup?.title &&
+                        subGroup.title.trim().toLowerCase() ===
+                          currentGroup.title.trim().toLowerCase(),
+                      );
+                      return (
+                        <Link
+                          key={cIdx}
+                          href={`/products/${category.slug}#subcat-${rIdx * 4 + cIdx}`}
+                          className="flex items-center gap-3.5 group transition-colors py-1.5"
                         >
-                          {subGroup.title}
-                        </span>
-                      </Link>
-                    );
-                  })}
-                </div>
-              );
-            })}
+                          <Droplet
+                            size={21}
+                            className={`shrink-0 transition-colors ${
+                              isCurrentGroup
+                                ? "text-[#eb1e25] fill-[#eb1e25]"
+                                : "text-[#475569] fill-[#475569] group-hover:text-[#eb1e25] group-hover:fill-[#eb1e25]"
+                            }`}
+                          />
+                          <span
+                            className={`text-sm md:text-[15px] font-normal uppercase tracking-normal leading-relaxed transition-colors ${
+                              isCurrentGroup
+                                ? "text-[#eb1e25] font-semibold"
+                                : "text-[#334155] group-hover:text-[#eb1e25]"
+                            }`}
+                          >
+                            {subGroup.title}
+                          </span>
+                        </Link>
+                      );
+                    })}
+                  </div>
+                );
+              })}
+            </div>
           </div>
-        </div>
+        )}
       </div>
 
       <Footer onOpenEnquiry={handleOpenEnquiry} />

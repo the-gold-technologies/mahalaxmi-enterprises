@@ -13,7 +13,7 @@ import {
   Minus,
   Layers,
 } from "lucide-react";
-import { productsData } from "@/data/productsData";
+import { useCMSStore } from "@/store/useCMSStore";
 
 interface NavbarProps {
   fontSizeMultiplier: number;
@@ -21,6 +21,13 @@ interface NavbarProps {
   language: "EN" | "HI";
   setLanguage: (lang: "EN" | "HI") => void;
 }
+
+const DEFAULT_CATEGORIES = [
+  { slug: "industrial-oils", name: "Industrial Oils" },
+  { slug: "industrial-greases", name: "Industrial Greases" },
+  { slug: "automotive-oils", name: "Automotive Oils" },
+  { slug: "bike-oils", name: "Bike Engine Oils" },
+];
 
 export default function Navbar({
   fontSizeMultiplier,
@@ -32,11 +39,29 @@ export default function Navbar({
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileProductsOpen, setMobileProductsOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
-  const [activeHoverCategory, setActiveHoverCategory] = useState<string>(
-    productsData[0]?.slug || "automotive-oils",
-  );
+  const [activeHoverCategory, setActiveHoverCategory] =
+    useState<string>("industrial-oils");
   const [activeTab, setActiveTab] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState("");
+
+  const { products, productCategories, fetchProducts } = useCMSStore();
+
+  React.useEffect(() => {
+    if (!productCategories || !products) {
+      fetchProducts().catch(console.error);
+    }
+  }, [productCategories, products, fetchProducts]);
+
+  const categories =
+    productCategories && productCategories.length > 0
+      ? productCategories
+      : DEFAULT_CATEGORIES;
+
+  const currentCategory =
+    categories.find((c) => c.slug === activeHoverCategory) || categories[0];
+
+  const categoryProducts =
+    products?.filter((p) => p.categorySlug === currentCategory.slug) || [];
 
   const increaseFont = () => {
     if (fontSizeMultiplier < 1.25) setFontSizeMultiplier((prev) => prev + 0.08);
@@ -79,9 +104,6 @@ export default function Navbar({
       document.body.style.overflow = "";
     };
   }, [mobileMenuOpen]);
-
-  const activeCategoryData =
-    productsData.find((c) => c.slug === activeHoverCategory) || productsData[0];
 
   return (
     <header className="relative z-50 bg-white shadow-md">
@@ -259,7 +281,7 @@ export default function Navbar({
                         <Layers size={13} className="text-[#eb1e25]" />{" "}
                         Categories
                       </div>
-                      {productsData.map((cat) => {
+                      {categories.map((cat) => {
                         const isCatActive = activeHoverCategory === cat.slug;
                         return (
                           <div
@@ -295,32 +317,46 @@ export default function Navbar({
                     {/* Right Column: Pre-populated Sub-Products List */}
                     <div className="col-span-7 pl-1 flex flex-col justify-between">
                       <div
-                        key={activeCategoryData.slug}
+                        key={currentCategory.slug}
                         className="animate-in fade-in duration-150 space-y-2"
                       >
                         <div className="text-[11px] font-extrabold text-[#002b5c] uppercase tracking-wider px-2 py-1 border-b border-gray-100 flex items-center justify-between">
-                          <span>{activeCategoryData.name}</span>
+                          <span>{currentCategory.name}</span>
                           <span className="text-[10px] text-[#eb1e25] font-bold bg-red-50 px-2 py-0.5 rounded">
-                            {activeCategoryData.products.length} Products
+                            {categoryProducts.length} Products
                           </span>
                         </div>
-                        <div className="space-y-1 max-h-56 overflow-y-auto pr-1">
-                          {activeCategoryData.products.map((prod) => (
-                            <Link
-                              key={prod.id}
-                              href={`/products/${prod.categorySlug}/${prod.slug}`}
-                              className="block px-3 py-2 text-xs font-medium text-gray-700 hover:bg-red-50 hover:text-[#eb1e25] rounded-lg transition-all duration-150 group border border-transparent hover:border-red-100"
-                            >
-                              <div className="font-bold text-[#002b5c] group-hover:text-[#eb1e25] transition-colors">
-                                {prod.name}
-                              </div>
-                              {prod.subtitle && (
-                                <div className="text-[10px] text-gray-500 font-normal">
-                                  {prod.subtitle}
+                        <div className="space-y-1 max-h-64 overflow-y-auto pr-1">
+                          {categoryProducts.length > 0 ? (
+                            categoryProducts.map((prod) => (
+                              <Link
+                                key={prod.id}
+                                href={`/products/${prod.categorySlug}/${prod.slug}`}
+                                className="block px-3 py-2 text-xs font-medium text-gray-700 hover:bg-red-50 hover:text-[#eb1e25] rounded-lg transition-all duration-150 group border border-transparent hover:border-red-100"
+                              >
+                                <div className="font-bold text-[#002b5c] group-hover:text-[#eb1e25] transition-colors">
+                                  {prod.name}
                                 </div>
-                              )}
+                                {(prod.subCategoryTitle ||
+                                  prod.tagline ||
+                                  (prod as any).subtitle) && (
+                                  <div className="text-[10px] text-gray-500 font-normal">
+                                    {prod.subCategoryTitle ||
+                                      prod.tagline ||
+                                      (prod as any).subtitle}
+                                  </div>
+                                )}
+                              </Link>
+                            ))
+                          ) : (
+                            <Link
+                              href={`/products/${currentCategory.slug}`}
+                              className="block px-3 py-4 text-xs text-gray-500 italic hover:text-[#002b5c]"
+                            >
+                              Explore all products in {currentCategory.name}{" "}
+                              &rarr;
                             </Link>
-                          ))}
+                          )}
                         </div>
                       </div>
                     </div>
@@ -411,7 +447,7 @@ export default function Navbar({
                             <span className="text-[11px] font-bold uppercase text-gray-400 tracking-wider">
                               Product Categories
                             </span>
-                            {productsData.map((cat) => (
+                            {categories.map((cat) => (
                               <Link
                                 key={cat.slug}
                                 href={`/products/${cat.slug}`}

@@ -322,8 +322,9 @@ export const useCMSStore = create<CMSStoreState & CMSStoreActions>((set, get) =>
   fetchProducts: async (categorySlug?: string) => {
     try {
       const baseUrl = getApiBaseUrl();
-      const url = categorySlug && categorySlug !== "all"
-        ? `${baseUrl}/api/products?category=${encodeURIComponent(categorySlug)}`
+      const isFiltered = Boolean(categorySlug && categorySlug !== "all");
+      const url = isFiltered
+        ? `${baseUrl}/api/products?category=${encodeURIComponent(categorySlug!)}`
         : `${baseUrl}/api/products`;
 
       const response = await fetch(url, {
@@ -336,11 +337,28 @@ export const useCMSStore = create<CMSStoreState & CMSStoreActions>((set, get) =>
 
       const json = await response.json();
       if (json.success && json.data) {
-        const { products, categories } = json.data;
-        set((state) => ({
-          products: Array.isArray(products) ? products : state.products,
-          productCategories: Array.isArray(categories) ? categories : state.productCategories,
-        }));
+        const { products: fetchedProducts, categories } = json.data;
+
+        set((state) => {
+          let updatedProducts = state.products;
+
+          if (Array.isArray(fetchedProducts)) {
+            if (isFiltered && Array.isArray(state.products) && state.products.length > 0) {
+              // Merge products without losing other categories
+              const productMap = new Map(state.products.map((p) => [p.id || p.slug, p]));
+              fetchedProducts.forEach((p) => productMap.set(p.id || p.slug, p));
+              updatedProducts = Array.from(productMap.values());
+            } else {
+              updatedProducts = fetchedProducts;
+            }
+          }
+
+          return {
+            products: updatedProducts,
+            productCategories: Array.isArray(categories) && categories.length > 0 ? categories : state.productCategories,
+          };
+        });
+
         return json.data;
       }
       return null;
