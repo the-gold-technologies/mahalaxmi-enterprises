@@ -1,15 +1,14 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import EnquiryModal from "@/components/EnquiryModal";
 import DownloadModal from "@/components/DownloadModal";
-import { getCategoryBySlug } from "@/data/productsData";
 import { ArrowLeft, Droplet } from "lucide-react";
-import { useCMSStore } from "@/store/useCMSStore";
+import { useCMSStore, CMSProduct } from "@/store/useCMSStore";
 
 export default function CategoryProductsPage() {
   const params = useParams();
@@ -25,7 +24,7 @@ export default function CategoryProductsPage() {
   const [downloadProductName, setDownloadProductName] = useState("");
   const [downloadPdfUrl, setDownloadPdfUrl] = useState("");
 
-  const { fetchProducts } = useCMSStore();
+  const { fetchProducts, products, productCategories } = useCMSStore();
 
   useEffect(() => {
     if (categorySlug) {
@@ -33,41 +32,51 @@ export default function CategoryProductsPage() {
     }
   }, [categorySlug, fetchProducts]);
 
-  const category = getCategoryBySlug(categorySlug);
+  // Current category from CMS store
+  const category = useMemo(() => {
+    if (!productCategories) return null;
+    return productCategories.find((c) => c.slug === categorySlug) || null;
+  }, [productCategories, categorySlug]);
 
-  if (!category) {
-    return (
-      <main className="min-h-screen bg-white text-gray-800 font-sans flex flex-col justify-between">
-        <Navbar
-          fontSizeMultiplier={fontSizeMultiplier}
-          setFontSizeMultiplier={setFontSizeMultiplier}
-          language={language}
-          setLanguage={setLanguage}
-        />
-        <div className="max-w-4xl mx-auto px-4 py-20 text-center">
-          <h1 className="text-3xl font-extrabold text-[#002b5c] mb-4">
-            Category Not Found
-          </h1>
-          <p className="text-gray-600 mb-8">
-            The requested product category could not be found.
-          </p>
-          <Link
-            href="/products/industrial-oils"
-            className="inline-flex items-center gap-2 bg-[#002b5c] text-white font-bold px-6 py-3 rounded-lg hover:bg-[#eb1e25] transition"
-          >
-            <ArrowLeft size={16} /> Return to All Categories
-          </Link>
-        </div>
-        <Footer onOpenEnquiry={() => setIsEnquiryOpen(true)} />
-      </main>
+  // Filter and group products dynamically from CMS
+  const subCategoryGroups = useMemo(() => {
+    if (!products || products.length === 0) return [];
+
+    const categoryProducts = products.filter(
+      (p) => !categorySlug || p.categorySlug === categorySlug
     );
-  }
+
+    const groupMap = new Map<string, { title: string; coverImage: string; products: CMSProduct[] }>();
+
+    categoryProducts.forEach((p) => {
+      const subTitle = (p as any).subCategoryTitle || (p as any).subtitle || (category?.name ? `${category.name} Range` : "Featured Products");
+      const cover = (p as any).containerImage || p.coverImage || category?.bannerImage || "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&q=80&w=600";
+
+      if (!groupMap.has(subTitle)) {
+        groupMap.set(subTitle, {
+          title: subTitle,
+          coverImage: cover,
+          products: [],
+        });
+      }
+
+      const existing = groupMap.get(subTitle)!;
+      if (!existing.coverImage && cover) {
+        existing.coverImage = cover;
+      }
+      existing.products.push(p);
+    });
+
+    return Array.from(groupMap.values());
+  }, [products, categorySlug, category]);
 
   const handleOpenEnquiry = (productName?: string) => {
     if (productName) setEnquiryProduct(productName);
     else setEnquiryProduct("");
     setIsEnquiryOpen(true);
   };
+
+  const categoryName = category?.name || categorySlug?.replace(/-/g, " ").toUpperCase() || "Products";
 
   return (
     <main
@@ -90,7 +99,7 @@ export default function CategoryProductsPage() {
             Home
           </Link>
           <span className="text-gray-400">/</span>
-          <span className="text-[#eb1e25] font-semibold">{category.name}</span>
+          <span className="text-[#eb1e25] font-semibold">{categoryName}</span>
         </div>
       </section>
 
@@ -98,7 +107,7 @@ export default function CategoryProductsPage() {
       <div className="max-w-6xl mx-auto px-4 md:px-8 py-10 md:py-14 w-full">
         {/* Sub-Category Groups Grid (2 Columns) */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-14">
-          {category.subCategoryGroups.map((group, idx) => {
+          {subCategoryGroups.map((group, idx) => {
             const words = group.title.split(" ");
             const firstWord = words[0];
             const remainingWords = words.slice(1).join(" ");
@@ -132,36 +141,33 @@ export default function CategoryProductsPage() {
                           src={group.coverImage}
                           alt={group.title}
                           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-108"
-                          onError={(e) => {
-                            (e.target as HTMLImageElement).src =
-                              "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&q=80&w=600";
-                          }}
                         />
+                        {/* Subtle bottom gradient tint */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#002b5c]/40 via-transparent to-transparent opacity-60 pointer-events-none" />
                       </div>
                     </div>
 
-                    {/* Red VIEW MORE Action Button */}
-                    <button
-                      onClick={() => handleOpenEnquiry(group.title)}
-                      className="w-full sm:w-[230px] bg-[#eb1e25] hover:bg-[#c4141a] text-white text-xs font-bold uppercase py-2.5 rounded-lg shadow-sm transition-colors text-center tracking-wider cursor-pointer"
+                    {/* Red VIEW MORE Action Link */}
+                    <Link
+                      href={`/products/${categorySlug}/${group.products[0]?.slug || ""}`}
+                      className="bg-[#eb1e25] hover:bg-[#c4141a] text-white text-xs font-bold uppercase tracking-wider py-2.5 px-6 rounded-lg text-center transition-all shadow-xs hover:shadow-md inline-flex items-center justify-center gap-1.5 w-full sm:w-[230px]"
                     >
-                      VIEW MORE
-                    </button>
+                      <span>VIEW MORE</span>
+                      <span className="text-sm">→</span>
+                    </Link>
                   </div>
 
-                  {/* Right Column: Pill-Style Product Buttons Grid with Gray Border & Arrow on Right */}
-                  <div className="flex-1 w-full flex flex-col space-y-2.5">
-                    {group.products.map((product) => (
+                  {/* Right Column: Uniform Fixed Height Product Pills Container with Vertical Scrollbar */}
+                  <div className="flex-1 max-h-[230px] w-full overflow-y-auto space-y-2 pr-1.5 scrollbar-visible">
+                    {group.products.map((prod) => (
                       <Link
-                        key={product.id}
-                        href={`/products/${category.slug}/${product.slug}`}
-                        className="group w-full bg-white hover:bg-slate-50 border border-gray-300 hover:border-[#002b5c] rounded-xl px-4 py-2.5 flex items-center justify-between text-xs sm:text-[13px] font-bold text-[#002b5c] shadow-2xs hover:shadow-sm transition-all"
+                        key={prod.id}
+                        href={`/products/${categorySlug}/${prod.slug}`}
+                        className="group/item bg-slate-100/80 hover:bg-white text-slate-700 hover:text-[#002b5c] text-xs font-semibold px-4 py-2.5 rounded-lg border border-slate-200/90 hover:border-sky-400/60 hover:shadow-2xs flex items-center justify-between transition-all uppercase tracking-tight leading-snug"
                       >
-                        <span className="truncate pr-2 group-hover:text-[#eb1e25] transition-colors">
-                          {product.name}
-                        </span>
-                        <span className="text-gray-400 group-hover:text-[#eb1e25] font-extrabold text-sm transition-transform group-hover:translate-x-0.5">
-                          &gt;
+                        <span className="truncate pr-2">{prod.name}</span>
+                        <span className="text-slate-400 group-hover/item:text-[#eb1e25] transition-transform duration-200 group-hover/item:translate-x-0.5 text-xs">
+                          →
                         </span>
                       </Link>
                     ))}
@@ -173,35 +179,42 @@ export default function CategoryProductsPage() {
         </div>
 
         {/* Bottom Sub-Category Teardrop Navigation Grid */}
-        <div className="mt-16 pt-8 border-t border-gray-200">
-          <div className="border-t border-gray-200">
-            {Array.from({ length: Math.ceil(category.subCategoryGroups.length / 4) }).map((_, rIdx) => {
-              const rowItems = category.subCategoryGroups.slice(rIdx * 4, rIdx * 4 + 4);
-              return (
-                <div
-                  key={rIdx}
-                  className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 items-center py-5 border-b border-gray-200"
-                >
-                  {rowItems.map((subGroup, cIdx) => (
-                    <a
-                      key={cIdx}
-                      href={`#subcat-${rIdx * 4 + cIdx}`}
-                      className="flex items-center gap-3.5 group transition-colors py-1.5"
-                    >
-                      <Droplet
-                        size={21}
-                        className="text-[#475569] fill-[#475569] shrink-0 group-hover:text-[#eb1e25] group-hover:fill-[#eb1e25] transition-colors"
-                      />
-                      <span className="text-sm md:text-[15px] font-normal uppercase text-[#334155] group-hover:text-[#eb1e25] tracking-normal leading-relaxed transition-colors">
-                        {subGroup.title}
-                      </span>
-                    </a>
-                  ))}
-                </div>
-              );
-            })}
+        {subCategoryGroups.length > 0 && (
+          <div className="mt-16 pt-8 border-t border-gray-200">
+            <div className="border-t border-gray-200">
+              {Array.from({
+                length: Math.ceil(subCategoryGroups.length / 4),
+              }).map((_, rIdx) => {
+                const rowItems = subCategoryGroups.slice(
+                  rIdx * 4,
+                  rIdx * 4 + 4
+                );
+                return (
+                  <div
+                    key={rIdx}
+                    className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 items-center py-5 border-b border-gray-200"
+                  >
+                    {rowItems.map((subGroup, cIdx) => (
+                      <a
+                        key={cIdx}
+                        href={`#subcat-${rIdx * 4 + cIdx}`}
+                        className="flex items-center gap-3.5 group transition-colors py-1.5"
+                      >
+                        <Droplet
+                          size={21}
+                          className="text-[#475569] fill-[#475569] shrink-0 group-hover:text-[#eb1e25] group-hover:fill-[#eb1e25] transition-colors"
+                        />
+                        <span className="text-sm md:text-[15px] font-normal uppercase text-[#334155] group-hover:text-[#eb1e25] tracking-normal leading-relaxed transition-colors">
+                          {subGroup.title}
+                        </span>
+                      </a>
+                    ))}
+                  </div>
+                );
+              })}
+            </div>
           </div>
-        </div>
+        )}
       </div>
 
       <Footer onOpenEnquiry={handleOpenEnquiry} />
