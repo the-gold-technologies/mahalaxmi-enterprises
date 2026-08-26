@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import EnquiryModal from "@/components/EnquiryModal";
+import DistributorModal from "@/components/DistributorModal";
 import ContactHero from "@/app/contact-us/components/ContactHero";
 import ContactBreadcrumb from "@/app/contact-us/components/ContactBreadcrumb";
 import ContactFormSection from "@/app/contact-us/components/ContactFormSection";
@@ -16,6 +17,9 @@ export default function ContactUsPage() {
   const [isEnquiryOpen, setIsEnquiryOpen] = useState(false);
   const [enquiryProduct, setEnquiryProduct] = useState("");
 
+  const [isDistributorOpen, setIsDistributorOpen] = useState(false);
+  const [distributorType, setDistributorType] = useState("Industrial Lube Distributor (ILD)");
+
   const { fetchContactUs, fetchPage } = useCMSStore();
 
   useEffect(() => {
@@ -27,6 +31,11 @@ export default function ContactUsPage() {
     if (productName) setEnquiryProduct(productName);
     else setEnquiryProduct("");
     setIsEnquiryOpen(true);
+  };
+
+  const handleOpenDistributor = (type?: string) => {
+    if (type) setDistributorType(type);
+    setIsDistributorOpen(true);
   };
 
   return (
@@ -51,7 +60,10 @@ export default function ContactUsPage() {
       <ContactBreadcrumb />
 
       {/* Main Content & Contact Form */}
-      <ContactFormSection onOpenEnquiry={handleOpenEnquiry} />
+      <ContactFormSection
+        onOpenEnquiry={handleOpenEnquiry}
+        onOpenDistributor={handleOpenDistributor}
+      />
 
       {/* Footer & Enquiry Modal */}
       <Footer onOpenEnquiry={handleOpenEnquiry} />
@@ -60,6 +72,12 @@ export default function ContactUsPage() {
         isOpen={isEnquiryOpen}
         onClose={() => setIsEnquiryOpen(false)}
         initialProduct={enquiryProduct}
+      />
+
+      <DistributorModal
+        isOpen={isDistributorOpen}
+        onClose={() => setIsDistributorOpen(false)}
+        initialType={distributorType}
       />
     </main>
   );

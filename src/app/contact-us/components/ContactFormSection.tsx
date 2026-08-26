@@ -5,6 +5,7 @@ import { useCMSStore } from "@/store/useCMSStore";
 
 interface ContactFormSectionProps {
   onOpenEnquiry?: (productName?: string) => void;
+  onOpenDistributor?: (type?: string) => void;
 }
 
 interface OfficeItem {
@@ -20,6 +21,7 @@ interface OfficeItem {
 
 export default function ContactFormSection({
   onOpenEnquiry,
+  onOpenDistributor,
 }: ContactFormSectionProps) {
   const [selectedRegion, setSelectedRegion] = useState<string>("ALL");
   const [searchQuery, setSearchQuery] = useState<string>("");
@@ -256,10 +258,13 @@ export default function ContactFormSection({
       {/* 5. LOCATE DISTRIBUTOR RED BANNER BUTTON */}
       <div className="mt-14 md:mt-20 mb-6 text-center">
         <button
-          onClick={() =>
-            onOpenEnquiry &&
-            onOpenEnquiry("Locate Industrial Lube Distributor (ILD)")
-          }
+          onClick={() => {
+            if (onOpenDistributor) {
+              onOpenDistributor("Industrial Lube Distributor (ILD)");
+            } else if (onOpenEnquiry) {
+              onOpenEnquiry("Locate Industrial Lube Distributor (ILD)");
+            }
+          }}
           className="inline-block bg-[#eb1e25] hover:bg-[#c4141a] text-white text-xs md:text-sm lg:text-base font-extrabold uppercase tracking-wide px-6 md:px-10 py-3.5 rounded shadow-md hover:shadow-lg transition-all cursor-pointer"
         >
           LOCATE INDUSTRIAL LUBE DISTRIBUTOR (ILD)/ BAZAAR LUBE DISTRIBUTOR

@@ -5,11 +5,13 @@ import { Home as HomeIcon, Phone, Mail } from "lucide-react";
 import { useCMSStore } from "@/store/useCMSStore";
 
 interface ContactSectionProps {
-  onOpenEnquiry: (productName?: string) => void;
+  onOpenEnquiry?: (productName?: string) => void;
+  onOpenDistributor?: (type?: string) => void;
 }
 
 export default function LocateDistributorContactSection({
   onOpenEnquiry,
+  onOpenDistributor,
 }: ContactSectionProps) {
   const { pages, globalSEO } = useCMSStore();
   const cmsLocate = pages["home"]?.LocateDistributorSection;
@@ -253,17 +255,25 @@ export default function LocateDistributorContactSection({
                 )}
               </div>
 
-              {/* Contact Us Action Button */}
-              {contactBtnText && (
-                <div className="mt-6 sm:mt-8 mb-4">
+              {/* Contact Us Action Buttons */}
+              <div className="mt-6 sm:mt-8 mb-4 flex flex-col sm:flex-row gap-3">
+                {contactBtnText && (
                   <button
-                    onClick={() => onOpenEnquiry(companyName || "Direct Contact Support")}
-                    className="bg-[#eb1e25] hover:bg-[#d0171d] text-white font-extrabold px-8 py-2.5 rounded text-sm uppercase tracking-wider shadow-none transition-all inline-block cursor-pointer"
+                    onClick={() => onOpenEnquiry && onOpenEnquiry(companyName || "Direct Contact Support")}
+                    className="bg-[#eb1e25] hover:bg-[#d0171d] text-white font-extrabold px-6 py-2.5 rounded text-sm uppercase tracking-wider shadow-none transition-all inline-block cursor-pointer text-center"
                   >
                     {contactBtnText}
                   </button>
-                </div>
-              )}
+                )}
+                {onOpenDistributor && (
+                  <button
+                    onClick={() => onOpenDistributor(lubeType)}
+                    className="bg-[#002b5c] hover:bg-[#001f42] text-white font-extrabold px-6 py-2.5 rounded text-sm uppercase tracking-wider shadow-none transition-all inline-block cursor-pointer text-center"
+                  >
+                    Become a Distributor
+                  </button>
+                )}
+              </div>
             </div>
           </div>
         </div>
