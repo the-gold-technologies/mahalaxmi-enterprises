@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
+import Link from "next/link";
+import { useCMSStore } from "@/store/useCMSStore";
 
 interface ProductsServicesProps {
   onSelectCategory?: (category: string) => void;
@@ -10,64 +12,69 @@ export default function ProductsServicesSection({
   onSelectCategory,
 }: ProductsServicesProps) {
   const [hoveredId, setHoveredId] = useState<string | null>(null);
+  const { pages } = useCMSStore();
 
-  const items = [
-    {
-      id: "industrial",
-      name: "Industrial Oils",
-      link: "/products/industrial-oils",
-      hoverImg: "/industrial-1.png",
-      img: "/industrial-2.png",
-    },
-    {
-      id: "greases",
-      name: "Greases",
-      link: "/products/industrial-greases",
-      hoverImg: "/greases-1.png",
-      img: "/greases-2.png",
-    },
-  ];
+  const cmsSection = pages["home"]?.ProductsServicesSection;
+
+  if (!cmsSection) {
+    return null;
+  }
+
+  const title = cmsSection.title || "OUR PRODUCTS AND SERVICES";
+  const subtitle = cmsSection.subtitle || cmsSection.description || "";
+  const items: any[] = cmsSection.items || cmsSection.categories || [];
+
+  if (items.length === 0) {
+    return null;
+  }
 
   return (
     <section id="products" className="py-16 bg-[#f4f6f9] text-center font-sans">
       <div className="max-w-7xl mx-auto px-4">
         {/* Section Title */}
-        <h2 className="text-3xl md:text-4xl font-extrabold text-[#002b5c] uppercase tracking-wide section-underline">
-          OUR PRODUCTS AND SERVICES
-        </h2>
+        {title && (
+          <h2 className="text-3xl md:text-4xl font-extrabold text-[#002b5c] uppercase tracking-wide section-underline">
+            {title}
+          </h2>
+        )}
 
-        <p className="mt-4 text-gray-600 text-sm md:text-base max-w-3xl mx-auto font-medium">
-          Mahalaxmi Enterprises has always been in the forefront developing and
-          marketing of technology advanced lubricants as per the market trends
-        </p>
+        {subtitle && (
+          <p className="mt-4 text-gray-600 text-sm md:text-base max-w-3xl mx-auto font-medium">
+            {subtitle}
+          </p>
+        )}
 
-        {/* 2 Category Items Centered */}
+        {/* Category Items Centered */}
         <div className="mt-12 flex justify-center items-center gap-12 sm:gap-20 flex-wrap">
-          {items.map((item) => {
-            const isHovered = hoveredId === item.id;
-            const bgImage = isHovered ? item.hoverImg : item.img;
+          {items.map((item, idx) => {
+            const itemId = item.id || item.slug || `cat-${idx}`;
+            const isHovered = hoveredId === itemId;
+            const bgImage = isHovered ? (item.hoverImg || item.img) : (item.img || item.hoverImg);
+            const link = item.link || `/products/${item.slug || itemId}`;
 
             return (
-              <a
-                key={item.id}
-                href={item.link}
-                onMouseEnter={() => setHoveredId(item.id)}
+              <Link
+                key={itemId}
+                href={link}
+                onMouseEnter={() => setHoveredId(itemId)}
                 onMouseLeave={() => setHoveredId(null)}
-                onClick={() => onSelectCategory && onSelectCategory(item.id)}
+                onClick={() => onSelectCategory && onSelectCategory(itemId)}
                 className="group flex flex-col items-center cursor-pointer transition-transform duration-300 hover:-translate-y-1.5"
               >
                 {/* Circular Background Image Box */}
-                <div
-                  className="w-28 h-28 sm:w-32 sm:h-32 md:w-36 md:h-36 rounded-full bg-contain bg-no-repeat bg-center transition-all duration-300 drop-shadow-md group-hover:drop-shadow-xl"
-                  style={{
-                    backgroundImage: `url(${bgImage})`,
-                  }}
-                />
+                {bgImage && (
+                  <div
+                    className="w-28 h-28 sm:w-32 sm:h-32 md:w-36 md:h-36 rounded-full bg-contain bg-no-repeat bg-center transition-all duration-300 drop-shadow-md group-hover:drop-shadow-xl"
+                    style={{
+                      backgroundImage: `url(${bgImage})`,
+                    }}
+                  />
+                )}
 
                 <h3 className="mt-4 text-sm sm:text-base font-bold text-[#002b5c] group-hover:text-[#eb1e25] transition-colors">
-                  {item.name}
+                  {item.name || item.title}
                 </h3>
-              </a>
+              </Link>
             );
           })}
         </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import AboutHpclHero from "@/app/about-us/components/AboutHpclHero";
 import AboutBreadcrumb from "@/app/about-us/components/AboutBreadcrumb";
@@ -8,6 +8,7 @@ import AboutMahalaxmiContent from "@/app/about-us/components/AboutMahalaxmiConte
 import LubesHeadquarterSection from "@/app/about-us/components/LubesHeadquarterSection";
 import Footer from "@/components/Footer";
 import EnquiryModal from "@/components/EnquiryModal";
+import { useCMSStore } from "@/store/useCMSStore";
 
 export default function AboutUsPage() {
   const [fontSizeMultiplier, setFontSizeMultiplier] = useState(1);
@@ -15,6 +16,12 @@ export default function AboutUsPage() {
 
   const [isEnquiryOpen, setIsEnquiryOpen] = useState(false);
   const [enquiryProduct, setEnquiryProduct] = useState("");
+
+  const { fetchPage } = useCMSStore();
+
+  useEffect(() => {
+    fetchPage("about-us").catch(console.error);
+  }, [fetchPage]);
 
   const handleOpenEnquiry = (productName?: string) => {
     if (productName) setEnquiryProduct(productName);

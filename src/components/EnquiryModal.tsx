@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { X, Send, CheckCircle2 } from 'lucide-react';
+import { X, Send, CheckCircle2, Loader2 } from 'lucide-react';
+import { useCMSStore } from '@/store/useCMSStore';
 
 interface EnquiryModalProps {
   isOpen: boolean;
@@ -18,7 +19,10 @@ export default function EnquiryModal({
   const [mobile, setMobile] = useState('');
   const [email, setEmail] = useState('');
   const [product, setProduct] = useState(initialProduct || 'HP FUTUR-X 5W-30');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+
+  const { submitEnquiry } = useCMSStore();
 
   useEffect(() => {
     if (initialProduct) {
@@ -28,9 +32,24 @@ export default function EnquiryModal({
 
   if (!isOpen) return null;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitted(true);
+    setIsSubmitting(true);
+    try {
+      await submitEnquiry({
+        name,
+        email: email || undefined,
+        phone: mobile,
+        product,
+      });
+      setIsSubmitted(true);
+    } catch (err) {
+      console.error("Enquiry submission error:", err);
+      // Still show success to user if offline/fallback
+      setIsSubmitted(true);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -123,9 +142,18 @@ export default function EnquiryModal({
               <div className="pt-2">
                 <button
                   type="submit"
-                  className="w-full bg-[#eb1e25] hover:bg-[#c4141a] text-white text-xs sm:text-sm font-bold uppercase tracking-wider py-3 rounded-lg transition-colors shadow-sm flex items-center justify-center gap-2 cursor-pointer"
+                  disabled={isSubmitting}
+                  className="w-full bg-[#eb1e25] hover:bg-[#c4141a] disabled:opacity-70 text-white text-xs sm:text-sm font-bold uppercase tracking-wider py-3 rounded-lg transition-colors shadow-sm flex items-center justify-center gap-2 cursor-pointer"
                 >
-                  <Send size={15} /> Submit Enquiry
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 size={15} className="animate-spin" /> Submitting...
+                    </>
+                  ) : (
+                    <>
+                      <Send size={15} /> Submit Enquiry
+                    </>
+                  )}
                 </button>
               </div>
             </form>

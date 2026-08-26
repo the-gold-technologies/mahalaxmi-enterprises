@@ -1,12 +1,13 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import EnquiryModal from "@/components/EnquiryModal";
 import EventsHero from "@/app/events/components/EventsHero";
 import EventsBreadcrumb from "@/app/events/components/EventsBreadcrumb";
 import EventsContent from "@/app/events/components/EventsContent";
+import { useCMSStore } from "@/store/useCMSStore";
 
 export default function EventsPage() {
   const [fontSizeMultiplier, setFontSizeMultiplier] = useState(1);
@@ -14,6 +15,13 @@ export default function EventsPage() {
 
   const [isEnquiryOpen, setIsEnquiryOpen] = useState(false);
   const [enquiryProduct, setEnquiryProduct] = useState("");
+
+  const { fetchEvents, fetchPage } = useCMSStore();
+
+  useEffect(() => {
+    fetchEvents().catch(console.error);
+    fetchPage("events").catch(console.error);
+  }, [fetchEvents, fetchPage]);
 
   const handleOpenEnquiry = (productName?: string) => {
     if (productName) setEnquiryProduct(productName);

@@ -1,13 +1,18 @@
 "use client";
 
 import React from "react";
+import { useCMSStore } from "@/store/useCMSStore";
 
 export default function EventsHero() {
+  const { pages } = useCMSStore();
+  const cmsHero = pages["events"]?.EventsHero;
+  const image = cmsHero?.bannerImage || "/events-banner.jpg";
+
   return (
     <section className="w-full relative overflow-hidden leading-none">
       <img
-        src="/events-banner.jpg"
-        alt="MAHALAXMI ENTERPRISES Events & Activities Gallery Banner"
+        src={image}
+        alt={cmsHero?.title || "MAHALAXMI ENTERPRISES Events & Activities Gallery Banner"}
         className="w-full h-auto object-cover block"
         onError={(e) => {
           (e.target as HTMLImageElement).src =

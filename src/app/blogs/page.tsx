@@ -1,12 +1,13 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import EnquiryModal from "@/components/EnquiryModal";
 import BlogsHero from "@/app/blogs/components/BlogsHero";
 import BlogsBreadcrumb from "@/app/blogs/components/BlogsBreadcrumb";
 import BlogsContent from "@/app/blogs/components/BlogsContent";
+import { useCMSStore } from "@/store/useCMSStore";
 
 export default function BlogsListingPage() {
   const [fontSizeMultiplier, setFontSizeMultiplier] = useState(1);
@@ -14,6 +15,13 @@ export default function BlogsListingPage() {
 
   const [isEnquiryOpen, setIsEnquiryOpen] = useState(false);
   const [enquiryProduct, setEnquiryProduct] = useState("");
+
+  const { fetchBlogs, fetchPage } = useCMSStore();
+
+  useEffect(() => {
+    fetchBlogs().catch(console.error);
+    fetchPage("blogs").catch(console.error);
+  }, [fetchBlogs, fetchPage]);
 
   const handleOpenEnquiry = (productName?: string) => {
     if (productName) setEnquiryProduct(productName);

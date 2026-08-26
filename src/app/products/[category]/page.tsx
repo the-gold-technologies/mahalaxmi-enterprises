@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
@@ -9,6 +9,7 @@ import EnquiryModal from "@/components/EnquiryModal";
 import DownloadModal from "@/components/DownloadModal";
 import { getCategoryBySlug } from "@/data/productsData";
 import { ArrowLeft, Droplet } from "lucide-react";
+import { useCMSStore } from "@/store/useCMSStore";
 
 export default function CategoryProductsPage() {
   const params = useParams();
@@ -23,6 +24,14 @@ export default function CategoryProductsPage() {
   const [isDownloadOpen, setIsDownloadOpen] = useState(false);
   const [downloadProductName, setDownloadProductName] = useState("");
   const [downloadPdfUrl, setDownloadPdfUrl] = useState("");
+
+  const { fetchProducts } = useCMSStore();
+
+  useEffect(() => {
+    if (categorySlug) {
+      fetchProducts(categorySlug).catch(console.error);
+    }
+  }, [categorySlug, fetchProducts]);
 
   const category = getCategoryBySlug(categorySlug);
 
@@ -59,8 +68,6 @@ export default function CategoryProductsPage() {
     else setEnquiryProduct("");
     setIsEnquiryOpen(true);
   };
-
-  const rowsCount = Math.ceil(category.subCategoryGroups.length / 4);
 
   return (
     <main
@@ -130,31 +137,31 @@ export default function CategoryProductsPage() {
                               "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&q=80&w=600";
                           }}
                         />
-                        {/* Subtle bottom gradient tint */}
-                        <div className="absolute inset-0 bg-gradient-to-t from-[#002b5c]/40 via-transparent to-transparent opacity-60 pointer-events-none" />
                       </div>
                     </div>
 
-                    <Link
-                      href={`/products/${category.slug}/${group.products[0]?.slug || ""}`}
-                      className="bg-[#eb1e25] hover:bg-[#c4141a] text-white text-xs font-bold uppercase tracking-wider py-2.5 px-6 rounded-lg text-center transition-all shadow-sm hover:shadow-md inline-flex items-center justify-center gap-1.5 w-full sm:w-[230px]"
+                    {/* Red VIEW MORE Action Button */}
+                    <button
+                      onClick={() => handleOpenEnquiry(group.title)}
+                      className="w-full sm:w-[230px] bg-[#eb1e25] hover:bg-[#c4141a] text-white text-xs font-bold uppercase py-2.5 rounded-lg shadow-sm transition-colors text-center tracking-wider cursor-pointer"
                     >
-                      <span>VIEW MORE</span>
-                      <span className="text-sm">→</span>
-                    </Link>
+                      VIEW MORE
+                    </button>
                   </div>
 
-                  {/* Right Column: Uniform Fixed Height Product Pills Container with Vertical Scrollbar */}
-                  <div className="flex-1 max-h-[230px] w-full overflow-y-auto space-y-2 pr-1.5 scrollbar-visible">
-                    {group.products.map((prod) => (
+                  {/* Right Column: Pill-Style Product Buttons Grid with Gray Border & Arrow on Right */}
+                  <div className="flex-1 w-full flex flex-col space-y-2.5">
+                    {group.products.map((product) => (
                       <Link
-                        key={prod.id}
-                        href={`/products/${category.slug}/${prod.slug}`}
-                        className="group/item bg-slate-100/80 hover:bg-white text-slate-700 hover:text-[#002b5c] text-xs font-semibold px-4 py-2.5 rounded-lg border border-slate-200/90 hover:border-sky-400/60 hover:shadow-sm flex items-center justify-between transition-all uppercase tracking-tight leading-snug"
+                        key={product.id}
+                        href={`/products/${category.slug}/${product.slug}`}
+                        className="group w-full bg-white hover:bg-slate-50 border border-gray-300 hover:border-[#002b5c] rounded-xl px-4 py-2.5 flex items-center justify-between text-xs sm:text-[13px] font-bold text-[#002b5c] shadow-2xs hover:shadow-sm transition-all"
                       >
-                        <span className="truncate pr-2">{prod.name}</span>
-                        <span className="text-slate-400 group-hover/item:text-[#eb1e25] transition-transform duration-200 group-hover/item:translate-x-0.5 text-xs">
-                          →
+                        <span className="truncate pr-2 group-hover:text-[#eb1e25] transition-colors">
+                          {product.name}
+                        </span>
+                        <span className="text-gray-400 group-hover:text-[#eb1e25] font-extrabold text-sm transition-transform group-hover:translate-x-0.5">
+                          &gt;
                         </span>
                       </Link>
                     ))}
@@ -163,6 +170,37 @@ export default function CategoryProductsPage() {
               </div>
             );
           })}
+        </div>
+
+        {/* Bottom Sub-Category Teardrop Navigation Grid */}
+        <div className="mt-16 pt-8 border-t border-gray-200">
+          <div className="border-t border-gray-200">
+            {Array.from({ length: Math.ceil(category.subCategoryGroups.length / 4) }).map((_, rIdx) => {
+              const rowItems = category.subCategoryGroups.slice(rIdx * 4, rIdx * 4 + 4);
+              return (
+                <div
+                  key={rIdx}
+                  className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 items-center py-5 border-b border-gray-200"
+                >
+                  {rowItems.map((subGroup, cIdx) => (
+                    <a
+                      key={cIdx}
+                      href={`#subcat-${rIdx * 4 + cIdx}`}
+                      className="flex items-center gap-3.5 group transition-colors py-1.5"
+                    >
+                      <Droplet
+                        size={21}
+                        className="text-[#475569] fill-[#475569] shrink-0 group-hover:text-[#eb1e25] group-hover:fill-[#eb1e25] transition-colors"
+                      />
+                      <span className="text-sm md:text-[15px] font-normal uppercase text-[#334155] group-hover:text-[#eb1e25] tracking-normal leading-relaxed transition-colors">
+                        {subGroup.title}
+                      </span>
+                    </a>
+                  ))}
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
 

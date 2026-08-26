@@ -1,6 +1,9 @@
+"use client";
+
 import React, { useState } from "react";
 import { Search } from "lucide-react";
-import { regionalOfficesData, RegionalOffice } from "./regionalOfficesData";
+import { regionalOfficesData } from "./regionalOfficesData";
+import { useCMSStore } from "@/store/useCMSStore";
 
 interface ContactFormSectionProps {
   onOpenEnquiry?: (productName?: string) => void;
@@ -12,9 +15,33 @@ export default function ContactFormSection({
   const [selectedRegion, setSelectedRegion] = useState<string>("ALL");
   const [searchQuery, setSearchQuery] = useState<string>("");
 
-  const filteredOffices = regionalOfficesData.filter((office) => {
+  const { offices, pages, globalSEO } = useCMSStore();
+
+  const cmsHero = pages["contact-us"]?.ContactHero;
+  const pageTitle = cmsHero?.title || "CONTACT US";
+  const pageSubtitle =
+    cmsHero?.subtitle ||
+    "We strive to make ourselves better for our patrons, and so, would love to hear from you. Please contact us via the form below, email or over the telephone.";
+
+  // Normalize office data
+  const rawOffices = (offices && offices.length > 0)
+    ? offices.map((o) => ({
+        id: o.id,
+        name: o.name,
+        region: (o.type || "NORTH").toUpperCase(),
+        address: o.address,
+        contactNo: o.phone || "9810012345",
+        contactName: o.contactPerson || "Lube Regional Manager",
+        email: o.email || "sales@mahalaxmienterprises.com",
+        altEmail: "customercare@hpcl.in",
+      }))
+    : regionalOfficesData;
+
+  const filteredOffices = rawOffices.filter((office) => {
     const matchesRegion =
-      selectedRegion === "ALL" || office.region === selectedRegion;
+      selectedRegion === "ALL" ||
+      office.region.includes(selectedRegion) ||
+      selectedRegion.includes(office.region);
     const matchesQuery =
       office.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       office.address.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -22,20 +49,24 @@ export default function ContactFormSection({
     return matchesRegion && matchesQuery;
   });
 
+  const displayPhone = globalSEO?.phone || "+91 98765 43210";
+  const displayEmail = globalSEO?.email || "sales@mahalaxmienterprises.com";
+  const displayAddress =
+    globalSEO?.address ||
+    "Baghpat Region & Surrounding Industrial Belts, Uttar Pradesh";
+
   return (
     <section className="max-w-6xl mx-auto px-4 md:px-8 py-10 md:py-14">
       {/* 1. CONTACT US HEADER & INTRO */}
       <div className="mb-6">
         <h1 className="text-3xl md:text-4xl font-extrabold text-[#002b5c] tracking-tight uppercase">
-          CONTACT US
+          {pageTitle}
         </h1>
         <div className="w-20 h-1 bg-[#002b5c] mt-2"></div>
       </div>
 
       <p className="text-gray-700 text-sm md:text-base leading-relaxed mb-12 max-w-5xl font-sans">
-        We strive to make ourselves better for our patrons, and so, would love
-        to hear from you. Please contact us via the form below, email or over
-        the telephone.
+        {pageSubtitle}
       </p>
 
       {/* 2. MAHALAXMI ENTERPRISES AUTHORIZED DISTRIBUTOR */}
@@ -55,7 +86,7 @@ export default function ContactFormSection({
           </p>
           <p>
             <strong className="font-bold text-gray-900">Serving Region:</strong>{" "}
-            Baghpat Region & Surrounding Industrial Belts, Uttar Pradesh
+            {displayAddress}
           </p>
           <p>
             <strong className="font-bold text-gray-900">Establishment:</strong>{" "}
@@ -63,12 +94,12 @@ export default function ContactFormSection({
           </p>
           <p className="pt-2">
             <strong className="font-bold text-gray-900">Direct Contact:</strong>{" "}
-            +91 98765 43210 |{" "}
+            {displayPhone} |{" "}
             <a
-              href="mailto:sales@mahalaxmienterprises.com"
+              href={`mailto:${displayEmail}`}
               className="text-[#002b5c] hover:text-[#eb1e25] font-normal transition-colors"
             >
-              sales@mahalaxmienterprises.com
+              {displayEmail}
             </a>
           </p>
         </div>
@@ -99,7 +130,7 @@ export default function ContactFormSection({
                 className="bg-white text-gray-900 text-xs px-3 py-1.5 rounded outline-none border-0 w-44 md:w-56"
               />
             </div>
-            <button className="bg-[#eb1e25] hover:bg-[#c4141a] text-white font-bold text-xs uppercase px-4 py-1.5 rounded transition">
+            <button className="bg-[#eb1e25] hover:bg-[#c4141a] text-white font-bold text-xs uppercase px-4 py-1.5 rounded transition cursor-pointer">
               SEARCH
             </button>
           </div>
@@ -111,7 +142,7 @@ export default function ContactFormSection({
             <button
               key={region}
               onClick={() => setSelectedRegion(region)}
-              className={`px-6 py-1.5 rounded text-xs md:text-sm font-bold uppercase transition ${
+              className={`px-6 py-1.5 rounded text-xs md:text-sm font-bold uppercase transition cursor-pointer ${
                 selectedRegion === region
                   ? "bg-[#eb1e25] text-white shadow-xs"
                   : "bg-gray-100 text-gray-700 hover:bg-gray-200"
@@ -180,7 +211,7 @@ export default function ContactFormSection({
             onOpenEnquiry &&
             onOpenEnquiry("Locate Industrial Lube Distributor (ILD)")
           }
-          className="inline-block bg-[#eb1e25] hover:bg-[#c4141a] text-white text-xs md:text-sm lg:text-base font-extrabold uppercase tracking-wide px-6 md:px-10 py-3.5 rounded shadow-md hover:shadow-lg transition-all"
+          className="inline-block bg-[#eb1e25] hover:bg-[#c4141a] text-white text-xs md:text-sm lg:text-base font-extrabold uppercase tracking-wide px-6 md:px-10 py-3.5 rounded shadow-md hover:shadow-lg transition-all cursor-pointer"
         >
           LOCATE INDUSTRIAL LUBE DISTRIBUTOR (ILD)/ BAZAAR LUBE DISTRIBUTOR
           (BLD)

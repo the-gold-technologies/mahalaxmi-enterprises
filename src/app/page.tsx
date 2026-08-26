@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import HeroSlider from "@/components/HeroSlider";
 import AboutSection from "@/components/AboutSection";
@@ -11,6 +11,7 @@ import DistributorBanner from "@/components/DistributorBanner";
 import LocateDistributorContactSection from "@/components/LocateDistributorContactSection";
 import Footer from "@/components/Footer";
 import EnquiryModal from "@/components/EnquiryModal";
+import { useCMSStore } from "@/store/useCMSStore";
 
 export default function Home() {
   const [fontSizeMultiplier, setFontSizeMultiplier] = useState(1);
@@ -18,6 +19,12 @@ export default function Home() {
 
   const [isEnquiryOpen, setIsEnquiryOpen] = useState(false);
   const [enquiryProduct, setEnquiryProduct] = useState("");
+
+  const { fetchPage } = useCMSStore();
+
+  useEffect(() => {
+    fetchPage("home").catch(console.error);
+  }, [fetchPage]);
 
   const handleOpenEnquiry = (productName?: string) => {
     if (productName) setEnquiryProduct(productName);
@@ -61,7 +68,7 @@ export default function Home() {
       {/* 8. Locate Distributor Form & Contact Details Grid */}
       <LocateDistributorContactSection onOpenEnquiry={handleOpenEnquiry} />
 
-      {/* 9. Dark Navy Footer & Sticky Enquiry / Chat Bot Mascot */}
+      {/* 9. Dark Navy Footer & Sticky Enquiry Button */}
       <Footer onOpenEnquiry={handleOpenEnquiry} />
 
       {/* Enquiry Modal */}
