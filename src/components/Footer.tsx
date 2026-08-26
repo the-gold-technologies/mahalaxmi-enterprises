@@ -19,7 +19,7 @@ export default function Footer({ onOpenEnquiry }: FooterProps) {
   const hpclBadge = socialLinks.hpclBadge || "";
   const indiaGovBadge = socialLinks.indiaGovBadge || "";
   const globalCompactBadge = socialLinks.globalCompactBadge || "";
-  const siteTitle = globalSEO?.siteTitle || "Mahalaxmi Enterprises";
+  const copyrightText = socialLinks.copyrightText || "";
 
   return (
     <>
@@ -27,9 +27,11 @@ export default function Footer({ onOpenEnquiry }: FooterProps) {
       <footer className="bg-[#002749] text-white py-5 px-4 sm:px-8 border-t border-[#002b5c]">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 text-xs sm:text-sm font-medium">
           {/* Left Copyright */}
-          <div className="text-center md:text-left">
-            <p>© {new Date().getFullYear()} {siteTitle}. All rights reserved.</p>
-          </div>
+          {copyrightText && (
+            <div className="text-center md:text-left">
+              <p>{copyrightText}</p>
+            </div>
+          )}
 
           {/* Middle Links */}
           <div className="flex items-center gap-8 text-white">
@@ -41,7 +43,7 @@ export default function Footer({ onOpenEnquiry }: FooterProps) {
             </a>
           </div>
 
-          {/* Official Partner Badges (2-column layout matching reference screenshot) */}
+          {/* Official Partner Badges */}
           {(hpclBadge || indiaGovBadge || globalCompactBadge) && (
             <div className="flex items-center gap-3 mr-8">
               {/* HPCL Logo */}
