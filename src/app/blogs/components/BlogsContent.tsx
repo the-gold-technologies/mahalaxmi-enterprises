@@ -1,16 +1,19 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { blogsData } from "../blogsData";
 import { Clock, Calendar, ArrowRight } from "lucide-react";
-import { useCMSStore } from "@/store/useCMSStore";
+import { useCMSStore, CMSBlogPost } from "@/store/useCMSStore";
 
 export default function BlogsContent() {
   const [selectedCategory, setSelectedCategory] = useState<string>("ALL");
-  const { blogs } = useCMSStore();
+  const { blogs, fetchBlogs } = useCMSStore();
 
-  const posts = (blogs && blogs.length > 0) ? blogs : blogsData;
+  useEffect(() => {
+    fetchBlogs().catch(console.error);
+  }, [fetchBlogs]);
+
+  const posts = blogs || [];
 
   const categories = ["ALL", ...Array.from(new Set(posts.map((p) => p.category).filter(Boolean)))];
 
@@ -52,10 +55,6 @@ export default function BlogsContent() {
                 src={post.coverImage || "/blogs-banner.jpg"}
                 alt={post.title}
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-108"
-                onError={(e) => {
-                  (e.target as HTMLImageElement).src =
-                    "https://www.hplubricants.in/sites/default/files/blogs-banner.jpg";
-                }}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-60 pointer-events-none" />
 

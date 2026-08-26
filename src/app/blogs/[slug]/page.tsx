@@ -1,23 +1,22 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import EnquiryModal from "@/components/EnquiryModal";
 import BlogsBreadcrumb from "@/app/blogs/components/BlogsBreadcrumb";
-import { blogsData, BlogPost } from "../blogsData";
-import { useCMSStore } from "@/store/useCMSStore";
 import {
   Calendar,
   Clock,
   User,
   ArrowLeft,
+  Tag,
   CheckCircle2,
   Send,
-  Tag,
 } from "lucide-react";
+import { useCMSStore } from "@/store/useCMSStore";
 
 export default function BlogDetailPage() {
   const params = useParams();
@@ -38,16 +37,24 @@ export default function BlogDetailPage() {
     fetchBlogs().catch(console.error);
   }, [slug, fetchBlogBySlug, fetchBlogs]);
 
-  const handleOpenEnquiry = (productName?: string) => {
-    if (productName) setEnquiryProduct(productName);
-    else setEnquiryProduct("");
+  const post: any = useMemo(() => {
+    if (blogPosts[slug]) return blogPosts[slug];
+    if (blogs && blogs.length > 0) {
+      return blogs.find((b) => b.slug === slug) || null;
+    }
+    return null;
+  }, [blogPosts, blogs, slug]);
+
+  const relatedPosts = useMemo(() => {
+    if (!blogs) return [];
+    return blogs.filter((b) => b.slug !== slug).slice(0, 3);
+  }, [blogs, slug]);
+
+  const handleOpenEnquiry = (prodName?: string) => {
+    if (prodName) setEnquiryProduct(prodName);
+    else setEnquiryProduct(post?.title || "");
     setIsEnquiryOpen(true);
   };
-
-  // Find in store first, then fallback to local static data
-  const cmsPost = blogPosts[slug] || (blogs && blogs.find((b) => b.slug === slug));
-  const staticPost: BlogPost | undefined = blogsData.find((b) => b.slug === slug);
-  const post: any = cmsPost || staticPost;
 
   if (!post) {
     return (
@@ -63,36 +70,32 @@ export default function BlogDetailPage() {
             Blog Post Not Found
           </h1>
           <p className="text-gray-600 mb-8">
-            The article you are looking for does not exist or has been
-            relocated.
+            The technical lubrication article you are looking for does not exist or has been relocated.
           </p>
           <Link
             href="/blogs"
             className="inline-flex items-center gap-2 bg-[#002b5c] text-white font-bold px-6 py-3 rounded-lg hover:bg-[#eb1e25] transition"
           >
-            <ArrowLeft size={16} /> Back to All Blogs
+            <ArrowLeft size={16} /> Return to All Technical Articles
           </Link>
         </div>
-        <Footer onOpenEnquiry={handleOpenEnquiry} />
+        <Footer onOpenEnquiry={() => setIsEnquiryOpen(true)} />
       </main>
     );
   }
 
-  const allPosts = (blogs && blogs.length > 0) ? blogs : blogsData;
-  const relatedPosts = allPosts
-    .filter((b) => b.slug !== post.slug)
-    .slice(0, 3);
-
-  // Content normalization (supports structured content object or HTML string)
+  // Handle both Structured JSON Content and WYSIWYG HTML Content from CMS Rich Text Editor
   const isStructuredContent = typeof post.content === "object" && post.content !== null;
-  const intro = isStructuredContent ? post.content.intro : post.excerpt;
+  const intro = isStructuredContent ? post.content.intro : "";
   const sections = isStructuredContent && Array.isArray(post.content.sections) ? post.content.sections : [];
   const conclusion = isStructuredContent ? post.content.conclusion : "";
+  const recommendedProducts = isStructuredContent ? post.content.recommendedProducts : (post.recommendedProducts || []);
+
   const rawHtmlContent = typeof post.content === "string" ? post.content : null;
 
   return (
     <main
-      className="min-h-screen bg-white text-gray-800 font-sans"
+      className="min-h-screen bg-white text-gray-800 font-sans flex flex-col justify-between"
       style={{
         fontSize: `${16 * fontSizeMultiplier}px`,
       }}
@@ -105,11 +108,11 @@ export default function BlogDetailPage() {
         setLanguage={setLanguage}
       />
 
-      {/* Breadcrumb */}
+      {/* Breadcrumb Navigation Bar */}
       <BlogsBreadcrumb postTitle={post.title} />
 
-      {/* Main Article Container */}
-      <article className="max-w-6xl mx-auto px-4 md:px-8 py-10 md:py-14">
+      {/* Main Blog Post Content Body */}
+      <article className="max-w-5xl mx-auto px-4 md:px-8 py-10 md:py-14 w-full">
         {/* Category & Title */}
         <div className="mb-6">
           {post.category && (
@@ -151,10 +154,6 @@ export default function BlogDetailPage() {
               src={post.coverImage}
               alt={post.title}
               className="w-full h-full object-cover"
-              onError={(e) => {
-                (e.target as HTMLImageElement).src =
-                  "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&q=80&w=1200";
-              }}
             />
           </div>
         )}
@@ -166,9 +165,9 @@ export default function BlogDetailPage() {
           </div>
         )}
 
-        {/* Article Sections (Structured) */}
+        {/* Structured Sections (if available) */}
         {sections.length > 0 && (
-          <div className="space-y-10 text-gray-800 text-sm md:text-base leading-relaxed font-sans">
+          <div className="space-y-10 text-gray-800 text-sm md:text-base leading-relaxed font-sans mb-10">
             {sections.map((section: any, idx: number) => (
               <div key={idx} className="space-y-4">
                 <h2 className="text-xl md:text-2xl font-bold text-[#002b5c] tracking-tight">
@@ -202,16 +201,16 @@ export default function BlogDetailPage() {
           </div>
         )}
 
-        {/* Raw HTML Content if rendered as HTML */}
+        {/* Rich Text WYSIWYG HTML Content with Consistent Theme Typography */}
         {rawHtmlContent && (
           <div
-            className="prose max-w-none text-gray-800 text-sm md:text-base leading-relaxed font-sans space-y-4"
+            className="blog-rich-content text-gray-800 text-sm md:text-base leading-relaxed font-sans space-y-5 mb-10"
             dangerouslySetInnerHTML={{ __html: rawHtmlContent }}
           />
         )}
 
         {/* Recommended Products Callout Box */}
-        {post.recommendedProducts && post.recommendedProducts.length > 0 && (
+        {recommendedProducts && recommendedProducts.length > 0 && (
           <div className="my-12 bg-gradient-to-r from-[#002b5c] to-[#004085] text-white rounded-2xl p-6 md:p-8 shadow-md">
             <h3 className="text-lg md:text-xl font-bold mb-3 flex items-center gap-2">
               <Tag size={20} className="text-[#eb1e25]" /> Recommended Industrial Lubricants
@@ -221,7 +220,7 @@ export default function BlogDetailPage() {
               industrial & fleet operations across Baghpat and Uttar Pradesh.
             </p>
             <div className="flex flex-wrap items-center gap-3">
-              {post.recommendedProducts.map((prod: string, pIdx: number) => (
+              {recommendedProducts.map((prod: string, pIdx: number) => (
                 <button
                   key={pIdx}
                   onClick={() => handleOpenEnquiry(prod)}

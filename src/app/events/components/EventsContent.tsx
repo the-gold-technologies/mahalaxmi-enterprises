@@ -2,57 +2,59 @@
 
 import React, { useState } from "react";
 import { X } from "lucide-react";
-import { galleryItems, GalleryItem } from "./eventsData";
 import { useCMSStore } from "@/store/useCMSStore";
 
 export default function EventsContent() {
   const [lightboxImage, setLightboxImage] = useState<any | null>(null);
-  const { events, pages } = useCMSStore();
+  const { pages } = useCMSStore();
 
-  const cmsEvents = events || pages["events"]?.gallery || pages["events"]?.events;
-  const items = (Array.isArray(cmsEvents) && cmsEvents.length > 0) ? cmsEvents : galleryItems;
+  const cmsContent = pages["events"]?.EventsContent;
+  const cmsGallery = pages["events"]?.EventsGallery;
 
-  const title = pages["events"]?.EventsContent?.title || pages["events"]?.title || "EVENTS";
-  const intro = pages["events"]?.EventsContent?.description || pages["events"]?.description ||
-    "Mahalaxmi Enterprises actively engages with their stakeholders by frequently hosting meetings and events with them. This includes meeting business partners, strategic partners, distributors, OEMs, agencies, mechanics, and industrial clients.";
+  const title = cmsContent?.title || "";
+  const intro = cmsContent?.introText || "";
+  const items = cmsGallery?.galleryItems || [];
 
   return (
     <section className="max-w-6xl mx-auto px-4 md:px-8 py-10 md:py-14">
       {/* Main Section Header */}
-      <div className="mb-6">
-        <h1 className="text-3xl md:text-4xl font-extrabold text-[#002b5c] tracking-tight uppercase">
-          {title}
-        </h1>
-        <div className="w-20 h-1 bg-[#002b5c] mt-2"></div>
-      </div>
+      {title && (
+        <div className="mb-6">
+          <h1 className="text-3xl md:text-4xl font-extrabold text-[#002b5c] tracking-tight uppercase">
+            {title}
+          </h1>
+          <div className="w-20 h-1 bg-[#002b5c] mt-2"></div>
+        </div>
+      )}
 
       {/* Intro Description */}
-      <p className="text-gray-700 text-sm md:text-base leading-relaxed mb-12 max-w-5xl font-sans">
-        {intro}
-      </p>
+      {intro && (
+        <p className="text-gray-700 text-sm md:text-base leading-relaxed mb-12 max-w-5xl font-sans">
+          {intro}
+        </p>
+      )}
 
       {/* Photo Gallery Grid (3 columns with rounded corners) */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-        {items.map((item: any) => (
-          <div
-            key={item.id}
-            onClick={() => setLightboxImage(item)}
-            className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-200 cursor-pointer hover:-translate-y-1"
-          >
-            <div className="relative overflow-hidden aspect-[4/3] bg-gray-100 rounded-2xl">
-              <img
-                src={item.image}
-                alt={item.altText || item.title || "Event Image"}
-                className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-500 ease-out"
-                loading="lazy"
-                onError={(e) => {
-                  (e.target as HTMLImageElement).src = "/events-banner.jpg";
-                }}
-              />
+      {items.length > 0 && (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          {items.map((item: any, idx: number) => (
+            <div
+              key={item.id || idx}
+              onClick={() => setLightboxImage(item)}
+              className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-200 cursor-pointer hover:-translate-y-1"
+            >
+              <div className="relative overflow-hidden aspect-[4/3] bg-gray-100 rounded-2xl">
+                <img
+                  src={item.image}
+                  alt={item.altText || item.title || "Event Image"}
+                  className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-500 ease-out"
+                  loading="lazy"
+                />
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
 
       {/* Lightbox Modal */}
       {lightboxImage && (

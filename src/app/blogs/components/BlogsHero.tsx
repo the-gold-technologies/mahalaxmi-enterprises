@@ -6,18 +6,19 @@ import { useCMSStore } from "@/store/useCMSStore";
 export default function BlogsHero() {
   const { pages } = useCMSStore();
   const cmsHero = pages["blogs"]?.BlogsHero;
-  const image = cmsHero?.bannerImage || "/blogs-banner.jpg";
+  const image = cmsHero?.image || "";
+  const altText = cmsHero?.altText || "";
+
+  if (!image) {
+    return null;
+  }
 
   return (
     <section className="w-full relative overflow-hidden leading-none">
       <img
         src={image}
-        alt={cmsHero?.title || "Blogs - Mahalaxmi Enterprises HP Lubricants"}
+        alt={altText}
         className="w-full h-auto object-cover block"
-        onError={(e) => {
-          (e.target as HTMLImageElement).src =
-            "https://www.hplubricants.in/sites/default/files/blogs-banner.jpg";
-        }}
       />
     </section>
   );
