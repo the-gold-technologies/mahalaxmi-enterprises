@@ -16,7 +16,8 @@ import {
   CheckCircle2,
   Send,
 } from "lucide-react";
-import { useCMSStore } from "@/store/useCMSStore";
+import { useCMSStore, PageSEO } from "@/store/useCMSStore";
+import SEOMeta from "@/components/SEOMeta";
 
 export default function BlogDetailPage() {
   const params = useParams();
@@ -93,6 +94,15 @@ export default function BlogDetailPage() {
 
   const rawHtmlContent = typeof post.content === "string" ? post.content : null;
 
+  const blogSEO: PageSEO = useMemo(() => {
+    return {
+      title: post?.title ? `${post.title} | Mahalaxmi Enterprises` : undefined,
+      metaTitle: post?.metaTitle || (post?.title ? `${post.title} | Mahalaxmi Enterprises` : undefined),
+      metaDescription: post?.metaDescription || post?.excerpt || undefined,
+      canonicalUrl: post?.canonicalUrl || (typeof window !== "undefined" ? window.location.href : undefined),
+    };
+  }, [post]);
+
   return (
     <main
       className="min-h-screen bg-white text-gray-800 font-sans flex flex-col justify-between"
@@ -100,6 +110,8 @@ export default function BlogDetailPage() {
         fontSize: `${16 * fontSizeMultiplier}px`,
       }}
     >
+      <SEOMeta pageSlug={`blogs/${slug}`} customSEO={blogSEO} />
+
       {/* Header Navigation Bar */}
       <Navbar
         fontSizeMultiplier={fontSizeMultiplier}

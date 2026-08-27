@@ -8,6 +8,7 @@ import DistributorModal from "@/components/DistributorModal";
 import ContactHero from "@/app/contact-us/components/ContactHero";
 import ContactBreadcrumb from "@/app/contact-us/components/ContactBreadcrumb";
 import ContactFormSection from "@/app/contact-us/components/ContactFormSection";
+import SEOMeta from "@/components/SEOMeta";
 import { useCMSStore } from "@/store/useCMSStore";
 
 export default function ContactUsPage() {
@@ -45,6 +46,8 @@ export default function ContactUsPage() {
         fontSize: `${16 * fontSizeMultiplier}px`,
       }}
     >
+      <SEOMeta pageSlug="contact-us" />
+
       {/* Header Navigation Bar */}
       <Navbar
         fontSizeMultiplier={fontSizeMultiplier}

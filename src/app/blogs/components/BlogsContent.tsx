@@ -3,17 +3,20 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Clock, Calendar, ArrowRight } from "lucide-react";
-import { useCMSStore, CMSBlogPost } from "@/store/useCMSStore";
+import { useCMSStore, CMSBlogPost, getHeadingTag } from "@/store/useCMSStore";
 
 export default function BlogsContent() {
   const [selectedCategory, setSelectedCategory] = useState<string>("ALL");
-  const { blogs, fetchBlogs } = useCMSStore();
+  const { blogs, fetchBlogs, pages, pageSEO } = useCMSStore();
 
   useEffect(() => {
     fetchBlogs().catch(console.error);
   }, [fetchBlogs]);
 
   const posts = blogs || [];
+  const cmsContent = pages["blogs"]?.BlogsContent;
+  const h1Title = cmsContent?.title || "Technical Insights & Blogs";
+  const HeadingTag = getHeadingTag(pageSEO["blogs"]?.headingOptions, "h1");
 
   const categories = ["ALL", ...Array.from(new Set(posts.map((p) => p.category).filter(Boolean)))];
 
@@ -23,6 +26,18 @@ export default function BlogsContent() {
 
   return (
     <section className="max-w-6xl mx-auto px-4 md:px-8 py-10 md:py-16">
+      {/* Page H1 Heading */}
+      <div className="mb-8 border-b-2 border-gray-100 pb-4">
+        <HeadingTag className="text-2xl md:text-3xl lg:text-4xl font-extrabold text-[#002b5c] tracking-tight uppercase">
+          {h1Title}
+        </HeadingTag>
+        {cmsContent?.introText && (
+          <p className="mt-2 text-sm md:text-base text-gray-600 max-w-3xl">
+            {cmsContent.introText}
+          </p>
+        )}
+      </div>
+
       {/* Category Filter Pills if categories exist */}
       {categories.length > 2 && (
         <div className="flex flex-wrap items-center gap-2 mb-8">

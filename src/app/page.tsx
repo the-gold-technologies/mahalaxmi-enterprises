@@ -12,6 +12,7 @@ import LocateDistributorContactSection from "@/components/LocateDistributorConta
 import Footer from "@/components/Footer";
 import EnquiryModal from "@/components/EnquiryModal";
 import DistributorModal from "@/components/DistributorModal";
+import SEOMeta from "@/components/SEOMeta";
 import { useCMSStore } from "@/store/useCMSStore";
 
 export default function Home() {
@@ -48,6 +49,8 @@ export default function Home() {
         fontSize: `${16 * fontSizeMultiplier}px`,
       }}
     >
+      <SEOMeta pageSlug="home" isLandingPage={true} />
+
       {/* 1. Top Header Utility & Navigation Bar */}
       <Navbar
         fontSizeMultiplier={fontSizeMultiplier}

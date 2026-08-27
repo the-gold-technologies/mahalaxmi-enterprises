@@ -7,6 +7,7 @@ import EnquiryModal from "@/components/EnquiryModal";
 import EventsHero from "@/app/events/components/EventsHero";
 import EventsBreadcrumb from "@/app/events/components/EventsBreadcrumb";
 import EventsContent from "@/app/events/components/EventsContent";
+import SEOMeta from "@/components/SEOMeta";
 import { useCMSStore } from "@/store/useCMSStore";
 
 export default function EventsPage() {
@@ -36,6 +37,8 @@ export default function EventsPage() {
         fontSize: `${16 * fontSizeMultiplier}px`,
       }}
     >
+      <SEOMeta pageSlug="events" />
+
       {/* Header Navigation Bar */}
       <Navbar
         fontSizeMultiplier={fontSizeMultiplier}

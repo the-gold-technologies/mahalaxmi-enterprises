@@ -10,13 +10,13 @@ import {
   Headphones,
   CheckCircle2,
 } from "lucide-react";
-import { useCMSStore } from "@/store/useCMSStore";
+import { useCMSStore, getHeadingTag } from "@/store/useCMSStore";
 import { FormattedText } from "@/components/FormattedText";
 
 const iconMap = [Building2, Boxes, Wrench, Truck, ShieldCheck, Headphones];
 
 export default function AboutMahalaxmiContent() {
-  const { pages } = useCMSStore();
+  const { pages, pageSEO } = useCMSStore();
   const cmsStory =
     pages["about-us"]?.AboutMahalaxmiContent || pages["about-us"]?.MahalaxmiStory;
 
@@ -38,13 +38,15 @@ export default function AboutMahalaxmiContent() {
   const whyChooseItems: { title: string; description: string }[] =
     cmsStory.whyChooseItems || [];
 
+  const HeadingTag = getHeadingTag(pageSEO["about-us"]?.headingOptions, "h1");
+
   return (
     <section className="max-w-6xl mx-auto px-4 md:px-8 py-10 md:py-14">
       {/* Main Section Header */}
       {title && (
-        <h1 className="text-2xl md:text-3xl lg:text-4xl font-extrabold text-[#002b5c] tracking-tight uppercase mb-8 border-b-2 border-gray-100 pb-4">
+        <HeadingTag className="text-2xl md:text-3xl lg:text-4xl font-extrabold text-[#002b5c] tracking-tight uppercase mb-8 border-b-2 border-gray-100 pb-4">
           {title}
-        </h1>
+        </HeadingTag>
       )}
 
       {/* Sub-header: Proprietor Info */}

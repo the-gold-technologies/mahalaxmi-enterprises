@@ -8,6 +8,7 @@ import AboutMahalaxmiContent from "@/app/about-us/components/AboutMahalaxmiConte
 import LubesHeadquarterSection from "@/app/about-us/components/LubesHeadquarterSection";
 import Footer from "@/components/Footer";
 import EnquiryModal from "@/components/EnquiryModal";
+import SEOMeta from "@/components/SEOMeta";
 import { useCMSStore } from "@/store/useCMSStore";
 
 export default function AboutUsPage() {
@@ -36,6 +37,8 @@ export default function AboutUsPage() {
         fontSize: `${16 * fontSizeMultiplier}px`,
       }}
     >
+      <SEOMeta pageSlug="about-us" />
+
       {/* Header Navigation Bar */}
       <Navbar
         fontSizeMultiplier={fontSizeMultiplier}

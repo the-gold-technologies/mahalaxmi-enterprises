@@ -2,11 +2,11 @@
 
 import React, { useState } from "react";
 import { X } from "lucide-react";
-import { useCMSStore } from "@/store/useCMSStore";
+import { useCMSStore, getHeadingTag } from "@/store/useCMSStore";
 
 export default function EventsContent() {
   const [lightboxImage, setLightboxImage] = useState<any | null>(null);
-  const { pages } = useCMSStore();
+  const { pages, pageSEO } = useCMSStore();
 
   const cmsContent = pages["events"]?.EventsContent;
   const cmsGallery = pages["events"]?.EventsGallery;
@@ -14,15 +14,16 @@ export default function EventsContent() {
   const title = cmsContent?.title || "";
   const intro = cmsContent?.introText || "";
   const items = cmsGallery?.galleryItems || [];
+  const HeadingTag = getHeadingTag(pageSEO["events"]?.headingOptions, "h1");
 
   return (
     <section className="max-w-6xl mx-auto px-4 md:px-8 py-10 md:py-14">
       {/* Main Section Header */}
       {title && (
         <div className="mb-6">
-          <h1 className="text-3xl md:text-4xl font-extrabold text-[#002b5c] tracking-tight uppercase">
+          <HeadingTag className="text-3xl md:text-4xl font-extrabold text-[#002b5c] tracking-tight uppercase">
             {title}
-          </h1>
+          </HeadingTag>
           <div className="w-20 h-1 bg-[#002b5c] mt-2"></div>
         </div>
       )}

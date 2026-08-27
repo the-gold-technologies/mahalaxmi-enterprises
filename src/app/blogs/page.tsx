@@ -7,6 +7,7 @@ import EnquiryModal from "@/components/EnquiryModal";
 import BlogsHero from "@/app/blogs/components/BlogsHero";
 import BlogsBreadcrumb from "@/app/blogs/components/BlogsBreadcrumb";
 import BlogsContent from "@/app/blogs/components/BlogsContent";
+import SEOMeta from "@/components/SEOMeta";
 import { useCMSStore } from "@/store/useCMSStore";
 
 export default function BlogsListingPage() {
@@ -36,6 +37,8 @@ export default function BlogsListingPage() {
         fontSize: `${16 * fontSizeMultiplier}px`,
       }}
     >
+      <SEOMeta pageSlug="blogs" />
+
       {/* Header Navigation Bar */}
       <Navbar
         fontSizeMultiplier={fontSizeMultiplier}

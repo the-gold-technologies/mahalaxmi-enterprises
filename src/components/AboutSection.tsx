@@ -1,32 +1,34 @@
-'use client';
+"use client";
 
-import React from 'react';
-import Link from 'next/link';
-import { useCMSStore } from '@/store/useCMSStore';
-import { FormattedText } from '@/components/FormattedText';
+import React from "react";
+import Link from "next/link";
+import { useCMSStore, getHeadingTag } from "@/store/useCMSStore";
+import { FormattedText } from "@/components/FormattedText";
 
 export default function AboutSection() {
-  const { pages } = useCMSStore();
+  const { pages, pageSEO } = useCMSStore();
   const cmsAbout = pages["home"]?.AboutSection;
 
   if (!cmsAbout) {
     return null;
   }
 
-  const title = cmsAbout.title || '';
-  const subtitle = cmsAbout.subtitle || '';
-  const description = cmsAbout.description || cmsAbout.bodyText || '';
-  const buttonText = cmsAbout.buttonText || 'Read More';
-  const buttonLink = cmsAbout.buttonLink || '/about-us';
+  const title = cmsAbout.title || "";
+  const subtitle = cmsAbout.subtitle || "";
+  const description = cmsAbout.description || cmsAbout.bodyText || "";
+  const buttonText = cmsAbout.buttonText || "Read More";
+  const buttonLink = cmsAbout.buttonLink || "/about-us";
+
+  const HeadingTag = getHeadingTag(pageSEO["home"]?.headingOptions, "h1");
 
   return (
     <section id="about" className="py-16 bg-white text-center">
       <div className="max-w-4xl mx-auto px-4">
         {/* Section Heading with dark blue underline */}
         {title && (
-          <h1 className="text-3xl md:text-4xl font-extrabold text-[#002b5c] uppercase tracking-wide section-underline">
+          <HeadingTag className="text-3xl md:text-4xl font-extrabold text-[#002b5c] uppercase tracking-wide section-underline">
             {title}
-          </h1>
+          </HeadingTag>
         )}
 
         {subtitle && (

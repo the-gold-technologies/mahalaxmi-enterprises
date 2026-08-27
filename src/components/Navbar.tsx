@@ -47,10 +47,8 @@ export default function Navbar({
   const { products, productCategories, fetchProducts } = useCMSStore();
 
   React.useEffect(() => {
-    if (!productCategories || !products) {
-      fetchProducts().catch(console.error);
-    }
-  }, [productCategories, products, fetchProducts]);
+    fetchProducts().catch(console.error);
+  }, [fetchProducts]);
 
   const categories =
     productCategories && productCategories.length > 0

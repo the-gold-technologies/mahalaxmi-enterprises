@@ -8,8 +8,9 @@ import Footer from "@/components/Footer";
 import EnquiryModal from "@/components/EnquiryModal";
 import DownloadModal from "@/components/DownloadModal";
 import { ArrowLeft, FileText, Droplet, Search } from "lucide-react";
-import { useCMSStore } from "@/store/useCMSStore";
+import { useCMSStore, PageSEO } from "@/store/useCMSStore";
 import { FormattedText } from "@/components/FormattedText";
+import SEOMeta from "@/components/SEOMeta";
 
 export default function ProductDetailPage() {
   const params = useParams();
@@ -143,6 +144,22 @@ export default function ProductDetailPage() {
   );
   const colCount = hasMultiCols ? product.tableHeaders!.length : 1;
 
+  const productSEO: PageSEO = useMemo(() => {
+    return {
+      title: product?.name ? `${product.name} | HP Lubricants Distributor` : undefined,
+      metaTitle: product?.metaTitle || (product?.name ? `${product.name} | HPCL Lubricants` : undefined),
+      metaDescription:
+        product?.metaDescription ||
+        product?.description ||
+        product?.tagline ||
+        (product?.name ? `Buy ${product.name} genuine HPCL industrial lubricants from Mahalaxmi Enterprises.` : undefined),
+      targetKeywords:
+        product?.targetKeywords ||
+        (product?.name ? `${product.name}, HP Lubricants, ${category?.name || "industrial oil"}` : undefined),
+      canonicalUrl: typeof window !== "undefined" ? window.location.href : undefined,
+    };
+  }, [product, category]);
+
   return (
     <main
       className="min-h-screen bg-white text-gray-800 font-sans flex flex-col justify-between"
@@ -150,6 +167,8 @@ export default function ProductDetailPage() {
         fontSize: `${16 * fontSizeMultiplier}px`,
       }}
     >
+      <SEOMeta pageSlug={`product:${productSlug}`} customSEO={productSEO} />
+
       <Navbar
         fontSizeMultiplier={fontSizeMultiplier}
         setFontSizeMultiplier={setFontSizeMultiplier}

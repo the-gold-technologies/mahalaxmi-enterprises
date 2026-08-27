@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
-import { useCMSStore } from "@/store/useCMSStore";
+import { useCMSStore, getHeadingTag } from "@/store/useCMSStore";
 
 interface ContactFormSectionProps {
   onOpenEnquiry?: (productName?: string) => void;
@@ -26,14 +26,15 @@ export default function ContactFormSection({
   const [selectedRegion, setSelectedRegion] = useState<string>("ALL");
   const [searchQuery, setSearchQuery] = useState<string>("");
 
-  const { offices, pages, globalSEO } = useCMSStore();
+  const { offices, pages, pageSEO, globalSEO } = useCMSStore();
 
   const cmsHero = pages["contact-us"]?.ContactHero;
   const cmsHeadquarter = pages["contact-us"]?.ContactHeadquarter;
   const cmsRegionalOffices = pages["contact-us"]?.RegionalOffices;
 
-  const pageTitle = cmsHero?.title || "";
+  const pageTitle = cmsHero?.title || "CONTACT DETAILS";
   const pageSubtitle = cmsHero?.subtitle || "";
+  const HeadingTag = getHeadingTag(pageSEO["contact-us"]?.headingOptions, "h1");
 
   // Headquarter information
   const companyName = cmsHeadquarter?.companyName || "";
@@ -78,9 +79,9 @@ export default function ContactFormSection({
       {/* 1. CONTACT US HEADER & INTRO */}
       {pageTitle && (
         <div className="mb-6">
-          <h1 className="text-3xl md:text-4xl font-extrabold text-[#002b5c] tracking-tight uppercase">
+          <HeadingTag className="text-3xl md:text-4xl font-extrabold text-[#002b5c] tracking-tight uppercase">
             {pageTitle}
-          </h1>
+          </HeadingTag>
           <div className="w-20 h-1 bg-[#002b5c] mt-2"></div>
         </div>
       )}

@@ -8,7 +8,8 @@ import Footer from "@/components/Footer";
 import EnquiryModal from "@/components/EnquiryModal";
 import DownloadModal from "@/components/DownloadModal";
 import { ArrowLeft, Droplet } from "lucide-react";
-import { useCMSStore, CMSProduct } from "@/store/useCMSStore";
+import { useCMSStore, CMSProduct, PageSEO, getHeadingTag } from "@/store/useCMSStore";
+import SEOMeta from "@/components/SEOMeta";
 
 export default function CategoryProductsPage() {
   const params = useParams();
@@ -24,7 +25,7 @@ export default function CategoryProductsPage() {
   const [downloadProductName, setDownloadProductName] = useState("");
   const [downloadPdfUrl, setDownloadPdfUrl] = useState("");
 
-  const { fetchProducts, products, productCategories } = useCMSStore();
+  const { fetchProducts, products, productCategories, pageSEO } = useCMSStore();
 
   useEffect(() => {
     if (categorySlug) {
@@ -77,6 +78,21 @@ export default function CategoryProductsPage() {
   };
 
   const categoryName = category?.name || categorySlug?.replace(/-/g, " ").toUpperCase() || "Products";
+  const currentSEO = pageSEO[`products/${categorySlug}`] || pageSEO["products"];
+  const categoryTitle = currentSEO?.title || categoryName;
+  const categoryDesc = currentSEO?.metaDescription || category?.description;
+  const HeadingTag = getHeadingTag(currentSEO?.headingOptions, "h1");
+
+  const categorySEO: PageSEO = useMemo(() => {
+    return {
+      title: `${categoryName} | Mahalaxmi Enterprises HP Lubricants`,
+      metaTitle: `${categoryName} | HP Lubricants Industrial Distributor`,
+      metaDescription:
+        category?.description ||
+        `Explore ${categoryName} high-performance lubricants, oils, and greases from Mahalaxmi Enterprises.`,
+      canonicalUrl: typeof window !== "undefined" ? window.location.href : undefined,
+    };
+  }, [categoryName, category]);
 
   return (
     <main
@@ -85,6 +101,8 @@ export default function CategoryProductsPage() {
         fontSize: `${16 * fontSizeMultiplier}px`,
       }}
     >
+      <SEOMeta pageSlug={`products/${categorySlug}`} customSEO={categorySEO} />
+
       <Navbar
         fontSizeMultiplier={fontSizeMultiplier}
         setFontSizeMultiplier={setFontSizeMultiplier}
@@ -105,6 +123,18 @@ export default function CategoryProductsPage() {
 
       {/* Main Content Grid strictly matching HP Lubricants official design */}
       <div className="max-w-6xl mx-auto px-4 md:px-8 py-10 md:py-14 w-full">
+        {/* Category H1 Heading from SEO */}
+        <div className="mb-8 border-b-2 border-gray-100 pb-4">
+          <HeadingTag className="text-2xl md:text-3xl lg:text-4xl font-extrabold text-[#002b5c] tracking-tight uppercase">
+            {categoryTitle}
+          </HeadingTag>
+          {categoryDesc && (
+            <p className="mt-2 text-sm md:text-base text-gray-600 max-w-3xl">
+              {categoryDesc}
+            </p>
+          )}
+        </div>
+
         {/* Sub-Category Groups Grid (2 Columns) */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-14">
           {subCategoryGroups.map((group, idx) => {
