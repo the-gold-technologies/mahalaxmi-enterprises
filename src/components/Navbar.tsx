@@ -44,11 +44,18 @@ export default function Navbar({
   const [activeTab, setActiveTab] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState("");
 
-  const { products, productCategories, fetchProducts } = useCMSStore();
+  const {
+    products,
+    productCategories,
+    fetchProducts,
+    globalSEO,
+    fetchGlobalSEO,
+  } = useCMSStore();
 
   React.useEffect(() => {
     fetchProducts().catch(console.error);
-  }, [fetchProducts]);
+    fetchGlobalSEO().catch(console.error);
+  }, [fetchProducts, fetchGlobalSEO]);
 
   const categories =
     productCategories && productCategories.length > 0
@@ -57,6 +64,8 @@ export default function Navbar({
 
   const currentCategory =
     categories.find((c) => c.slug === activeHoverCategory) || categories[0];
+
+  const logoSrc = globalSEO?.logo || "/mahalaxmi png logo .png";
 
   const categoryProducts =
     products?.filter((p) => p.categorySlug === currentCategory.slug) || [];
@@ -227,7 +236,7 @@ export default function Navbar({
         {/* Logo */}
         <Link href="/" className="flex items-center py-1">
           <img
-            src="/mahalaxmi png logo .png"
+            src={logoSrc}
             alt="MAHALAXMI ENTERPRISES"
             className="h-11 sm:h-14 lg:h-16 w-auto object-contain"
             onError={(e) => {
@@ -386,7 +395,7 @@ export default function Navbar({
               className="flex items-center"
             >
               <img
-                src="/mahalaxmi png logo .png"
+                src={logoSrc}
                 alt="Mahalaxmi Enterprises"
                 className="h-12 w-auto object-contain"
                 onError={(e) => {
