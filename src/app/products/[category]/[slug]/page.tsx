@@ -9,6 +9,7 @@ import EnquiryModal from "@/components/EnquiryModal";
 import DownloadModal from "@/components/DownloadModal";
 import { ArrowLeft, FileText, Droplet, Search } from "lucide-react";
 import { useCMSStore } from "@/store/useCMSStore";
+import { FormattedText } from "@/components/FormattedText";
 
 export default function ProductDetailPage() {
   const params = useParams();
@@ -307,7 +308,7 @@ export default function ProductDetailPage() {
                 Description
               </h3>
               <p className="text-xs sm:text-sm text-slate-700 leading-relaxed font-sans font-normal">
-                {product.description}
+                <FormattedText text={product.description} />
               </p>
             </div>
           )}
@@ -322,7 +323,7 @@ export default function ProductDetailPage() {
                   Application Areas:
                 </h3>
                 <p className="text-xs sm:text-sm text-slate-700 leading-relaxed font-sans">
-                  {product.applicationAreas}
+                  <FormattedText text={product.applicationAreas} />
                 </p>
               </div>
             )}

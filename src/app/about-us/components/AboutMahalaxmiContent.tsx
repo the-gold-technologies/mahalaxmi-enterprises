@@ -11,6 +11,7 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import { useCMSStore } from "@/store/useCMSStore";
+import { FormattedText } from "@/components/FormattedText";
 
 const iconMap = [Building2, Boxes, Wrench, Truck, ShieldCheck, Headphones];
 
@@ -57,7 +58,9 @@ export default function AboutMahalaxmiContent() {
       {paragraphs.length > 0 && (
         <div className="space-y-6 text-gray-700 text-sm md:text-base leading-relaxed font-sans">
           {paragraphs.map((p, idx) => (
-            <p key={idx}>{p}</p>
+            <p key={idx}>
+              <FormattedText text={p} />
+            </p>
           ))}
         </div>
       )}
@@ -72,7 +75,7 @@ export default function AboutMahalaxmiContent() {
           )}
           {hpclOverview.description && (
             <p className="text-sm text-gray-700 leading-relaxed mb-3">
-              {hpclOverview.description}
+              <FormattedText text={hpclOverview.description} />
             </p>
           )}
           {Array.isArray(hpclOverview.bullets) && hpclOverview.bullets.length > 0 && (

@@ -3,6 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { useCMSStore } from '@/store/useCMSStore';
+import { FormattedText } from '@/components/FormattedText';
 
 export default function AboutSection() {
   const { pages } = useCMSStore();
@@ -36,7 +37,7 @@ export default function AboutSection() {
 
         {description && (
           <p className="mt-4 text-gray-700 text-sm md:text-base leading-relaxed max-w-3xl mx-auto font-sans">
-            {description}
+            <FormattedText text={description} />
           </p>
         )}
 
