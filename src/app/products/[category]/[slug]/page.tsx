@@ -146,19 +146,14 @@ export default function ProductDetailPage() {
 
   const productSEO: PageSEO = useMemo(() => {
     return {
-      title: product?.name ? `${product.name} | HP Lubricants Distributor` : undefined,
-      metaTitle: product?.metaTitle || (product?.name ? `${product.name} | HPCL Lubricants` : undefined),
-      metaDescription:
-        product?.metaDescription ||
-        product?.description ||
-        product?.tagline ||
-        (product?.name ? `Buy ${product.name} genuine HPCL industrial lubricants from Mahalaxmi Enterprises.` : undefined),
-      targetKeywords:
-        product?.targetKeywords ||
-        (product?.name ? `${product.name}, HP Lubricants, ${category?.name || "industrial oil"}` : undefined),
-      canonicalUrl: typeof window !== "undefined" ? window.location.href : undefined,
+      title: product?.metaTitle || product?.title || product?.name,
+      metaTitle: product?.metaTitle || product?.title || product?.name,
+      metaDescription: product?.metaDescription || product?.description || product?.tagline,
+      targetKeywords: product?.targetKeywords,
+      canonicalUrl: product?.canonicalUrl,
+      schema: product?.schema,
     };
-  }, [product, category]);
+  }, [product]);
 
   return (
     <main

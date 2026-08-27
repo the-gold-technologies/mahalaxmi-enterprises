@@ -96,10 +96,12 @@ export default function BlogDetailPage() {
 
   const blogSEO: PageSEO = useMemo(() => {
     return {
-      title: post?.title ? `${post.title} | Mahalaxmi Enterprises` : undefined,
-      metaTitle: post?.metaTitle || (post?.title ? `${post.title} | Mahalaxmi Enterprises` : undefined),
-      metaDescription: post?.metaDescription || post?.excerpt || undefined,
-      canonicalUrl: post?.canonicalUrl || (typeof window !== "undefined" ? window.location.href : undefined),
+      title: post?.metaTitle || post?.title,
+      metaTitle: post?.metaTitle || post?.title,
+      metaDescription: post?.metaDescription || post?.excerpt,
+      targetKeywords: post?.targetKeywords || post?.keywords,
+      canonicalUrl: post?.canonicalUrl,
+      schema: post?.schema,
     };
   }, [post]);
 

@@ -83,17 +83,6 @@ export default function CategoryProductsPage() {
   const categoryDesc = currentSEO?.metaDescription || category?.description;
   const HeadingTag = getHeadingTag(currentSEO?.headingOptions, "h1");
 
-  const categorySEO: PageSEO = useMemo(() => {
-    return {
-      title: `${categoryName} | Mahalaxmi Enterprises HP Lubricants`,
-      metaTitle: `${categoryName} | HP Lubricants Industrial Distributor`,
-      metaDescription:
-        category?.description ||
-        `Explore ${categoryName} high-performance lubricants, oils, and greases from Mahalaxmi Enterprises.`,
-      canonicalUrl: typeof window !== "undefined" ? window.location.href : undefined,
-    };
-  }, [categoryName, category]);
-
   return (
     <main
       className="min-h-screen bg-white text-gray-800 font-sans flex flex-col justify-between"
@@ -101,7 +90,7 @@ export default function CategoryProductsPage() {
         fontSize: `${16 * fontSizeMultiplier}px`,
       }}
     >
-      <SEOMeta pageSlug={`products/${categorySlug}`} customSEO={categorySEO} />
+      <SEOMeta pageSlug={`products/${categorySlug}`} />
 
       <Navbar
         fontSizeMultiplier={fontSizeMultiplier}

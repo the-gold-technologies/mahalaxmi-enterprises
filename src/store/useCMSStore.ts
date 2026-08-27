@@ -33,15 +33,56 @@ export interface PageSEO {
 export function getHeadingTag(
   headingOptions?: any,
   defaultTag: string = "h1",
+  targetType?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "hero" | "sub" | string,
 ): React.ElementType {
   if (!headingOptions) return defaultTag as React.ElementType;
 
-  const rawTag =
-    typeof headingOptions === "string"
-      ? headingOptions
-      : headingOptions.h1 || defaultTag;
+  let rawTag: any = defaultTag;
 
-  const tag = rawTag.toLowerCase().trim();
+  if (typeof headingOptions === "string") {
+    rawTag = headingOptions;
+  } else if (typeof headingOptions === "object" && headingOptions !== null) {
+    const isPrimary =
+      !targetType ||
+      targetType === "h1" ||
+      targetType === "hero" ||
+      targetType === "title";
+
+    const isSecondary =
+      targetType === "h2" ||
+      targetType === "sub" ||
+      targetType === "subtitle";
+
+    if (isPrimary) {
+      rawTag =
+        headingOptions.heroHeadingTag ||
+        headingOptions.h1 ||
+        headingOptions.headingTag ||
+        headingOptions.titleTag ||
+        headingOptions.hero ||
+        headingOptions.tag ||
+        defaultTag;
+    } else if (isSecondary) {
+      rawTag =
+        headingOptions.subHeadingTag ||
+        headingOptions.h2 ||
+        headingOptions.subtitleTag ||
+        headingOptions.subTag ||
+        headingOptions.secondaryTag ||
+        defaultTag;
+    } else if (targetType) {
+      rawTag = headingOptions[targetType] || defaultTag;
+    } else {
+      rawTag =
+        headingOptions.heroHeadingTag ||
+        headingOptions.h1 ||
+        headingOptions.h2 ||
+        headingOptions.headingTag ||
+        defaultTag;
+    }
+  }
+
+  const tag = (typeof rawTag === "string" ? rawTag : defaultTag).toLowerCase().trim();
   const validTags = ["h1", "h2", "h3", "h4", "h5", "h6", "p", "div", "span"];
   return (validTags.includes(tag) ? tag : defaultTag) as React.ElementType;
 }
@@ -67,6 +108,8 @@ export interface GlobalSEO {
   };
   robotsTxt?: string | null;
   schema?: string | null;
+  customHeaderScripts?: string | null;
+  customFooterScripts?: string | null;
 }
 
 export interface OfficeLocation {

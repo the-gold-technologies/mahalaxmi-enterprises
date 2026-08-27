@@ -25,6 +25,7 @@ export interface TestimonialItem {
 
 export default function TestimonialsSection() {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [cardsPerPage, setCardsPerPage] = useState(4);
   const [isPaused, setIsPaused] = useState(false);
   const { pages } = useCMSStore();
 
@@ -34,8 +35,32 @@ export default function TestimonialsSection() {
   const title = cmsTestimonialsSection?.title || "";
   const subtitle = cmsTestimonialsSection?.subtitle || cmsTestimonialsSection?.description || "";
 
-  const cardsPerPage = 4;
+  // Dynamically update cardsPerPage based on window width
+  useEffect(() => {
+    const handleResize = () => {
+      if (typeof window === "undefined") return;
+      if (window.innerWidth < 640) {
+        setCardsPerPage(1);
+      } else if (window.innerWidth < 1024) {
+        setCardsPerPage(2);
+      } else {
+        setCardsPerPage(4);
+      }
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   const maxIndex = Math.max(0, testimonials.length - cardsPerPage);
+
+  // Keep currentIndex bounded when cardsPerPage changes on resize
+  useEffect(() => {
+    if (currentIndex > maxIndex) {
+      setCurrentIndex(maxIndex);
+    }
+  }, [maxIndex, currentIndex]);
 
   // Automatic slide transition every 4 seconds (pauses on hover)
   useEffect(() => {
@@ -44,7 +69,7 @@ export default function TestimonialsSection() {
       setCurrentIndex((prev) => (prev >= maxIndex ? 0 : prev + 1));
     }, 4000);
     return () => clearInterval(interval);
-  }, [isPaused, maxIndex, testimonials.length]);
+  }, [isPaused, maxIndex, testimonials.length, cardsPerPage]);
 
   const prevSlide = () => {
     if (testimonials.length <= cardsPerPage) return;
@@ -101,7 +126,7 @@ export default function TestimonialsSection() {
             <div
               className="flex gap-6 transition-transform duration-700 ease-in-out"
               style={{
-                transform: `translateX(calc(-${currentIndex} * (100% / 4 + 6px)))`,
+                transform: `translateX(calc(-${currentIndex} * ((100% + 24px) / ${cardsPerPage})))`,
               }}
             >
               {testimonials.map((t, idx) => (
