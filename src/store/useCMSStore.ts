@@ -33,7 +33,16 @@ export interface PageSEO {
 export function getHeadingTag(
   headingOptions?: any,
   defaultTag: string = "h1",
-  targetType?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "hero" | "sub" | string,
+  targetType?:
+    | "h1"
+    | "h2"
+    | "h3"
+    | "h4"
+    | "h5"
+    | "h6"
+    | "hero"
+    | "sub"
+    | string,
 ): React.ElementType {
   if (!headingOptions) return defaultTag as React.ElementType;
 
@@ -49,9 +58,7 @@ export function getHeadingTag(
       targetType === "title";
 
     const isSecondary =
-      targetType === "h2" ||
-      targetType === "sub" ||
-      targetType === "subtitle";
+      targetType === "h2" || targetType === "sub" || targetType === "subtitle";
 
     if (isPrimary) {
       rawTag =
@@ -82,7 +89,9 @@ export function getHeadingTag(
     }
   }
 
-  const tag = (typeof rawTag === "string" ? rawTag : defaultTag).toLowerCase().trim();
+  const tag = (typeof rawTag === "string" ? rawTag : defaultTag)
+    .toLowerCase()
+    .trim();
   const validTags = ["h1", "h2", "h3", "h4", "h5", "h6", "p", "div", "span"];
   return (validTags.includes(tag) ? tag : defaultTag) as React.ElementType;
 }
@@ -248,10 +257,7 @@ interface CMSStoreActions {
 }
 
 export const getApiBaseUrl = (): string => {
-  if (typeof process !== "undefined" && process.env.NEXT_PUBLIC_CMS_API_URL) {
-    return process.env.NEXT_PUBLIC_CMS_API_URL.replace(/\/$/, "");
-  }
-  return "http://localhost:3001";
+  return process.env.NEXT_PUBLIC_CMS_API_URL || "";
 };
 
 // In-flight promise cache to prevent duplicate simultaneous API calls

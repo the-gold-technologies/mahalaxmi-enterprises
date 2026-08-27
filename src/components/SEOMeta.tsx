@@ -326,10 +326,7 @@ function generatePageSchema({
   products: any[] | null;
   blogs: any[] | null;
 }) {
-  const origin =
-    typeof window !== "undefined" && window.location.origin
-      ? window.location.origin
-      : "https://mahalaxmilubricants.com";
+  const origin = (process.env.NEXT_PUBLIC_SITE_URL || "").replace(/\/$/, "");
 
   const companyName = globalSEO?.siteTitle || "Mahalaxmi Enterprises";
   const companyPhone = globalSEO?.phone || "+91 98765 43210";
