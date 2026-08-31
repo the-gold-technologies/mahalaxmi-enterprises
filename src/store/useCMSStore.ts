@@ -257,7 +257,7 @@ interface CMSStoreActions {
 }
 
 export const getApiBaseUrl = (): string => {
-  return process.env.NEXT_PUBLIC_CMS_API_URL || "";
+  return process.env.NEXT_CMS_API_URL || "";
 };
 
 // In-flight promise cache to prevent duplicate simultaneous API calls
