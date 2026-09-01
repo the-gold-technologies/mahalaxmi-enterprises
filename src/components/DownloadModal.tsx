@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { X, Download, CheckCircle2, FileText } from 'lucide-react';
+import { X, Download, CheckCircle2, FileText, Loader2 } from 'lucide-react';
+import { useCMSStore } from '@/store/useCMSStore';
 
 interface DownloadModalProps {
   isOpen: boolean;
@@ -22,7 +23,10 @@ export default function DownloadModal({
   const [mobile, setMobile] = useState('');
   const [email, setEmail] = useState('');
   const [company, setCompany] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDownloaded, setIsDownloaded] = useState(false);
+
+  const { submitEnquiry } = useCMSStore();
 
   useEffect(() => {
     if (isOpen) {
@@ -32,9 +36,24 @@ export default function DownloadModal({
 
   if (!isOpen) return null;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsDownloaded(true);
+    setIsSubmitting(true);
+
+    try {
+      await submitEnquiry({
+        name,
+        phone: mobile,
+        email: email || undefined,
+        product: `${productName} (${pdfType} Download)`,
+        message: `Requested ${pdfType} document for ${productName}. Company: ${company || 'N/A'}`,
+      });
+    } catch (err) {
+      console.error("Download lead capture error:", err);
+    } finally {
+      setIsSubmitting(false);
+      setIsDownloaded(true);
+    }
 
     // Trigger PDF download simulation / file fetch
     const link = document.createElement('a');
@@ -139,9 +158,18 @@ export default function DownloadModal({
               <div className="pt-2">
                 <button
                   type="submit"
-                  className="w-full bg-[#eb1e25] hover:bg-[#c4141a] text-white text-xs sm:text-sm font-bold uppercase tracking-wider py-3 rounded-lg transition-colors shadow-sm flex items-center justify-center gap-2 cursor-pointer"
+                  disabled={isSubmitting}
+                  className="w-full bg-[#eb1e25] hover:bg-[#c4141a] disabled:opacity-70 text-white text-xs sm:text-sm font-bold uppercase tracking-wider py-3 rounded-lg transition-colors shadow-sm flex items-center justify-center gap-2 cursor-pointer"
                 >
-                  <Download size={16} /> Download {pdfType} PDF Document
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 size={16} className="animate-spin" /> Processing...
+                    </>
+                  ) : (
+                    <>
+                      <Download size={16} /> Download {pdfType} PDF Document
+                    </>
+                  )}
                 </button>
               </div>
             </form>

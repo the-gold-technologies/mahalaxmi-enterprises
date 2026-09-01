@@ -50,13 +50,13 @@ export default function ContactFormSection() {
   const formBadge = contactForm?.badge || "";
   const formTitle = contactForm?.title || "";
   const formSubtitle = contactForm?.subtitle || "";
-  const buttonText = contactForm?.buttonText || "Submit Enquiry";
+  const buttonText = contactForm?.buttonText || "";
 
   // Dynamic SEO Heading
   const HeadingTag = getHeadingTag(pageSEO["contact-us"]?.headingOptions, "h1");
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
@@ -98,10 +98,8 @@ export default function ContactFormSection() {
   return (
     <section className="bg-slate-50/50 py-12 md:py-16">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        
         {/* 2-Column Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-start">
-          
           {/* LEFT SIDE: ContactHeadquarter */}
           <div className="lg:col-span-5 space-y-8">
             <div>
@@ -127,7 +125,6 @@ export default function ContactFormSection() {
 
             {/* Contact Details from ContactHeadquarter */}
             <div className="space-y-6 pt-2 border-t border-gray-200/80">
-              
               {/* Phone */}
               {phone && (
                 <div className="flex items-start gap-4">
@@ -267,7 +264,9 @@ export default function ContactFormSection() {
                   Enquiry Submitted Successfully!
                 </h3>
                 <p className="text-sm text-gray-600 max-w-sm mx-auto leading-relaxed">
-                  Thank you for contacting {companyName ? <strong>{companyName}</strong> : "us"}. We will get back to you shortly.
+                  Thank you for contacting{" "}
+                  {companyName ? <strong>{companyName}</strong> : "us"}. We will
+                  get back to you shortly.
                 </p>
                 <button
                   type="button"
@@ -353,7 +352,8 @@ export default function ContactFormSection() {
                 {/* Message */}
                 <div>
                   <label className="block text-xs font-bold text-gray-700 uppercase tracking-wide mb-1.5">
-                    Your Message / Requirement Details <span className="text-[#eb1e25]">*</span>
+                    Your Message / Requirement Details{" "}
+                    <span className="text-[#eb1e25]">*</span>
                   </label>
                   <textarea
                     name="message"
@@ -389,7 +389,6 @@ export default function ContactFormSection() {
               </form>
             )}
           </div>
-
         </div>
       </div>
     </section>

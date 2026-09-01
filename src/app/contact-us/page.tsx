@@ -63,10 +63,7 @@ export default function ContactUsPage() {
       <ContactBreadcrumb />
 
       {/* Main Content & Contact Form */}
-      <ContactFormSection
-        onOpenEnquiry={handleOpenEnquiry}
-        onOpenDistributor={handleOpenDistributor}
-      />
+      <ContactFormSection />
 
       {/* Footer & Enquiry Modal */}
       <Footer onOpenEnquiry={handleOpenEnquiry} />
