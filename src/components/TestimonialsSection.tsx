@@ -105,12 +105,12 @@ export default function TestimonialsSection() {
         )}
 
         {/* Carousel Slider Outer Wrapper (Hover to Pause) */}
+        {/*
         <div
           className="mt-14 relative px-2 sm:px-12"
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
         >
-          {/* Left Arrow Button */}
           {testimonials.length > cardsPerPage && (
             <button
               onClick={prevSlide}
@@ -121,7 +121,6 @@ export default function TestimonialsSection() {
             </button>
           )}
 
-          {/* Testimonials Smooth Overflow Window */}
           <div className="overflow-hidden py-4 px-1">
             <div
               className="flex gap-6 transition-transform duration-700 ease-in-out"
@@ -134,10 +133,8 @@ export default function TestimonialsSection() {
                   key={t.id || idx}
                   className="shrink-0 w-full sm:w-[calc((100%-24px)/2)] lg:w-[calc((100%-72px)/4)] relative bg-white border border-[#d1d5db] pt-9 pb-9 px-5 flex flex-col justify-between text-center shadow-xs transition-all duration-300 hover:shadow-md min-h-[440px]"
                 >
-                  {/* Top-Left Red Double Quote Badge Overlapping Top Border Line */}
                   <RedQuoteBadge className="absolute -top-[14px] left-6" />
 
-                  {/* Center Profile Avatar */}
                   {t.image && (
                     <div className="flex justify-center mt-1 mb-4">
                       <img
@@ -148,7 +145,6 @@ export default function TestimonialsSection() {
                     </div>
                   )}
 
-                  {/* Name & Role in Dark Navy */}
                   <div className="flex flex-col items-center">
                     <h3 className="text-sm font-bold text-[#001a36] tracking-tight">
                       {t.name}
@@ -159,7 +155,6 @@ export default function TestimonialsSection() {
                       </p>
                     )}
 
-                    {/* Organization & Location in Bold Red */}
                     {t.org && (
                       <p className="text-sm font-bold text-[#eb1e25] mt-2 leading-snug">
                         {t.org}
@@ -172,24 +167,20 @@ export default function TestimonialsSection() {
                     )}
                   </div>
 
-                  {/* Light Gray Horizontal Divider Line */}
                   <div className="w-full border-t border-[#d1d5db] my-4" />
 
-                  {/* Quote Text Body */}
                   <div className="grow flex items-center justify-center pb-2">
                     <p className="text-sm text-[#374151] font-normal leading-relaxed font-sans px-1">
                       &ldquo;{t.quote}&rdquo;
                     </p>
                   </div>
 
-                  {/* Bottom-Right Red Double Quote Badge Overlapping Bottom Border Line */}
                   <RedQuoteBadge className="absolute -bottom-[14px] right-6" />
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Right Arrow Button */}
           {testimonials.length > cardsPerPage && (
             <button
               onClick={nextSlide}
@@ -200,6 +191,7 @@ export default function TestimonialsSection() {
             </button>
           )}
         </div>
+        */}
       </div>
     </section>
   );
