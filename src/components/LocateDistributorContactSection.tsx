@@ -257,7 +257,7 @@ export default function LocateDistributorContactSection({
               </div>
 
               {/* Contact Us Action Buttons */}
-              <div className="mt-6 sm:mt-8 mb-4 flex flex-col sm:flex-row gap-3">
+              <div className="mt-6 sm:mt-8 mb-4 flex flex-col items-start gap-3">
                 {contactBtnText && (
                   <button
                     onClick={() => onOpenEnquiry && onOpenEnquiry(companyName || "Direct Contact Support")}
