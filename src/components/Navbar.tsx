@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -12,8 +12,9 @@ import {
   Plus,
   Minus,
   Layers,
+  Droplet,
 } from "lucide-react";
-import { useCMSStore } from "@/store/useCMSStore";
+import { useCMSStore, CMSProduct } from "@/store/useCMSStore";
 
 interface NavbarProps {
   fontSizeMultiplier: number;
@@ -22,11 +23,29 @@ interface NavbarProps {
   setLanguage: (lang: "EN" | "HI") => void;
 }
 
-const DEFAULT_CATEGORIES = [
-  { slug: "industrial-oils", name: "Industrial Oils" },
-  { slug: "industrial-greases", name: "Industrial Greases" },
-  { slug: "automotive-oils", name: "Automotive Oils" },
-  { slug: "bike-oils", name: "Bike Engine Oils" },
+interface ProductSubCategoryItem {
+  title: string;
+  categorySlug: string;
+  anchor: string;
+}
+
+const DEFAULT_PRODUCT_CATEGORIES: ProductSubCategoryItem[] = [
+  { title: "COMPRESSOR OILS", categorySlug: "industrial-oils", anchor: "compressor-oils" },
+  { title: "CYLINDER OIL", categorySlug: "industrial-oils", anchor: "cylinder-oil" },
+  { title: "FILM OIL", categorySlug: "industrial-oils", anchor: "film-oil" },
+  { title: "GENERAL PURPOSE MACHINERY OILS", categorySlug: "industrial-oils", anchor: "general-purpose-machinery-oils" },
+  { title: "HYDRAULIC OILS", categorySlug: "industrial-oils", anchor: "hydraulic-oils" },
+  { title: "MACHINERY OILS", categorySlug: "industrial-oils", anchor: "machinery-oils" },
+  { title: "OPEN GEAR COMPOUNDS", categorySlug: "industrial-oils", anchor: "open-gear-compounds" },
+  { title: "PNEUMATIC TOOL OILS", categorySlug: "industrial-oils", anchor: "pneumatic-tool-oils" },
+  { title: "REFRIGERATION COMPRESSOR OILS", categorySlug: "industrial-oils", anchor: "refrigeration-compressor-oils" },
+  { title: "SPINDLE OILS", categorySlug: "industrial-oils", anchor: "spindle-oils" },
+  { title: "STENTER OILS", categorySlug: "industrial-oils", anchor: "stenter-oils" },
+  { title: "SUGAR MILL BEARING OILS", categorySlug: "industrial-oils", anchor: "sugar-mill-bearing-oils" },
+  { title: "TRANSFORMER OILS", categorySlug: "industrial-oils", anchor: "transformer-oils" },
+  { title: "TURBINE OILS", categorySlug: "industrial-oils", anchor: "turbine-oils" },
+  { title: "WIRE ROPE LUBRICANTS", categorySlug: "industrial-oils", anchor: "wire-rope-lubricants" },
+  { title: "INDUSTRIAL GREASES", categorySlug: "industrial-greases", anchor: "industrial-greases" },
 ];
 
 export default function Navbar({
@@ -40,13 +59,12 @@ export default function Navbar({
   const [mobileProductsOpen, setMobileProductsOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [activeHoverCategory, setActiveHoverCategory] =
-    useState<string>("industrial-oils");
+    useState<string>("compressor-oils");
   const [activeTab, setActiveTab] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState("");
 
   const {
     products,
-    productCategories,
     fetchProducts,
     globalSEO,
     fetchGlobalSEO,
@@ -57,18 +75,63 @@ export default function Navbar({
     fetchGlobalSEO().catch(console.error);
   }, [fetchProducts, fetchGlobalSEO]);
 
-  const categories =
-    productCategories && productCategories.length > 0
-      ? productCategories
-      : DEFAULT_CATEGORIES;
+  // Extract direct categories dynamically from CMS products if available
+  const productSubCategories = useMemo<ProductSubCategoryItem[]>(() => {
+    if (!products || products.length === 0) return DEFAULT_PRODUCT_CATEGORIES;
 
-  const currentCategory =
-    categories.find((c) => c.slug === activeHoverCategory) || categories[0];
+    const map = new Map<string, ProductSubCategoryItem>();
+    products
+      .filter((p) => p.categorySlug === "industrial-oils" || p.categorySlug === "industrial-greases")
+      .forEach((p) => {
+        const title =
+          (p as any).subCategoryTitle ||
+          (p as any).subtitle ||
+          (p.categorySlug === "industrial-greases" ? "INDUSTRIAL GREASES" : "INDUSTRIAL OILS");
+        const upperTitle = title.toUpperCase().trim();
+        if (!map.has(upperTitle)) {
+          const anchor = upperTitle
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, "-")
+            .replace(/^-|-$/g, "");
+          map.set(upperTitle, {
+            title: upperTitle,
+            categorySlug: p.categorySlug,
+            anchor,
+          });
+        }
+      });
+
+    // Ensure INDUSTRIAL GREASES is present
+    if (!map.has("INDUSTRIAL GREASES")) {
+      map.set("INDUSTRIAL GREASES", {
+        title: "INDUSTRIAL GREASES",
+        categorySlug: "industrial-greases",
+        anchor: "industrial-greases",
+      });
+    }
+
+    const list = Array.from(map.values()).sort((a, b) => a.title.localeCompare(b.title));
+    return list.length > 0 ? list : DEFAULT_PRODUCT_CATEGORIES;
+  }, [products]);
+
+  const currentSubCat =
+    productSubCategories.find((c) => c.anchor === activeHoverCategory) ||
+    productSubCategories[0] ||
+    DEFAULT_PRODUCT_CATEGORIES[0];
+
+  const currentCategoryProducts = useMemo(() => {
+    if (!products || products.length === 0) return [];
+    return products.filter((p) => {
+      const pTitle = ((p as any).subCategoryTitle || (p as any).subtitle || "").toUpperCase().trim();
+      const pAnchor = pTitle.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+      if (currentSubCat.anchor === "industrial-greases") {
+        return p.categorySlug === "industrial-greases" || pAnchor === "industrial-greases";
+      }
+      return pAnchor === currentSubCat.anchor;
+    });
+  }, [products, currentSubCat]);
 
   const logoSrc = globalSEO?.logo || "/mahalaxmi png logo .png";
-
-  const categoryProducts =
-    products?.filter((p) => p.categorySlug === currentCategory.slug) || [];
 
   const increaseFont = () => {
     if (fontSizeMultiplier < 1.25) setFontSizeMultiplier((prev) => prev + 0.08);
@@ -144,7 +207,8 @@ export default function Navbar({
             />
             <button
               type="submit"
-              className="bg-[#eb1e25] text-white h-[28px] sm:h-[30px] px-2 border border-[#eb1e25] flex items-center justify-center hover:bg-[#c4141a] transition-colors cursor-pointer"
+              disabled={!searchQuery.trim()}
+              className="bg-[#eb1e25] text-white h-[28px] sm:h-[30px] px-2 border border-[#eb1e25] flex items-center justify-center hover:bg-[#c4141a] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-[#eb1e25] transition-colors cursor-pointer"
               aria-label="Search"
             >
               <Search size={14} className="font-bold stroke-[2.5]" />
@@ -202,7 +266,8 @@ export default function Navbar({
             />
             <button
               type="submit"
-              className="bg-[#eb1e25] text-white h-[26px] px-1.5 border border-[#eb1e25] flex items-center justify-center cursor-pointer"
+              disabled={!searchQuery.trim()}
+              className="bg-[#eb1e25] text-white h-[26px] px-1.5 border border-[#eb1e25] flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed transition-colors cursor-pointer"
               aria-label="Search"
             >
               <Search size={12} />
@@ -279,34 +344,52 @@ export default function Navbar({
                   )}
                 </Link>
 
-                {/* Clean 2-Column Mega Menu (Pre-populated with first category, zero empty boxes) */}
+                {/* Same 2-Column Mega Menu UI with Direct Categories in Left Column */}
                 {item.isMegaMenu && openDropdown === item.name && (
-                  <div className="absolute top-full left-0 -ml-12 w-[560px] bg-white shadow-2xl border border-gray-100 rounded-2xl p-4 z-50 grid grid-cols-12 gap-4 animate-in fade-in zoom-in-95 duration-150">
-                    {/* Left Column: Categories List */}
-                    <div className="col-span-5 border-r border-gray-100 pr-2.5 space-y-1">
+                  <div
+                    className="absolute top-full left-0 -ml-12 w-[560px] bg-white shadow-2xl border border-gray-100 rounded-2xl p-4 z-50 grid grid-cols-12 gap-4 animate-in fade-in zoom-in-95 duration-150"
+                    onMouseEnter={() => setOpenDropdown(item.name)}
+                    onMouseLeave={() => setOpenDropdown(null)}
+                  >
+                    {/* Left Column: Direct Category List with Exact Same Visual Style */}
+                    <div className="col-span-5 border-r border-gray-100 pr-2.5 space-y-1 max-h-64 overflow-y-auto">
                       <div className="text-[11px] font-extrabold text-gray-400 uppercase tracking-wider px-3 py-1 mb-1 flex items-center gap-1.5">
                         <Layers size={13} className="text-[#eb1e25]" />{" "}
                         Categories
                       </div>
-                      {categories.map((cat) => {
-                        const isCatActive = activeHoverCategory === cat.slug;
+                      {productSubCategories.map((cat) => {
+                        const isCatActive = activeHoverCategory === cat.anchor;
                         return (
                           <div
-                            key={cat.slug}
+                            key={cat.anchor}
                             onMouseEnter={() =>
-                              setActiveHoverCategory(cat.slug)
+                              setActiveHoverCategory(cat.anchor)
                             }
                             className="block"
                           >
                             <Link
-                              href={`/products/${cat.slug}`}
-                              className={`flex items-center justify-between px-3 py-2.5 text-xs font-bold transition-all duration-150 cursor-pointer ${
+                              href={cat.categorySlug === "industrial-greases" ? "/products/industrial-greases" : `/products/${cat.categorySlug}#subcat-${cat.anchor}`}
+                              onClick={() => {
+                                setActiveTab(item.name);
+                                setOpenDropdown(null);
+                              }}
+                              className={`flex items-center justify-between px-3 py-2 text-xs font-bold transition-all duration-150 cursor-pointer group ${
                                 isCatActive
                                   ? "bg-[#002b5c] text-white border-l-4 border-[#eb1e25] rounded-r-lg rounded-l-xs shadow-xs"
                                   : "text-gray-700 hover:bg-gray-50 hover:text-[#eb1e25] rounded-lg"
                               }`}
                             >
-                              <span>{cat.name}</span>
+                              <div className="flex items-center gap-2 truncate pr-1">
+                                <Droplet
+                                  size={13}
+                                  className={`shrink-0 transition-colors ${
+                                    isCatActive
+                                      ? "text-[#eb1e25] fill-[#eb1e25]"
+                                      : "text-slate-500 fill-slate-500 group-hover:text-[#eb1e25] group-hover:fill-[#eb1e25]"
+                                  }`}
+                                />
+                                <span className="truncate">{cat.title}</span>
+                              </div>
                               <ChevronRight
                                 size={14}
                                 className={
@@ -321,24 +404,28 @@ export default function Navbar({
                       })}
                     </div>
 
-                    {/* Right Column: Pre-populated Sub-Products List */}
+                    {/* Right Column: Pre-populated Products for the Hovered Category */}
                     <div className="col-span-7 pl-1 flex flex-col justify-between">
                       <div
-                        key={currentCategory.slug}
+                        key={currentSubCat.anchor}
                         className="animate-in fade-in duration-150 space-y-2"
                       >
                         <div className="text-[11px] font-extrabold text-[#002b5c] uppercase tracking-wider px-2 py-1 border-b border-gray-100 flex items-center justify-between">
-                          <span>{currentCategory.name}</span>
-                          <span className="text-[10px] text-[#eb1e25] font-bold bg-red-50 px-2 py-0.5 rounded">
-                            {categoryProducts.length} Products
+                          <span className="truncate pr-2">{currentSubCat.title}</span>
+                          <span className="text-[10px] text-[#eb1e25] font-bold bg-red-50 px-2 py-0.5 rounded shrink-0">
+                            {currentCategoryProducts.length} Products
                           </span>
                         </div>
                         <div className="space-y-1 max-h-64 overflow-y-auto pr-1">
-                          {categoryProducts.length > 0 ? (
-                            categoryProducts.map((prod) => (
+                          {currentCategoryProducts.length > 0 ? (
+                            currentCategoryProducts.map((prod) => (
                               <Link
                                 key={prod.id}
                                 href={`/products/${prod.categorySlug}/${prod.slug}`}
+                                onClick={() => {
+                                  setActiveTab(item.name);
+                                  setOpenDropdown(null);
+                                }}
                                 className="block px-3 py-2 text-xs font-medium text-gray-700 hover:bg-red-50 hover:text-[#eb1e25] rounded-lg transition-all duration-150 group border border-transparent hover:border-red-100"
                               >
                                 <div className="font-bold text-[#002b5c] group-hover:text-[#eb1e25] transition-colors">
@@ -347,7 +434,7 @@ export default function Navbar({
                                 {(prod.subCategoryTitle ||
                                   prod.tagline ||
                                   (prod as any).subtitle) && (
-                                  <div className="text-[10px] text-gray-500 font-normal">
+                                  <div className="text-[10px] text-gray-500 font-normal truncate">
                                     {prod.subCategoryTitle ||
                                       prod.tagline ||
                                       (prod as any).subtitle}
@@ -357,11 +444,14 @@ export default function Navbar({
                             ))
                           ) : (
                             <Link
-                              href={`/products/${currentCategory.slug}`}
+                              href={`/products/${currentSubCat.categorySlug}#subcat-${currentSubCat.anchor}`}
+                              onClick={() => {
+                                setActiveTab(item.name);
+                                setOpenDropdown(null);
+                              }}
                               className="block px-3 py-4 text-xs text-gray-500 italic hover:text-[#002b5c]"
                             >
-                              Explore all products in {currentCategory.name}{" "}
-                              &rarr;
+                              Explore all products in {currentSubCat.title} &rarr;
                             </Link>
                           )}
                         </div>
@@ -448,23 +538,23 @@ export default function Navbar({
                           )}
                         </button>
 
-                        {/* Collapsible Sub-Categories for PRODUCTS & SERVICES */}
+                        {/* Collapsible Product Categories for PRODUCTS & SERVICES */}
                         {mobileProductsOpen && (
-                          <div className="pl-3 mt-1 flex flex-col gap-1.5 border-l-2 border-[#eb1e25]/70 bg-gray-50/80 p-3 rounded-r-lg animate-in fade-in duration-150">
+                          <div className="pl-3 mt-1 flex flex-col gap-1.5 border-l-2 border-[#eb1e25]/70 bg-gray-50/80 p-3 rounded-r-lg max-h-[360px] overflow-y-auto animate-in fade-in duration-150">
                             <span className="text-[11px] font-bold uppercase text-gray-400 tracking-wider">
                               Product Categories
                             </span>
-                            {categories.map((cat) => (
+                            {productSubCategories.map((catItem, cIdx) => (
                               <Link
-                                key={cat.slug}
-                                href={`/products/${cat.slug}`}
+                                key={cIdx}
+                                href={`/products/${catItem.categorySlug}#subcat-${catItem.anchor}`}
                                 onClick={() => {
                                   setMobileMenuOpen(false);
                                   setMobileProductsOpen(false);
                                 }}
-                                className="text-xs text-gray-700 hover:text-[#eb1e25] font-semibold py-1.5 px-2 rounded hover:bg-white flex items-center justify-between transition-colors"
+                                className="text-xs text-gray-700 hover:text-[#eb1e25] font-semibold py-1.5 px-2 rounded hover:bg-white flex items-center justify-between transition-colors uppercase"
                               >
-                                <span>{cat.name}</span>
+                                <span className="truncate">{catItem.title}</span>
                                 <ChevronRight
                                   size={14}
                                   className="text-gray-400"

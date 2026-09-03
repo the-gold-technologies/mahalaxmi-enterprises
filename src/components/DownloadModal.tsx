@@ -64,6 +64,11 @@ export default function DownloadModal({
     document.body.removeChild(link);
   };
 
+  const isFormValid =
+    name.trim().length > 0 &&
+    mobile.trim().length > 0 &&
+    email.trim().length > 0;
+
   return (
     <div
       className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4"
@@ -158,8 +163,8 @@ export default function DownloadModal({
               <div className="pt-2">
                 <button
                   type="submit"
-                  disabled={isSubmitting}
-                  className="w-full bg-[#eb1e25] hover:bg-[#c4141a] disabled:opacity-70 text-white text-xs sm:text-sm font-bold uppercase tracking-wider py-3 rounded-lg transition-colors shadow-sm flex items-center justify-center gap-2 cursor-pointer"
+                  disabled={isSubmitting || !isFormValid}
+                  className="w-full bg-[#eb1e25] hover:bg-[#c4141a] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-[#eb1e25] text-white text-xs sm:text-sm font-bold uppercase tracking-wider py-3 rounded-lg transition-colors shadow-sm flex items-center justify-center gap-2 cursor-pointer"
                 >
                   {isSubmitting ? (
                     <>

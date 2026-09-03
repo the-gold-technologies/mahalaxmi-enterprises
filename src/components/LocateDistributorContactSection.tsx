@@ -132,7 +132,8 @@ export default function LocateDistributorContactSection({
                   <div className="ml-0 sm:ml-40 mt-2 sm:mt-4">
                     <button
                       type="submit"
-                      className="bg-[#eb1e25] hover:bg-[#d0171d] text-white font-extrabold px-4 py-2.5 rounded text-sm uppercase tracking-wider shadow-none transition-all inline-block cursor-pointer"
+                      disabled={!lubeType.trim() || !country.trim()}
+                      className="bg-[#eb1e25] hover:bg-[#d0171d] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-[#eb1e25] text-white font-extrabold px-4 py-2.5 rounded text-sm uppercase tracking-wider shadow-none transition-all inline-block cursor-pointer"
                     >
                       {searchBtnText}
                     </button>

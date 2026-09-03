@@ -130,12 +130,13 @@ export default function CategoryProductsPage() {
             const words = group.title.split(" ");
             const firstWord = words[0];
             const remainingWords = words.slice(1).join(" ");
+            const anchorSlug = group.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 
             return (
               <div
                 key={idx}
-                id={`subcat-${idx}`}
-                className="flex flex-col space-y-5 scroll-mt-24"
+                id={`subcat-${anchorSlug}`}
+                className="flex flex-col space-y-5 scroll-mt-28"
               >
                 {/* Header Title with Dark Blue Underline on First Word */}
                 <div className="border-b border-gray-200 pb-2">
@@ -213,12 +214,14 @@ export default function CategoryProductsPage() {
                     key={rIdx}
                     className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 items-center py-5 border-b border-gray-200"
                   >
-                    {rowItems.map((subGroup, cIdx) => (
-                      <a
-                        key={cIdx}
-                        href={`#subcat-${rIdx * 4 + cIdx}`}
-                        className="flex items-center gap-3.5 group transition-colors py-1.5"
-                      >
+                    {rowItems.map((subGroup, cIdx) => {
+                      const anchorSlug = subGroup.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+                      return (
+                        <a
+                          key={cIdx}
+                          href={`#subcat-${anchorSlug}`}
+                          className="flex items-center gap-3.5 group transition-colors py-1.5"
+                        >
                         <Droplet
                           size={21}
                           className="text-[#475569] fill-[#475569] shrink-0 group-hover:text-[#eb1e25] group-hover:fill-[#eb1e25] transition-colors"
@@ -226,8 +229,9 @@ export default function CategoryProductsPage() {
                         <span className="text-sm md:text-[15px] font-normal uppercase text-[#334155] group-hover:text-[#eb1e25] tracking-normal leading-relaxed transition-colors">
                           {subGroup.title}
                         </span>
-                      </a>
-                    ))}
+                        </a>
+                      );
+                    })}
                   </div>
                 );
               })}

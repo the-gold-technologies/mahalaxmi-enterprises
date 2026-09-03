@@ -95,6 +95,11 @@ export default function ContactFormSection() {
     }
   };
 
+  const isFormValid =
+    formData.name.trim().length > 0 &&
+    formData.phone.trim().length > 0 &&
+    formData.message.trim().length > 0;
+
   return (
     <section className="bg-slate-50/50 py-12 md:py-16">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -370,8 +375,8 @@ export default function ContactFormSection() {
                 <div className="pt-2">
                   <button
                     type="submit"
-                    disabled={isSubmitting}
-                    className="w-full bg-[#eb1e25] hover:bg-[#c9151c] active:scale-[0.99] disabled:opacity-60 text-white text-sm font-bold uppercase tracking-wider py-3.5 px-6 rounded-lg transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer"
+                    disabled={isSubmitting || !isFormValid}
+                    className="w-full bg-[#eb1e25] hover:bg-[#c9151c] active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-[#eb1e25] text-white text-sm font-bold uppercase tracking-wider py-3.5 px-6 rounded-lg transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer"
                   >
                     {isSubmitting ? (
                       <>
