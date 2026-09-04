@@ -30,10 +30,14 @@ export default function TestimonialsSection() {
   const { pages } = useCMSStore();
 
   const cmsTestimonialsSection = pages["home"]?.TestimonialsSection;
-  const testimonials: TestimonialItem[] = cmsTestimonialsSection?.testimonials || [];
+  const testimonials: TestimonialItem[] =
+    cmsTestimonialsSection?.testimonials || [];
 
   const title = cmsTestimonialsSection?.title || "";
-  const subtitle = cmsTestimonialsSection?.subtitle || cmsTestimonialsSection?.description || "";
+  const subtitle =
+    cmsTestimonialsSection?.subtitle ||
+    cmsTestimonialsSection?.description ||
+    "";
 
   // Dynamically update cardsPerPage based on window width
   useEffect(() => {
