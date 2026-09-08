@@ -18,7 +18,8 @@ const iconMap = [Building2, Boxes, Wrench, Truck, ShieldCheck, Headphones];
 export default function AboutMahalaxmiContent() {
   const { pages, pageSEO } = useCMSStore();
   const cmsStory =
-    pages["about-us"]?.AboutMahalaxmiContent || pages["about-us"]?.MahalaxmiStory;
+    pages["about-us"]?.AboutMahalaxmiContent ||
+    pages["about-us"]?.MahalaxmiStory;
 
   if (!cmsStory) {
     return null;
@@ -26,17 +27,24 @@ export default function AboutMahalaxmiContent() {
 
   const title = cmsStory.title || "";
   const subtitle = cmsStory.subtitle || "";
+  const proprietorRole =
+    cmsStory.proprietorRole || cmsStory.proprietorDesignation || "";
   const paragraphs: string[] = Array.isArray(cmsStory.paragraphs)
     ? cmsStory.paragraphs
     : cmsStory.description
-    ? [cmsStory.description]
-    : [];
+      ? [cmsStory.description]
+      : [];
 
   const hpclOverview = cmsStory.hpclOverview;
   const whyChooseTitle = cmsStory.whyChooseTitle || "";
   const whyChooseSubtitle = cmsStory.whyChooseSubtitle || "";
   const whyChooseItems: { title: string; description: string }[] =
     cmsStory.whyChooseItems || [];
+
+  const proprietorPhoto = cmsStory.proprietorPhoto || "";
+  const proprietorPhotoAlt =
+    cmsStory.proprietorPhotoAlt ||
+    (subtitle ? `${subtitle} — ${proprietorRole || "Proprietor"}` : "");
 
   const HeadingTag = getHeadingTag(pageSEO["about-us"]?.headingOptions, "h1");
 
@@ -49,18 +57,41 @@ export default function AboutMahalaxmiContent() {
         </HeadingTag>
       )}
 
-      {/* Sub-header: Proprietor Info */}
+      {/* Proprietor Photo + Name Row */}
       {subtitle && (
-        <h2 className="text-xl md:text-2xl font-bold text-[#eb1e25] mb-6">
-          {subtitle}
-        </h2>
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6 mb-6">
+          {proprietorPhoto && (
+            <div className="shrink-0">
+              <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden border-4 border-[#002b5c]/20 shadow-md bg-gray-100 flex items-center justify-center">
+                <img
+                  src={proprietorPhoto}
+                  alt={proprietorPhotoAlt}
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).style.display = "none";
+                  }}
+                />
+              </div>
+            </div>
+          )}
+          <div>
+            <h2 className="text-xl md:text-2xl font-bold text-[#eb1e25]">
+              {subtitle}
+            </h2>
+            {proprietorRole && (
+              <p className="text-xs text-gray-500 mt-1 font-medium uppercase tracking-wide">
+                {proprietorRole}
+              </p>
+            )}
+          </div>
+        </div>
       )}
 
       {/* Text Paragraphs */}
       {paragraphs.length > 0 && (
         <div className="space-y-6 text-gray-700 text-sm md:text-base leading-relaxed font-sans">
           {paragraphs.map((p, idx) => (
-            <p key={idx}>
+            <p key={idx} className="text-justify">
               <FormattedText text={p} />
             </p>
           ))}
@@ -80,13 +111,14 @@ export default function AboutMahalaxmiContent() {
               <FormattedText text={hpclOverview.description} />
             </p>
           )}
-          {Array.isArray(hpclOverview.bullets) && hpclOverview.bullets.length > 0 && (
-            <ul className="space-y-1.5 text-xs text-gray-600 list-disc list-inside">
-              {hpclOverview.bullets.map((b: string, idx: number) => (
-                <li key={idx}>{b}</li>
-              ))}
-            </ul>
-          )}
+          {Array.isArray(hpclOverview.bullets) &&
+            hpclOverview.bullets.length > 0 && (
+              <ul className="space-y-1.5 text-xs text-gray-600 list-disc list-inside">
+                {hpclOverview.bullets.map((b: string, idx: number) => (
+                  <li key={idx}>{b}</li>
+                ))}
+              </ul>
+            )}
         </div>
       )}
 
@@ -108,7 +140,8 @@ export default function AboutMahalaxmiContent() {
           {whyChooseItems.length > 0 && (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {whyChooseItems.map((item, index) => {
-                const IconComp = iconMap[index % iconMap.length] || CheckCircle2;
+                const IconComp =
+                  iconMap[index % iconMap.length] || CheckCircle2;
                 return (
                   <div
                     key={index}

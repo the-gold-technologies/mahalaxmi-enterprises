@@ -10,7 +10,7 @@ import TrustedClientsSection from "@/components/TrustedClientsSection";
 import LocateDistributorContactSection from "@/components/LocateDistributorContactSection";
 import Footer from "@/components/Footer";
 import EnquiryModal from "@/components/EnquiryModal";
-import DistributorModal from "@/components/DistributorModal";
+
 import SEOMeta from "@/components/SEOMeta";
 import { useCMSStore } from "@/store/useCMSStore";
 
@@ -21,10 +21,7 @@ export default function Home() {
   const [isEnquiryOpen, setIsEnquiryOpen] = useState(false);
   const [enquiryProduct, setEnquiryProduct] = useState("");
 
-  const [isDistributorOpen, setIsDistributorOpen] = useState(false);
-  const [distributorType, setDistributorType] = useState(
-    "Industrial Lube Distributor (ILD)",
-  );
+
 
   const { fetchPage } = useCMSStore();
 
@@ -38,10 +35,6 @@ export default function Home() {
     setIsEnquiryOpen(true);
   };
 
-  const handleOpenDistributor = (type?: string) => {
-    if (type) setDistributorType(type);
-    setIsDistributorOpen(true);
-  };
 
   return (
     <main className="min-h-screen bg-white text-gray-800">
@@ -70,10 +63,9 @@ export default function Home() {
       {/* 6.5. Trusted Clients & Partners Infinite Marquee Section */}
       <TrustedClientsSection />
 
-      {/* 8. Locate Distributor Form & Contact Details Grid */}
+      {/* 8. Contact Details Section */}
       <LocateDistributorContactSection
         onOpenEnquiry={handleOpenEnquiry}
-        onOpenDistributor={handleOpenDistributor}
       />
 
       {/* 9. Dark Navy Footer & Sticky Enquiry Button */}
@@ -86,12 +78,6 @@ export default function Home() {
         initialProduct={enquiryProduct}
       />
 
-      {/* Distributor Leaders Modal */}
-      <DistributorModal
-        isOpen={isDistributorOpen}
-        onClose={() => setIsDistributorOpen(false)}
-        initialType={distributorType}
-      />
     </main>
   );
 }
