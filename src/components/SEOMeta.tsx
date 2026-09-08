@@ -360,21 +360,6 @@ function generatePageSchema({
       addressRegion: "Uttar Pradesh",
       addressCountry: "IN",
     },
-    openingHoursSpecification: [
-      {
-        "@type": "OpeningHoursSpecification",
-        dayOfWeek: [
-          "Monday",
-          "Tuesday",
-          "Wednesday",
-          "Thursday",
-          "Friday",
-          "Saturday",
-        ],
-        opens: "09:00",
-        closes: "19:00",
-      },
-    ],
   };
 
   // 1. Home / Landing Page Schema

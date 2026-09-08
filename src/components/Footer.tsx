@@ -7,7 +7,6 @@ import {
   Instagram,
   Mail,
   Linkedin,
-  Twitter,
 } from "lucide-react";
 import { useCMSStore } from "@/store/useCMSStore";
 
@@ -140,17 +139,6 @@ export default function Footer({ onOpenEnquiry }: FooterProps) {
                 aria-label="LinkedIn"
               >
                 <Linkedin size={18} />
-              </a>
-            )}
-            {socialLinks.twitter && (
-              <a
-                href={socialLinks.twitter}
-                target="_blank"
-                rel="noreferrer"
-                className="w-9 h-9 rounded-full bg-[#1da1f2] flex items-center justify-center text-white hover:opacity-90 transition shadow-xs"
-                aria-label="Twitter"
-              >
-                <Twitter size={18} />
               </a>
             )}
           </div>
