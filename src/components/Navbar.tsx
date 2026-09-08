@@ -31,22 +31,82 @@ interface ProductSubCategoryItem {
 }
 
 const DEFAULT_PRODUCT_CATEGORIES: ProductSubCategoryItem[] = [
-  { title: "COMPRESSOR OILS", categorySlug: "industrial-oils", anchor: "compressor-oils" },
-  { title: "CYLINDER OIL", categorySlug: "industrial-oils", anchor: "cylinder-oil" },
+  {
+    title: "COMPRESSOR OILS",
+    categorySlug: "industrial-oils",
+    anchor: "compressor-oils",
+  },
+  {
+    title: "CYLINDER OIL",
+    categorySlug: "industrial-oils",
+    anchor: "cylinder-oil",
+  },
   { title: "FILM OIL", categorySlug: "industrial-oils", anchor: "film-oil" },
-  { title: "GENERAL PURPOSE MACHINERY OILS", categorySlug: "industrial-oils", anchor: "general-purpose-machinery-oils" },
-  { title: "HYDRAULIC OILS", categorySlug: "industrial-oils", anchor: "hydraulic-oils" },
-  { title: "MACHINERY OILS", categorySlug: "industrial-oils", anchor: "machinery-oils" },
-  { title: "OPEN GEAR COMPOUNDS", categorySlug: "industrial-oils", anchor: "open-gear-compounds" },
-  { title: "PNEUMATIC TOOL OILS", categorySlug: "industrial-oils", anchor: "pneumatic-tool-oils" },
-  { title: "REFRIGERATION COMPRESSOR OILS", categorySlug: "industrial-oils", anchor: "refrigeration-compressor-oils" },
-  { title: "SPINDLE OILS", categorySlug: "industrial-oils", anchor: "spindle-oils" },
-  { title: "STENTER OILS", categorySlug: "industrial-oils", anchor: "stenter-oils" },
-  { title: "SUGAR MILL BEARING OILS", categorySlug: "industrial-oils", anchor: "sugar-mill-bearing-oils" },
-  { title: "TRANSFORMER OILS", categorySlug: "industrial-oils", anchor: "transformer-oils" },
-  { title: "TURBINE OILS", categorySlug: "industrial-oils", anchor: "turbine-oils" },
-  { title: "WIRE ROPE LUBRICANTS", categorySlug: "industrial-oils", anchor: "wire-rope-lubricants" },
-  { title: "INDUSTRIAL GREASES", categorySlug: "industrial-greases", anchor: "industrial-greases" },
+  {
+    title: "GENERAL PURPOSE MACHINERY OILS",
+    categorySlug: "industrial-oils",
+    anchor: "general-purpose-machinery-oils",
+  },
+  {
+    title: "HYDRAULIC OILS",
+    categorySlug: "industrial-oils",
+    anchor: "hydraulic-oils",
+  },
+  {
+    title: "MACHINERY OILS",
+    categorySlug: "industrial-oils",
+    anchor: "machinery-oils",
+  },
+  {
+    title: "OPEN GEAR COMPOUNDS",
+    categorySlug: "industrial-oils",
+    anchor: "open-gear-compounds",
+  },
+  {
+    title: "PNEUMATIC TOOL OILS",
+    categorySlug: "industrial-oils",
+    anchor: "pneumatic-tool-oils",
+  },
+  {
+    title: "REFRIGERATION COMPRESSOR OILS",
+    categorySlug: "industrial-oils",
+    anchor: "refrigeration-compressor-oils",
+  },
+  {
+    title: "SPINDLE OILS",
+    categorySlug: "industrial-oils",
+    anchor: "spindle-oils",
+  },
+  {
+    title: "STENTER OILS",
+    categorySlug: "industrial-oils",
+    anchor: "stenter-oils",
+  },
+  {
+    title: "SUGAR MILL BEARING OILS",
+    categorySlug: "industrial-oils",
+    anchor: "sugar-mill-bearing-oils",
+  },
+  {
+    title: "TRANSFORMER OILS",
+    categorySlug: "industrial-oils",
+    anchor: "transformer-oils",
+  },
+  {
+    title: "TURBINE OILS",
+    categorySlug: "industrial-oils",
+    anchor: "turbine-oils",
+  },
+  {
+    title: "WIRE ROPE LUBRICANTS",
+    categorySlug: "industrial-oils",
+    anchor: "wire-rope-lubricants",
+  },
+  {
+    title: "INDUSTRIAL GREASES",
+    categorySlug: "industrial-greases",
+    anchor: "industrial-greases",
+  },
 ];
 
 export default function Navbar({
@@ -64,12 +124,7 @@ export default function Navbar({
   const [activeTab, setActiveTab] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState("");
 
-  const {
-    products,
-    fetchProducts,
-    globalSEO,
-    fetchGlobalSEO,
-  } = useCMSStore();
+  const { products, fetchProducts, globalSEO, fetchGlobalSEO } = useCMSStore();
 
   React.useEffect(() => {
     fetchProducts().catch(console.error);
@@ -82,12 +137,18 @@ export default function Navbar({
 
     const map = new Map<string, ProductSubCategoryItem>();
     products
-      .filter((p) => p.categorySlug === "industrial-oils" || p.categorySlug === "industrial-greases")
+      .filter(
+        (p) =>
+          p.categorySlug === "industrial-oils" ||
+          p.categorySlug === "industrial-greases",
+      )
       .forEach((p) => {
         const title =
           (p as any).subCategoryTitle ||
           (p as any).subtitle ||
-          (p.categorySlug === "industrial-greases" ? "INDUSTRIAL GREASES" : "INDUSTRIAL OILS");
+          (p.categorySlug === "industrial-greases"
+            ? "INDUSTRIAL GREASES"
+            : "INDUSTRIAL OILS");
         const upperTitle = title.toUpperCase().trim();
         if (!map.has(upperTitle)) {
           const anchor = upperTitle
@@ -111,7 +172,9 @@ export default function Navbar({
       });
     }
 
-    const list = Array.from(map.values()).sort((a, b) => a.title.localeCompare(b.title));
+    const list = Array.from(map.values()).sort((a, b) =>
+      a.title.localeCompare(b.title),
+    );
     return list.length > 0 ? list : DEFAULT_PRODUCT_CATEGORIES;
   }, [products]);
 
@@ -123,10 +186,18 @@ export default function Navbar({
   const currentCategoryProducts = useMemo(() => {
     if (!products || products.length === 0) return [];
     return products.filter((p) => {
-      const pTitle = ((p as any).subCategoryTitle || (p as any).subtitle || "").toUpperCase().trim();
-      const pAnchor = pTitle.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+      const pTitle = ((p as any).subCategoryTitle || (p as any).subtitle || "")
+        .toUpperCase()
+        .trim();
+      const pAnchor = pTitle
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-|-$/g, "");
       if (currentSubCat.anchor === "industrial-greases") {
-        return p.categorySlug === "industrial-greases" || pAnchor === "industrial-greases";
+        return (
+          p.categorySlug === "industrial-greases" ||
+          pAnchor === "industrial-greases"
+        );
       }
       return pAnchor === currentSubCat.anchor;
     });
@@ -185,9 +256,17 @@ export default function Navbar({
     });
   };
 
-  const currentLanguage = useLanguage();
+  const detectedLanguage = useLanguage();
+  const [currentLanguage, setCurrentLanguage] = useState<"EN" | "HI">(
+    language || detectedLanguage || "EN",
+  );
+
+  React.useEffect(() => {
+    setCurrentLanguage(detectedLanguage);
+  }, [detectedLanguage]);
 
   const handleLanguageChange = (lang: "EN" | "HI") => {
+    setCurrentLanguage(lang);
     if (setLanguage) setLanguage(lang);
     changeLanguage(lang);
   };
@@ -244,7 +323,9 @@ export default function Navbar({
             >
               English
             </button>
-            <span className="text-gray-400 notranslate" translate="no">|</span>
+            <span className="text-gray-400 notranslate" translate="no">
+              |
+            </span>
             <button
               onClick={() => handleLanguageChange("HI")}
               className={`hover:underline cursor-pointer notranslate ${
@@ -276,8 +357,13 @@ export default function Navbar({
             </button>
           </form>
 
-          <div className="flex items-center gap-1" title={`Text Size: ${currentFontSize}px`}>
-            <span className="text-gray-600 text-xs font-sans select-none">Text</span>
+          <div
+            className="flex items-center gap-1"
+            title={`Text Size: ${currentFontSize}px`}
+          >
+            <span className="text-gray-600 text-xs font-sans select-none">
+              Text
+            </span>
             <button
               onClick={increaseFont}
               disabled={currentFontSize >= 26}
@@ -316,7 +402,9 @@ export default function Navbar({
           >
             English
           </button>
-          <span className="text-gray-300 notranslate" translate="no">|</span>
+          <span className="text-gray-300 notranslate" translate="no">
+            |
+          </span>
           <button
             onClick={() => handleLanguageChange("HI")}
             className={`cursor-pointer notranslate ${
@@ -349,8 +437,13 @@ export default function Navbar({
             </button>
           </form>
 
-          <div className="flex items-center gap-1" title={`Text Size: ${currentFontSize}px`}>
-            <span className="text-gray-500 text-[0.6875rem] select-none">Text</span>
+          <div
+            className="flex items-center gap-1"
+            title={`Text Size: ${currentFontSize}px`}
+          >
+            <span className="text-gray-500 text-[0.6875rem] select-none">
+              Text
+            </span>
             <button
               onClick={increaseFont}
               disabled={currentFontSize >= 26}
@@ -447,7 +540,11 @@ export default function Navbar({
                             className="block"
                           >
                             <Link
-                              href={cat.categorySlug === "industrial-greases" ? "/products/industrial-greases" : `/products/${cat.categorySlug}#subcat-${cat.anchor}`}
+                              href={
+                                cat.categorySlug === "industrial-greases"
+                                  ? "/products/industrial-greases"
+                                  : `/products/${cat.categorySlug}#subcat-${cat.anchor}`
+                              }
                               onClick={() => {
                                 setActiveTab(item.name);
                                 setOpenDropdown(null);
@@ -490,7 +587,9 @@ export default function Navbar({
                         className="animate-in fade-in duration-150 space-y-2"
                       >
                         <div className="text-[0.6875rem] font-extrabold text-[#002b5c] uppercase tracking-wider px-2 py-1 border-b border-gray-100 flex items-center justify-between">
-                          <span className="truncate pr-2">{currentSubCat.title}</span>
+                          <span className="truncate pr-2">
+                            {currentSubCat.title}
+                          </span>
                           <span className="text-[0.625rem] text-[#eb1e25] font-bold bg-red-50 px-2 py-0.5 rounded shrink-0">
                             {currentCategoryProducts.length} Products
                           </span>
@@ -530,7 +629,8 @@ export default function Navbar({
                               }}
                               className="block px-3 py-4 text-xs text-gray-500 italic hover:text-[#002b5c]"
                             >
-                              Explore all products in {currentSubCat.title} &rarr;
+                              Explore all products in {currentSubCat.title}{" "}
+                              &rarr;
                             </Link>
                           )}
                         </div>
@@ -633,7 +733,9 @@ export default function Navbar({
                                 }}
                                 className="text-xs text-gray-700 hover:text-[#eb1e25] font-semibold py-1.5 px-2 rounded hover:bg-white flex items-center justify-between transition-colors uppercase"
                               >
-                                <span className="truncate">{catItem.title}</span>
+                                <span className="truncate">
+                                  {catItem.title}
+                                </span>
                                 <ChevronRight
                                   size={14}
                                   className="text-gray-400"

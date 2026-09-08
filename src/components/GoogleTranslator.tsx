@@ -11,16 +11,22 @@ declare global {
 }
 
 export function isHindiActive(): boolean {
-  if (typeof document === "undefined") return false;
+  if (typeof window === "undefined" || typeof document === "undefined") return false;
+
+  // 1. Explicit user selection in localStorage takes absolute priority
+  try {
+    const saved = localStorage.getItem("mahalaxmi_language");
+    if (saved === "HI") return true;
+    if (saved === "EN") return false;
+  } catch {}
+
+  // 2. Cookie fallback for initial visits or external translations
   const c = document.cookie || "";
   if (c.indexOf("googtrans=/en/hi") !== -1 || c.indexOf("googtrans=%2Fen%2Fhi") !== -1) {
     return true;
   }
-  try {
-    return localStorage.getItem("mahalaxmi_language") === "HI";
-  } catch {
-    return false;
-  }
+
+  return false;
 }
 
 export function useLanguage(): "EN" | "HI" {
@@ -66,10 +72,11 @@ function waitForHindi(onDone: () => void, maxTimeoutMs = 600) {
   requestAnimationFrame(check);
 }
 
+let switchTimer: any = null;
+
 export function changeLanguage(lang: "EN" | "HI") {
   if (typeof window === "undefined") return;
 
-  const targetCode = lang === "HI" ? "hi" : "en";
   const domain = window.location.hostname;
 
   try {
@@ -78,28 +85,58 @@ export function changeLanguage(lang: "EN" | "HI") {
 
   window.dispatchEvent(new Event("languagechange"));
 
+  // Cancel any pending switch timer from rapid consecutive clicks
+  if (switchTimer) {
+    clearTimeout(switchTimer);
+    switchTimer = null;
+  }
+
   if (lang === "EN") {
     // Reveal immediately for English
     document.documentElement.classList.remove("translating-hi");
 
-    // Clear / set cookies to English
-    document.cookie = "googtrans=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
-    document.cookie = `googtrans=; path=/; domain=${domain}; expires=Thu, 01 Jan 1970 00:00:00 UTC;`;
-    if (domain.includes(".")) {
-      document.cookie = `googtrans=; path=/; domain=.${domain}; expires=Thu, 01 Jan 1970 00:00:00 UTC;`;
+    // Clear googtrans cookie across all possible domains and paths
+    const host = window.location.hostname;
+    const paths = ["/", window.location.pathname];
+    const domains = ["", host, `.${host}`];
+    if (host.includes(".")) {
+      const rootDomain = host.split(".").slice(-2).join(".");
+      domains.push(rootDomain, `.${rootDomain}`);
     }
-    document.cookie = "googtrans=/en/en; path=/;";
-    document.cookie = `googtrans=/en/en; path=/; domain=${domain};`;
+
+    paths.forEach((p) => {
+      domains.forEach((d) => {
+        const domPart = d ? `; domain=${d}` : "";
+        document.cookie = `googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=${p}${domPart};`;
+      });
+    });
 
     const select = document.querySelector(".goog-te-combo") as HTMLSelectElement | null;
     if (select) {
-      select.value = "en";
-      select.dispatchEvent(new Event("change"));
-    } else {
-      window.location.reload();
+      // Find original / empty option
+      let originalIndex = 0;
+      for (let i = 0; i < select.options.length; i++) {
+        if (select.options[i].value === "" || select.options[i].value === "en") {
+          originalIndex = i;
+          break;
+        }
+      }
+      select.selectedIndex = originalIndex;
+      select.value = select.options[originalIndex]?.value || "";
+      select.dispatchEvent(new Event("input", { bubbles: true }));
+      select.dispatchEvent(new Event("change", { bubbles: true }));
     }
+
+    // Also trigger restore button in Google Translate frame if present
+    try {
+      const banner = document.querySelector(".goog-te-banner-frame") as HTMLIFrameElement | null;
+      if (banner && banner.contentDocument) {
+        const restoreBtn = banner.contentDocument.querySelector(".goog-te-button button, #\\:1\\.restore") as HTMLElement | null;
+        if (restoreBtn) restoreBtn.click();
+      }
+    } catch {}
   } else {
-    // Add anti-flicker class during Hindi translation swap
+    // Switching to Hindi
     document.documentElement.classList.add("translating-hi");
 
     const cookieVal = "/en/hi";
@@ -111,8 +148,37 @@ export function changeLanguage(lang: "EN" | "HI") {
 
     const select = document.querySelector(".goog-te-combo") as HTMLSelectElement | null;
     if (select) {
-      select.value = "hi";
-      select.dispatchEvent(new Event("change"));
+      let hindiIndex = -1;
+      for (let i = 0; i < select.options.length; i++) {
+        if (select.options[i].value === "hi") {
+          hindiIndex = i;
+          break;
+        }
+      }
+
+      if (hindiIndex !== -1) {
+        // If already at hindiIndex, reset first so change event fires
+        if (select.selectedIndex === hindiIndex) {
+          select.selectedIndex = 0;
+          select.value = select.options[0]?.value || "";
+          select.dispatchEvent(new Event("change", { bubbles: true }));
+        }
+
+        switchTimer = setTimeout(() => {
+          if (select) {
+            select.selectedIndex = hindiIndex;
+            select.value = "hi";
+            select.dispatchEvent(new Event("input", { bubbles: true }));
+            select.dispatchEvent(new Event("change", { bubbles: true }));
+          }
+          switchTimer = null;
+        }, 25);
+      } else {
+        select.value = "hi";
+        select.dispatchEvent(new Event("input", { bubbles: true }));
+        select.dispatchEvent(new Event("change", { bubbles: true }));
+      }
+
       waitForHindi(() => {
         document.documentElement.classList.remove("translating-hi");
       }, 500);
@@ -135,8 +201,14 @@ export default function GoogleTranslator() {
       const trigger = () => {
         const select = document.querySelector(".goog-te-combo") as HTMLSelectElement | null;
         if (select) {
-          select.value = "hi";
-          select.dispatchEvent(new Event("change"));
+          for (let i = 0; i < select.options.length; i++) {
+            if (select.options[i].value === "hi") {
+              select.selectedIndex = i;
+              select.value = "hi";
+              select.dispatchEvent(new Event("change"));
+              break;
+            }
+          }
         }
       };
 

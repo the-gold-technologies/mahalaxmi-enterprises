@@ -87,8 +87,14 @@ export default function PrivacyPolicyPage() {
     const trigger = () => {
       const select = document.querySelector(".goog-te-combo") as HTMLSelectElement | null;
       if (select && select.value !== "hi") {
-        select.value = "hi";
-        select.dispatchEvent(new Event("change"));
+        for (let i = 0; i < select.options.length; i++) {
+          if (select.options[i].value === "hi") {
+            select.selectedIndex = i;
+            select.value = "hi";
+            select.dispatchEvent(new Event("change"));
+            break;
+          }
+        }
       }
     };
 

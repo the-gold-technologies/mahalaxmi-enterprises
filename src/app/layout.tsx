@@ -21,10 +21,9 @@ export default function RootLayout({
                     document.documentElement.style.fontSize = n + 'px';
                   }
                 }
+                var savedLang = localStorage.getItem('mahalaxmi_language');
                 var c = document.cookie || '';
-                var isHindi = c.indexOf('googtrans=/en/hi') !== -1 ||
-                              c.indexOf('googtrans=%2Fen%2Fhi') !== -1 ||
-                              localStorage.getItem('mahalaxmi_language') === 'HI';
+                var isHindi = savedLang === 'HI' || (savedLang !== 'EN' && (c.indexOf('googtrans=/en/hi') !== -1 || c.indexOf('googtrans=%2Fen%2Fhi') !== -1));
 
                 if (isHindi) {
                   document.documentElement.classList.add('translating-hi');
