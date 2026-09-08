@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useMemo } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -39,13 +39,27 @@ export default function CategoryProductsPage() {
     return productCategories.find((c) => c.slug === categorySlug) || null;
   }, [productCategories, categorySlug]);
 
+  const searchParams = useSearchParams();
+  const searchQuery = (searchParams?.get("search") || "").trim();
+
   // Filter and group products dynamically from CMS
   const subCategoryGroups = useMemo(() => {
     if (!products || products.length === 0) return [];
 
-    const categoryProducts = products.filter(
-      (p) => !categorySlug || p.categorySlug === categorySlug
-    );
+    const categoryProducts = products.filter((p) => {
+      const matchCat = !categorySlug || p.categorySlug === categorySlug;
+      if (!matchCat) return false;
+      if (!searchQuery) return true;
+      const q = searchQuery.toLowerCase();
+      const name = (p.name || "").toLowerCase();
+      const desc = (p.description || "").toLowerCase();
+      const sub = (
+        (p as any).subCategoryTitle ||
+        (p as any).subtitle ||
+        ""
+      ).toLowerCase();
+      return name.includes(q) || desc.includes(q) || sub.includes(q);
+    });
 
     const groupMap = new Map<string, { title: string; coverImage: string; products: CMSProduct[] }>();
 
@@ -118,6 +132,51 @@ export default function CategoryProductsPage() {
             </p>
           )}
         </div>
+        {/* Search Results Filter Alert Banner */}
+        {searchQuery && (
+          <div className="mb-8 p-4 sm:p-5 bg-blue-50/80 border border-blue-200 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs">
+            <div>
+              <span className="text-[10px] font-bold uppercase tracking-wider text-[#002b5c] bg-white px-2.5 py-0.5 rounded-full border border-blue-100">
+                Filtered By Search Keyword
+              </span>
+              <p className="text-sm font-semibold text-gray-800 mt-1">
+                Showing matching results for <span className="font-extrabold text-[#eb1e25]">&ldquo;{searchQuery}&rdquo;</span> in {categoryName}
+              </p>
+            </div>
+            <Link
+              href={`/products/${categorySlug}`}
+              className="inline-flex items-center justify-center px-4 py-1.5 rounded-lg bg-white border border-gray-200 hover:border-red-300 text-xs font-bold text-[#eb1e25] hover:bg-red-50 transition-all uppercase tracking-wider self-start sm:self-auto cursor-pointer"
+            >
+              Clear Search ×
+            </Link>
+          </div>
+        )}
+
+        {/* Empty State if No Products Match Search */}
+        {searchQuery && subCategoryGroups.length === 0 && (
+          <div className="py-16 px-6 bg-white rounded-2xl border border-gray-200 text-center max-w-md mx-auto my-8">
+            <h3 className="text-base font-bold text-[#002b5c] uppercase">
+              No matching products found
+            </h3>
+            <p className="text-xs text-gray-500 mt-2 leading-relaxed">
+              We couldn&apos;t find any {categoryName} matching &ldquo;{searchQuery}&rdquo;.
+            </p>
+            <div className="mt-5 flex justify-center gap-3">
+              <Link
+                href={`/products/${categorySlug}`}
+                className="px-4 py-2 bg-[#eb1e25] text-white text-xs font-bold rounded-lg uppercase tracking-wider hover:bg-[#c4141a] transition-colors"
+              >
+                View All {categoryName}
+              </Link>
+              <Link
+                href={categorySlug === "industrial-oils" ? "/products/industrial-greases" : "/products/industrial-oils"}
+                className="px-4 py-2 border border-gray-300 text-gray-700 text-xs font-bold rounded-lg uppercase tracking-wider hover:bg-gray-50 transition-colors"
+              >
+                Search {categorySlug === "industrial-oils" ? "Greases" : "Industrial Oils"}
+              </Link>
+            </div>
+          </div>
+        )}
 
         {/* Sub-Category Groups Grid (2 Columns) */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-14">
@@ -180,7 +239,7 @@ export default function CategoryProductsPage() {
                         href={`/products/${categorySlug}/${prod.slug}`}
                         className="group/item bg-slate-100/80 hover:bg-white text-slate-700 hover:text-[#002b5c] text-xs font-semibold px-4 py-2.5 rounded-lg border border-slate-200/90 hover:border-sky-400/60 hover:shadow-2xs flex items-center justify-between transition-all uppercase tracking-tight leading-snug"
                       >
-                        <span className="truncate pr-2">{prod.name}</span>
+                        <span className="pr-2 leading-relaxed break-words font-semibold">{prod.name}</span>
                         <span className="text-slate-400 group-hover/item:text-[#eb1e25] transition-transform duration-200 group-hover/item:translate-x-0.5 text-xs">
                           →
                         </span>

@@ -30,8 +30,8 @@ export default function LocateDistributorContactSection({
   return (
     <section id="contact" className="py-8 sm:py-12 lg:py-16 bg-white font-sans">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Contact Details Box */}
-        <div className="bg-[#ECEEF2] w-full border-[#D1D1D1] border p-4 sm:p-6 lg:py-8 lg:px-10">
+        {/* Contact Details */}
+        <div className="w-full py-4 sm:py-6">
           <div className="flex flex-col lg:flex-row items-start gap-8">
 
             {/* Logo */}

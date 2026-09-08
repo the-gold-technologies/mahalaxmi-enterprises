@@ -125,27 +125,42 @@ export function changeLanguage(lang: "EN" | "HI") {
       document.cookie = `googtrans=${cookieVal}; path=/; domain=.${domain};`;
     }
 
-    const select = document.querySelector(".goog-te-combo") as HTMLSelectElement | null;
-    if (select) {
-      let hindiIndex = -1;
-      for (let i = 0; i < select.options.length; i++) {
-        if (select.options[i].value === "hi") {
-          hindiIndex = i;
-          break;
+    const triggerSelect = () => {
+      const select = document.querySelector(".goog-te-combo") as HTMLSelectElement | null;
+      if (select) {
+        let hindiIndex = -1;
+        for (let i = 0; i < select.options.length; i++) {
+          if (select.options[i].value === "hi") {
+            hindiIndex = i;
+            break;
+          }
         }
-      }
 
-      if (hindiIndex !== -1) {
-        select.selectedIndex = hindiIndex;
-      }
-      select.value = "hi";
-      select.dispatchEvent(new Event("change", { bubbles: true }));
+        if (hindiIndex !== -1) {
+          select.selectedIndex = hindiIndex;
+        }
+        select.value = "hi";
+        select.dispatchEvent(new Event("change", { bubbles: true }));
 
-      waitForHindi(() => {
-        document.documentElement.classList.remove("translating-hi");
-      }, 500);
-    } else {
-      window.location.reload();
+        waitForHindi(() => {
+          document.documentElement.classList.remove("translating-hi");
+        }, 500);
+        return true;
+      }
+      return false;
+    };
+
+    if (!triggerSelect()) {
+      let attempts = 0;
+      const poll = setInterval(() => {
+        attempts++;
+        if (triggerSelect() || attempts > 25) {
+          clearInterval(poll);
+          if (attempts > 25) {
+            window.location.reload();
+          }
+        }
+      }, 80);
     }
   }
 }
@@ -212,7 +227,7 @@ export default function GoogleTranslator() {
     if (!document.getElementById("google-translate-script")) {
       const script = document.createElement("script");
       script.id = "google-translate-script";
-      script.src = "//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
+      script.src = "https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
       script.async = true;
       document.body.appendChild(script);
     }

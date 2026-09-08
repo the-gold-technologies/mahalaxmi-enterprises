@@ -55,7 +55,7 @@ export default function Home() {
       <AboutSection />
 
       {/* 4. Our Products and Services Section */}
-      <ProductsServicesSection onSelectCategory={() => handleOpenEnquiry()} />
+      <ProductsServicesSection />
 
       {/* 6. Client Testimonials Section */}
       <TestimonialsSection />

@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
   Search,
   ChevronDown,
@@ -123,8 +123,60 @@ export default function Navbar({
     useState<string>("compressor-oils");
   const [activeTab, setActiveTab] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState("");
+  const [isSearchDropdownOpen, setIsSearchDropdownOpen] = useState(false);
+  const searchDropdownRef = React.useRef<HTMLDivElement>(null);
+  const router = useRouter();
 
   const { products, fetchProducts, globalSEO, fetchGlobalSEO } = useCMSStore();
+
+  const liveSearchResults = useMemo(() => {
+    if (!searchQuery.trim() || !products) return [];
+    const q = searchQuery.toLowerCase().trim();
+    return products
+      .filter((p) => {
+        const name = (p.name || "").toLowerCase();
+        const desc = (p.description || "").toLowerCase();
+        const sub = (
+          (p as any).subCategoryTitle ||
+          (p as any).subtitle ||
+          ""
+        ).toLowerCase();
+        return name.includes(q) || desc.includes(q) || sub.includes(q);
+      })
+      .slice(0, 6);
+  }, [products, searchQuery]);
+
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!searchQuery.trim()) return;
+    setIsSearchDropdownOpen(false);
+    const q = searchQuery.toLowerCase().trim();
+    const isGrease = products?.some(
+      (p) =>
+        p.categorySlug === "industrial-greases" &&
+        ((p.name || "").toLowerCase().includes(q) ||
+          ((p as any).subCategoryTitle || "").toLowerCase().includes(q))
+    );
+    const targetCat = isGrease ? "industrial-greases" : "industrial-oils";
+    router.push(
+      `/products/${targetCat}?search=${encodeURIComponent(searchQuery.trim())}`
+    );
+  };
+
+  React.useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        searchDropdownRef.current &&
+        !searchDropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsSearchDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   React.useEffect(() => {
     fetchProducts().catch(console.error);
@@ -339,23 +391,72 @@ export default function Navbar({
             </button>
           </div>
 
-          <form className="flex items-center font-sans">
-            <input
-              type="text"
-              placeholder="Search"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="outline-none border font-sans border-[#CCCCCC] border-r-0 px-2.5 text-xs sm:text-[0.8125rem] py-1 h-[28px] sm:h-[30px] w-[110px] sm:w-[140px] focus:w-[160px] transition-all"
-            />
-            <button
-              type="submit"
-              disabled={!searchQuery.trim()}
-              className="bg-[#eb1e25] text-white h-[28px] sm:h-[30px] px-2 border border-[#eb1e25] flex items-center justify-center hover:bg-[#c4141a] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-[#eb1e25] transition-colors cursor-pointer"
-              aria-label="Search"
-            >
-              <Search size={14} className="font-bold stroke-[2.5]" />
-            </button>
-          </form>
+          <div className="relative" ref={searchDropdownRef}>
+            <form onSubmit={handleSearchSubmit} className="flex items-center font-sans">
+              <input
+                type="text"
+                placeholder="Search products..."
+                value={searchQuery}
+                onChange={(e) => {
+                  setSearchQuery(e.target.value);
+                  setIsSearchDropdownOpen(true);
+                }}
+                onFocus={() => setIsSearchDropdownOpen(true)}
+                className="outline-none border font-sans border-[#CCCCCC] border-r-0 px-2.5 text-xs sm:text-[0.8125rem] py-1 h-[28px] sm:h-[30px] w-[110px] sm:w-[150px] focus:w-[180px] transition-all bg-white"
+              />
+              <button
+                type="submit"
+                disabled={!searchQuery.trim()}
+                className="bg-[#eb1e25] text-white h-[28px] sm:h-[30px] px-2 border border-[#eb1e25] flex items-center justify-center hover:bg-[#c4141a] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-[#eb1e25] transition-colors cursor-pointer"
+                aria-label="Search"
+              >
+                <Search size={14} className="font-bold stroke-[2.5]" />
+              </button>
+            </form>
+
+            {/* Instant Search Results Dropdown */}
+            {isSearchDropdownOpen && searchQuery.trim().length >= 1 && (
+              <div className="absolute right-0 mt-1 w-72 sm:w-80 bg-white rounded-xl shadow-2xl border border-gray-200 overflow-hidden z-50 text-left">
+                <div className="px-3 py-2 bg-gray-50 border-b border-gray-100 flex items-center justify-between text-[10px] font-bold text-gray-500 uppercase tracking-wider">
+                  <span>Matching Products ({liveSearchResults.length})</span>
+                  <span className="text-[#eb1e25] truncate max-w-[120px]">&ldquo;{searchQuery}&rdquo;</span>
+                </div>
+                {liveSearchResults.length > 0 ? (
+                  <div className="max-h-64 overflow-y-auto divide-y divide-gray-50">
+                    {liveSearchResults.map((p) => {
+                      const cat = p.categorySlug || "industrial-oils";
+                      return (
+                        <Link
+                          key={p.id}
+                          href={`/products/${cat}/${p.slug}`}
+                          onClick={() => setIsSearchDropdownOpen(false)}
+                          className="p-2.5 hover:bg-red-50/60 flex flex-col transition-colors group/item block"
+                        >
+                          <span className="text-xs font-bold text-[#002b5c] group-hover/item:text-[#eb1e25] leading-snug">
+                            {p.name}
+                          </span>
+                          <span className="text-[10px] text-gray-400 uppercase mt-0.5 font-medium">
+                            {(p as any).subCategoryTitle || (p as any).subtitle || cat.replace("-", " ")}
+                          </span>
+                        </Link>
+                      );
+                    })}
+                    <button
+                      type="button"
+                      onClick={handleSearchSubmit}
+                      className="w-full p-2.5 bg-gray-50 hover:bg-[#002b5c] hover:text-white text-xs font-bold text-center text-[#002b5c] transition-colors uppercase tracking-wider cursor-pointer block border-t border-gray-100"
+                    >
+                      View All Search Results →
+                    </button>
+                  </div>
+                ) : (
+                  <div className="p-4 text-center text-xs text-gray-400">
+                    No products found for &ldquo;{searchQuery}&rdquo;
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
 
           <div
             className="flex items-center gap-1"
@@ -419,7 +520,7 @@ export default function Navbar({
         </div>
 
         <div className="flex items-center gap-2">
-          <form className="flex items-center font-sans">
+          <form onSubmit={handleSearchSubmit} className="flex items-center font-sans">
             <input
               type="text"
               placeholder="Search"
