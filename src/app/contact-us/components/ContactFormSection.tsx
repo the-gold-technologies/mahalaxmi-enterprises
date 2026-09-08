@@ -5,21 +5,25 @@ import {
   Phone,
   MapPin,
   Mail,
-  Clock,
   Send,
   CheckCircle2,
   Loader2,
   MessageSquare,
   ArrowRight,
   User,
+  RefreshCw,
+  Building2,
 } from "lucide-react";
 import { useCMSStore, getHeadingTag } from "@/store/useCMSStore";
+import { CaptchaInput, useCaptcha } from "@/components/CaptchaWidget";
+
 
 export default function ContactFormSection() {
   const { pages, pageSEO, submitEnquiry } = useCMSStore();
 
   const [formData, setFormData] = useState({
     name: "",
+    companyName: "",
     phone: "",
     email: "",
     product: "",
@@ -30,27 +34,30 @@ export default function ContactFormSection() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
+  const { code, input: captchaInput, setInput: setCaptchaInput, refresh: refreshCaptcha, isValid: captchaValid } = useCaptcha();
+
   // Exact CMS API Sections
   const sections = pages["contact-us"] || {};
   const contactHeadquarter = sections.ContactHeadquarter;
   const contactForm = sections.ContactForm;
 
   // Exact fields from ContactHeadquarter
-  const companyName = contactHeadquarter?.companyName || "";
-  const badge = contactHeadquarter?.badge || "";
+  const companyNameDisplay = contactHeadquarter?.companyName || "";
+  const badge = contactHeadquarter?.badge || "Authorized Industrial Lube Distributor";
   const proprietor = contactHeadquarter?.proprietor || "";
-  const description = contactHeadquarter?.description || "";
+  const description =
+    contactHeadquarter?.description ||
+    "Connect with our team for HP Lubricants requirements, technical seminars, and bulk inquiries.";
   const phone = contactHeadquarter?.phone || "";
-  const email = contactHeadquarter?.email || "";
+  const email = contactHeadquarter?.email || "info@hplubricantscfa.com";
   const address = contactHeadquarter?.address || "";
-  const workingHours = contactHeadquarter?.workingHours || "";
   const whatsapp = contactHeadquarter?.whatsapp || "";
 
   // Exact fields from ContactForm
   const formBadge = contactForm?.badge || "";
   const formTitle = contactForm?.title || "";
   const formSubtitle = contactForm?.subtitle || "";
-  const buttonText = contactForm?.buttonText || "";
+  const buttonText = contactForm?.buttonText || "Send Enquiry";
 
   // Dynamic SEO Heading
   const HeadingTag = getHeadingTag(pageSEO["contact-us"]?.headingOptions, "h1");
@@ -63,6 +70,7 @@ export default function ContactFormSection() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!captchaValid) return;
     setIsSubmitting(true);
     setErrorMessage("");
 
@@ -72,7 +80,12 @@ export default function ContactFormSection() {
         phone: formData.phone,
         email: formData.email || undefined,
         product: formData.product || "General Enquiry",
-        message: formData.message,
+        message: [
+          formData.companyName ? `Company: ${formData.companyName}` : "",
+          formData.message,
+        ]
+          .filter(Boolean)
+          .join("\n"),
       });
 
       if (res && res.error) {
@@ -81,11 +94,13 @@ export default function ContactFormSection() {
         setIsSubmitted(true);
         setFormData({
           name: "",
+          companyName: "",
           phone: "",
           email: "",
           product: "",
           message: "",
         });
+        refreshCaptcha();
       }
     } catch (err: any) {
       console.error("Enquiry submit error:", err);
@@ -98,7 +113,8 @@ export default function ContactFormSection() {
   const isFormValid =
     formData.name.trim().length > 0 &&
     formData.phone.trim().length > 0 &&
-    formData.message.trim().length > 0;
+    formData.message.trim().length > 0 &&
+    captchaValid;
 
   return (
     <section className="bg-slate-50/50 py-12 md:py-16">
@@ -115,14 +131,14 @@ export default function ContactFormSection() {
                 </div>
               )}
 
-              {companyName && (
+              {companyNameDisplay && (
                 <HeadingTag className="text-3xl sm:text-4xl font-black text-[#002b5c] tracking-tight leading-tight mb-3">
-                  {companyName}
+                  {companyNameDisplay}
                 </HeadingTag>
               )}
 
               {description && (
-                <p className="text-gray-600 text-sm leading-relaxed">
+                <p className="text-gray-600 text-sm leading-relaxed text-justify">
                   {description}
                 </p>
               )}
@@ -167,7 +183,7 @@ export default function ContactFormSection() {
                 </div>
               )}
 
-              {/* Address */}
+              {/* Depot Address */}
               {address && (
                 <div className="flex items-start gap-4">
                   <div className="w-10 h-10 rounded-xl bg-white border border-gray-200 flex items-center justify-center text-[#002b5c] shadow-xs shrink-0">
@@ -175,7 +191,7 @@ export default function ContactFormSection() {
                   </div>
                   <div>
                     <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
-                      Office Address
+                      Depot Address
                     </div>
                     <p className="text-sm font-medium text-gray-800 leading-relaxed mt-0.5 whitespace-pre-line">
                       {address}
@@ -203,30 +219,13 @@ export default function ContactFormSection() {
                   </div>
                 </div>
               )}
-
-              {/* Working Hours */}
-              {workingHours && (
-                <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-xl bg-white border border-gray-200 flex items-center justify-center text-emerald-600 shadow-xs shrink-0">
-                    <Clock className="w-4 h-4" />
-                  </div>
-                  <div>
-                    <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
-                      Working Hours
-                    </div>
-                    <p className="text-sm font-medium text-gray-800 mt-0.5">
-                      {workingHours}
-                    </p>
-                  </div>
-                </div>
-              )}
             </div>
 
             {/* WhatsApp */}
             {whatsapp && (
               <div className="pt-2">
                 <a
-                  href={`https://wa.me/${whatsapp}?text=Hello%20${encodeURIComponent(companyName)},%20I%20have%20an%20enquiry.`}
+                  href={`https://wa.me/${whatsapp}?text=Hello%20${encodeURIComponent(companyNameDisplay)},%20I%20have%20an%20enquiry.`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center justify-center gap-2.5 px-5 py-3 rounded-xl bg-[#25D366] hover:bg-[#20bd5a] text-white text-sm font-bold shadow-xs hover:shadow-md transition-all active:scale-[0.99]"
@@ -270,7 +269,7 @@ export default function ContactFormSection() {
                 </h3>
                 <p className="text-sm text-gray-600 max-w-sm mx-auto leading-relaxed">
                   Thank you for contacting{" "}
-                  {companyName ? <strong>{companyName}</strong> : "us"}. We will
+                  {companyNameDisplay ? <strong>{companyNameDisplay}</strong> : "us"}. We will
                   get back to you shortly.
                 </p>
                 <button
@@ -323,8 +322,22 @@ export default function ContactFormSection() {
                   </div>
                 </div>
 
-                {/* Email & Subject */}
+                {/* Company Name & Email */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-bold text-gray-700 uppercase tracking-wide mb-1.5">
+                      Company Name
+                    </label>
+                    <input
+                      type="text"
+                      name="companyName"
+                      value={formData.companyName}
+                      onChange={handleChange}
+                      placeholder="Your company / organization"
+                      className="w-full px-3.5 py-2.5 text-sm bg-white border border-gray-300 rounded-lg text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-[#002b5c] focus:ring-2 focus:ring-[#002b5c]/10 transition-all"
+                    />
+                  </div>
+
                   <div>
                     <label className="block text-xs font-bold text-gray-700 uppercase tracking-wide mb-1.5">
                       Email Address
@@ -338,20 +351,21 @@ export default function ContactFormSection() {
                       className="w-full px-3.5 py-2.5 text-sm bg-white border border-gray-300 rounded-lg text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-[#002b5c] focus:ring-2 focus:ring-[#002b5c]/10 transition-all"
                     />
                   </div>
+                </div>
 
-                  <div>
-                    <label className="block text-xs font-bold text-gray-700 uppercase tracking-wide mb-1.5">
-                      Product Requirement
-                    </label>
-                    <input
-                      type="text"
-                      name="product"
-                      value={formData.product}
-                      onChange={handleChange}
-                      placeholder="e.g. HP Lubricants"
-                      className="w-full px-3.5 py-2.5 text-sm bg-white border border-gray-300 rounded-lg text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-[#002b5c] focus:bg-white focus:ring-2 focus:ring-[#002b5c]/10 transition-all"
-                    />
-                  </div>
+                {/* Product Requirement */}
+                <div>
+                  <label className="block text-xs font-bold text-gray-700 uppercase tracking-wide mb-1.5">
+                    Product Requirement
+                  </label>
+                  <input
+                    type="text"
+                    name="product"
+                    value={formData.product}
+                    onChange={handleChange}
+                    placeholder="e.g. HP FUTUR-X 5W-30"
+                    className="w-full px-3.5 py-2.5 text-sm bg-white border border-gray-300 rounded-lg text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-[#002b5c] focus:bg-white focus:ring-2 focus:ring-[#002b5c]/10 transition-all"
+                  />
                 </div>
 
                 {/* Message */}
@@ -368,6 +382,20 @@ export default function ContactFormSection() {
                     onChange={handleChange}
                     placeholder="Provide details about your inquiry or product requirement..."
                     className="w-full px-3.5 py-2.5 text-sm bg-white border border-gray-300 rounded-lg text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-[#002b5c] focus:ring-2 focus:ring-[#002b5c]/10 transition-all resize-none"
+                  />
+                </div>
+
+                {/* Visual CAPTCHA */}
+                <div>
+                  <label className="block text-xs font-bold text-gray-700 uppercase tracking-wide mb-1.5">
+                    Security Verification <span className="text-[#eb1e25]">*</span>
+                  </label>
+                  <CaptchaInput
+                    code={code}
+                    value={captchaInput}
+                    onChange={setCaptchaInput}
+                    isValid={captchaValid}
+                    onRefresh={refreshCaptcha}
                   />
                 </div>
 

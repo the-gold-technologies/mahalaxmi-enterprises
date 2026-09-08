@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { X, Send, CheckCircle2, Loader2 } from 'lucide-react';
+import { CaptchaInput, useCaptcha } from '@/components/CaptchaWidget';
 import { useCMSStore } from '@/store/useCMSStore';
 
 interface EnquiryModalProps {
@@ -9,6 +10,8 @@ interface EnquiryModalProps {
   onClose: () => void;
   initialProduct?: string;
 }
+
+
 
 export default function EnquiryModal({
   isOpen,
@@ -18,11 +21,15 @@ export default function EnquiryModal({
   const [name, setName] = useState('');
   const [mobile, setMobile] = useState('');
   const [email, setEmail] = useState('');
-  const [product, setProduct] = useState(initialProduct || 'HP FUTUR-X 5W-30');
+  const [companyName, setCompanyName] = useState('');
+  const [product, setProduct] = useState(initialProduct || '');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const { submitEnquiry } = useCMSStore();
+  const { code, input: captchaInput, setInput: setCaptchaInput, refresh: refreshCaptcha, isValid: captchaValid } = useCaptcha();
+
+  const { submitEnquiry, globalSEO } = useCMSStore();
+  const siteName = globalSEO?.siteName || 'HP Lubricants';
 
   useEffect(() => {
     if (initialProduct) {
@@ -32,20 +39,23 @@ export default function EnquiryModal({
 
   if (!isOpen) return null;
 
+
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!captchaValid) return;
     setIsSubmitting(true);
     try {
       await submitEnquiry({
         name,
         email: email || undefined,
         phone: mobile,
-        product,
+        product: product || 'General Enquiry',
+        message: companyName ? `Company: ${companyName}` : undefined,
       });
       setIsSubmitted(true);
     } catch (err) {
       console.error("Enquiry submission error:", err);
-      // Still show success to user if offline/fallback
       setIsSubmitted(true);
     } finally {
       setIsSubmitting(false);
@@ -55,7 +65,8 @@ export default function EnquiryModal({
   const isFormValid =
     name.trim().length > 0 &&
     mobile.trim().length > 0 &&
-    product.trim().length > 0;
+    product.trim().length > 0 &&
+    captchaValid;
 
   return (
     <div
@@ -77,18 +88,19 @@ export default function EnquiryModal({
 
         {!isSubmitted ? (
           <>
-            {/* Simple Clean Header */}
+            {/* Header */}
             <div className="mb-5 pr-6">
               <span className="text-[0.6875rem] font-extrabold text-[#eb1e25] uppercase tracking-wider block mb-1">
-                MAHALAXMI ENTERPRISES ENQUIRY
+                {siteName} — Product Enquiry
               </span>
               <h2 className="text-2xl font-black text-[#002b5c]">
                 Request Product Quote
               </h2>
             </div>
 
-            {/* Clean Form */}
+            {/* Form */}
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+              {/* Full Name */}
               <div>
                 <label className="block text-xs font-bold text-gray-700 mb-1.5">
                   Full Name <span className="text-[#eb1e25]">*</span>
@@ -99,6 +111,20 @@ export default function EnquiryModal({
                   placeholder="Enter your name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
+                  className="w-full px-3.5 py-2.5 text-xs sm:text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-[#002b5c] focus:ring-1 focus:ring-[#002b5c] transition-colors"
+                />
+              </div>
+
+              {/* Company Name */}
+              <div>
+                <label className="block text-xs font-bold text-gray-700 mb-1.5">
+                  Company Name
+                </label>
+                <input
+                  type="text"
+                  placeholder="Your company / organization"
+                  value={companyName}
+                  onChange={(e) => setCompanyName(e.target.value)}
                   className="w-full px-3.5 py-2.5 text-xs sm:text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-[#002b5c] focus:ring-1 focus:ring-[#002b5c] transition-colors"
                 />
               </div>
@@ -131,6 +157,7 @@ export default function EnquiryModal({
                 </div>
               </div>
 
+              {/* Product Requirement */}
               <div>
                 <label className="block text-xs font-bold text-gray-700 mb-1.5">
                   Product Requirement <span className="text-[#eb1e25]">*</span>
@@ -140,7 +167,22 @@ export default function EnquiryModal({
                   required
                   value={product}
                   onChange={(e) => setProduct(e.target.value)}
+                  placeholder="e.g. HP FUTUR-X 5W-30"
                   className="w-full px-3.5 py-2.5 text-xs sm:text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-[#002b5c] focus:ring-1 focus:ring-[#002b5c] transition-colors font-medium text-[#002b5c]"
+                />
+              </div>
+
+              {/* Visual CAPTCHA */}
+              <div>
+                <label className="block text-xs font-bold text-gray-700 mb-1.5">
+                  Verify <span className="text-[#eb1e25]">*</span>
+                </label>
+                <CaptchaInput
+                  code={code}
+                  value={captchaInput}
+                  onChange={setCaptchaInput}
+                  isValid={captchaValid}
+                  onRefresh={refreshCaptcha}
                 />
               </div>
 
@@ -170,7 +212,7 @@ export default function EnquiryModal({
               Enquiry Submitted!
             </h3>
             <p className="text-xs text-gray-600 mb-6 leading-relaxed">
-              Thank you <strong>{name}</strong>. Our Mahalaxmi Enterprises representative will contact you at <strong>{mobile}</strong> shortly.
+              Thank you <strong>{name}</strong>. Our {siteName} representative will contact you at <strong>{mobile}</strong> shortly.
             </p>
             <button
               onClick={() => {

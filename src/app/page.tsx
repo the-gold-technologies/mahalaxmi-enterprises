@@ -7,7 +7,6 @@ import AboutSection from "@/components/AboutSection";
 import ProductsServicesSection from "@/components/ProductsServicesSection";
 import TestimonialsSection from "@/components/TestimonialsSection";
 import TrustedClientsSection from "@/components/TrustedClientsSection";
-import DistributorBanner from "@/components/DistributorBanner";
 import LocateDistributorContactSection from "@/components/LocateDistributorContactSection";
 import Footer from "@/components/Footer";
 import EnquiryModal from "@/components/EnquiryModal";
@@ -23,7 +22,9 @@ export default function Home() {
   const [enquiryProduct, setEnquiryProduct] = useState("");
 
   const [isDistributorOpen, setIsDistributorOpen] = useState(false);
-  const [distributorType, setDistributorType] = useState("Industrial Lube Distributor (ILD)");
+  const [distributorType, setDistributorType] = useState(
+    "Industrial Lube Distributor (ILD)",
+  );
 
   const { fetchPage } = useCMSStore();
 
@@ -68,12 +69,6 @@ export default function Home() {
 
       {/* 6.5. Trusted Clients & Partners Infinite Marquee Section */}
       <TrustedClientsSection />
-
-      {/* 7. Full-Width Red Distributor Banner */}
-      <DistributorBanner
-        onOpenEnquiry={handleOpenEnquiry}
-        onOpenDistributor={handleOpenDistributor}
-      />
 
       {/* 8. Locate Distributor Form & Contact Details Grid */}
       <LocateDistributorContactSection

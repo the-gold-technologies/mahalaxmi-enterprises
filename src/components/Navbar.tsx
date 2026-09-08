@@ -519,7 +519,7 @@ export default function Navbar({
                 {/* Same 2-Column Mega Menu UI with Direct Categories in Left Column */}
                 {item.isMegaMenu && openDropdown === item.name && (
                   <div
-                    className="absolute top-full left-0 -ml-12 w-[560px] bg-white shadow-2xl border border-gray-100 rounded-2xl p-4 z-50 grid grid-cols-12 gap-4 animate-in fade-in zoom-in-95 duration-150"
+                    className={`absolute top-full ${currentLanguage === "HI" ? "-right-44" : "left-0"} -ml-12 w-[560px] bg-white shadow-2xl border border-gray-100 rounded-2xl p-4 z-50 grid grid-cols-12 gap-4 animate-in fade-in zoom-in-95 duration-150`}
                     onMouseEnter={() => setOpenDropdown(item.name)}
                     onMouseLeave={() => setOpenDropdown(null)}
                   >
