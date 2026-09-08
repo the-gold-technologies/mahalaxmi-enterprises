@@ -79,7 +79,7 @@ export default function EnquiryModal({
           <>
             {/* Simple Clean Header */}
             <div className="mb-5 pr-6">
-              <span className="text-[11px] font-extrabold text-[#eb1e25] uppercase tracking-wider block mb-1">
+              <span className="text-[0.6875rem] font-extrabold text-[#eb1e25] uppercase tracking-wider block mb-1">
                 MAHALAXMI ENTERPRISES ENQUIRY
               </span>
               <h2 className="text-2xl font-black text-[#002b5c]">

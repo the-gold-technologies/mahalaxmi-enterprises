@@ -108,7 +108,7 @@ export default function DistributorModal({
           <>
             {/* Header */}
             <div className="mb-6 pr-8">
-              <span className="text-[11px] font-extrabold text-[#eb1e25] uppercase tracking-wider block mb-1">
+              <span className="text-[0.6875rem] font-extrabold text-[#eb1e25] uppercase tracking-wider block mb-1">
                 HPCL LUBRICANTS DISTRIBUTION NETWORK
               </span>
               <h2 className="text-2xl sm:text-3xl font-black text-[#002b5c]">

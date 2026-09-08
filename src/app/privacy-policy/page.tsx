@@ -66,12 +66,7 @@ export default function PrivacyPolicyPage() {
   const email = globalSEO?.email;
 
   return (
-    <main
-      className="min-h-screen bg-white text-gray-800 font-sans flex flex-col justify-between"
-      style={{
-        fontSize: `${16 * fontSizeMultiplier}px`,
-      }}
-    >
+    <main className="min-h-screen bg-white text-gray-800 font-sans flex flex-col justify-between">
       <SEOMeta pageSlug="privacy-policy" />
 
       {/* Header Navigation Bar */}
@@ -194,13 +189,13 @@ export default function PrivacyPolicyPage() {
         }
         .privacy-rich-content {
           color: #334155;
-          font-size: 15px;
+          font-size: 0.9375rem;
           line-height: 1.8;
           max-width: 100%;
         }
         @media (min-width: 640px) {
           .privacy-rich-content {
-            font-size: 16px;
+            font-size: 1rem;
           }
         }
         .privacy-rich-content p {

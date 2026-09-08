@@ -106,12 +106,7 @@ export default function BlogDetailPage() {
   }, [post]);
 
   return (
-    <main
-      className="min-h-screen bg-white text-gray-800 font-sans flex flex-col justify-between"
-      style={{
-        fontSize: `${16 * fontSizeMultiplier}px`,
-      }}
-    >
+    <main className="min-h-screen bg-white text-gray-800 font-sans flex flex-col justify-between">
       <SEOMeta pageSlug={`blogs/${slug}`} customSEO={blogSEO} />
 
       {/* Header Navigation Bar */}
@@ -292,7 +287,7 @@ export default function BlogDetailPage() {
                   </div>
                   <div className="p-4">
                     {rel.category && (
-                      <span className="text-[10px] font-bold text-[#eb1e25] uppercase tracking-wider block mb-1">
+                      <span className="text-[0.625rem] font-bold text-[#eb1e25] uppercase tracking-wider block mb-1">
                         {rel.category}
                       </span>
                     )}

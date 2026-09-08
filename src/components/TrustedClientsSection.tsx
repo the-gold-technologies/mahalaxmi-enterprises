@@ -85,7 +85,7 @@ export default function TrustedClientsSection() {
                   {client.name}
                 </h3>
                 {client.category && (
-                  <p className="text-[11px] font-semibold text-[#eb1e25] mt-0.5 tracking-wide">
+                  <p className="text-[0.6875rem] font-semibold text-[#eb1e25] mt-0.5 tracking-wide">
                     {client.category}
                   </p>
                 )}

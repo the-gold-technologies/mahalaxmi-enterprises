@@ -156,12 +156,7 @@ export default function ProductDetailPage() {
   }, [product]);
 
   return (
-    <main
-      className="min-h-screen bg-white text-gray-800 font-sans flex flex-col justify-between"
-      style={{
-        fontSize: `${16 * fontSizeMultiplier}px`,
-      }}
-    >
+    <main className="min-h-screen bg-white text-gray-800 font-sans flex flex-col justify-between">
       <SEOMeta pageSlug={`product:${productSlug}`} customSEO={productSEO} />
 
       <Navbar
@@ -225,7 +220,7 @@ export default function ProductDetailPage() {
             {/* Center Column: Product Name, Subtitle, Specifications & Quick CTAs */}
             <div className="lg:col-span-4 flex flex-col justify-center space-y-4">
               <div>
-                <span className="text-[11px] font-extrabold text-[#eb1e25] uppercase tracking-wider block mb-1">
+                <span className="text-[0.6875rem] font-extrabold text-[#eb1e25] uppercase tracking-wider block mb-1">
                   {product.subtitle || currentGroup?.title || category.name}
                 </span>
                 <h2 className="text-2xl sm:text-3xl font-extrabold text-[#002b5c] tracking-tight mb-2">
@@ -236,7 +231,7 @@ export default function ProductDetailPage() {
                 {/* Specifications or Key Highlights */}
                 {product.specsText ? (
                   <div className="bg-slate-50 border-l-4 border-[#eb1e25] rounded-r-xl p-3.5 shadow-xs mb-4">
-                    <h3 className="text-[11px] font-bold uppercase tracking-wider text-[#eb1e25] mb-1">
+                    <h3 className="text-[0.6875rem] font-bold uppercase tracking-wider text-[#eb1e25] mb-1">
                       Meets Specifications:
                     </h3>
                     <p className="text-xs text-slate-700 leading-relaxed font-sans font-medium">
@@ -245,7 +240,7 @@ export default function ProductDetailPage() {
                   </div>
                 ) : product.applicationAreas ? (
                   <div className="bg-slate-50 border-l-4 border-[#002b5c] rounded-r-xl p-3.5 shadow-xs mb-4">
-                    <h3 className="text-[11px] font-bold uppercase tracking-wider text-[#002b5c] mb-1">
+                    <h3 className="text-[0.6875rem] font-bold uppercase tracking-wider text-[#002b5c] mb-1">
                       Key Application:
                     </h3>
                     <p className="text-xs text-slate-700 leading-relaxed font-sans font-medium">
@@ -255,7 +250,7 @@ export default function ProductDetailPage() {
                 ) : null}
 
                 {/* Quick Info Badges */}
-                <div className="flex flex-wrap gap-2 text-[11px] text-slate-600 font-medium">
+                <div className="flex flex-wrap gap-2 text-[0.6875rem] text-slate-600 font-medium">
                   <span className="bg-slate-100 px-2.5 py-1 rounded-md border border-slate-200">
                     📦 20L / 50L / 210L Barrel
                   </span>
@@ -284,7 +279,7 @@ export default function ProductDetailPage() {
 
             {/* Right Column: Sibling Products Sidebar */}
             <div className="lg:col-span-3 bg-slate-50/80 border border-slate-200/80 rounded-2xl p-4">
-              <span className="text-[11px] font-extrabold uppercase tracking-wider text-[#002b5c] block mb-3 pb-2 border-b border-slate-200">
+              <span className="text-[0.6875rem] font-extrabold uppercase tracking-wider text-[#002b5c] block mb-3 pb-2 border-b border-slate-200">
                 In This Series ({siblingProducts.length})
               </span>
               <div className="space-y-1.5 max-h-[260px] overflow-y-auto pr-1 scrollbar-visible">
@@ -522,7 +517,7 @@ export default function ProductDetailPage() {
                             }`}
                           />
                           <span
-                            className={`text-sm md:text-[15px] font-normal uppercase tracking-normal leading-relaxed transition-colors ${
+                            className={`text-sm md:text-[0.9375rem] font-normal uppercase tracking-normal leading-relaxed transition-colors ${
                               isCurrentGroup
                                 ? "text-[#eb1e25] font-semibold"
                                 : "text-[#334155] group-hover:text-[#eb1e25]"

@@ -43,12 +43,7 @@ export default function Home() {
   };
 
   return (
-    <main
-      className="min-h-screen bg-white text-gray-800"
-      style={{
-        fontSize: `${16 * fontSizeMultiplier}px`,
-      }}
-    >
+    <main className="min-h-screen bg-white text-gray-800">
       <SEOMeta pageSlug="home" isLandingPage={true} />
 
       {/* 1. Top Header Utility & Navigation Bar */}

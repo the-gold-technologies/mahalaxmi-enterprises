@@ -75,14 +75,14 @@ export default function BlogsContent() {
 
               {/* Floating Category Badge */}
               {post.category && (
-                <span className="absolute top-3.5 left-3.5 bg-white/95 backdrop-blur-sm text-[#002b5c] text-[11px] font-bold uppercase tracking-wider px-3 py-1 rounded-full shadow-sm border border-slate-100">
+                <span className="absolute top-3.5 left-3.5 bg-white/95 backdrop-blur-sm text-[#002b5c] text-[0.6875rem] font-bold uppercase tracking-wider px-3 py-1 rounded-full shadow-sm border border-slate-100">
                   {post.category}
                 </span>
               )}
 
               {/* Read Time */}
               {post.readTime && (
-                <span className="absolute top-3.5 right-3.5 bg-black/65 backdrop-blur-sm text-white text-[11px] font-medium px-2.5 py-1 rounded-full flex items-center gap-1">
+                <span className="absolute top-3.5 right-3.5 bg-black/65 backdrop-blur-sm text-white text-[0.6875rem] font-medium px-2.5 py-1 rounded-full flex items-center gap-1">
                   <Clock size={11} /> {post.readTime}
                 </span>
               )}
@@ -122,7 +122,7 @@ export default function BlogsContent() {
                   <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
                 </Link>
 
-                <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
+                <span className="text-[0.6875rem] font-semibold text-slate-400 uppercase tracking-wider">
                   MAHALAXMI ENTERPRISES
                 </span>
               </div>

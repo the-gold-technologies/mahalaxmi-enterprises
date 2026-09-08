@@ -31,12 +31,7 @@ export default function BlogsListingPage() {
   };
 
   return (
-    <main
-      className="min-h-screen bg-white text-gray-800 font-sans"
-      style={{
-        fontSize: `${16 * fontSizeMultiplier}px`,
-      }}
-    >
+    <main className="min-h-screen bg-white text-gray-800 font-sans">
       <SEOMeta pageSlug="blogs" />
 
       {/* Header Navigation Bar */}

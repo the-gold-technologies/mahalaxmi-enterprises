@@ -84,12 +84,7 @@ export default function CategoryProductsPage() {
   const HeadingTag = getHeadingTag(currentSEO?.headingOptions, "h1");
 
   return (
-    <main
-      className="min-h-screen bg-white text-gray-800 font-sans flex flex-col justify-between"
-      style={{
-        fontSize: `${16 * fontSizeMultiplier}px`,
-      }}
-    >
+    <main className="min-h-screen bg-white text-gray-800 font-sans flex flex-col justify-between">
       <SEOMeta pageSlug={`products/${categorySlug}`} />
 
       <Navbar
@@ -226,7 +221,7 @@ export default function CategoryProductsPage() {
                           size={21}
                           className="text-[#475569] fill-[#475569] shrink-0 group-hover:text-[#eb1e25] group-hover:fill-[#eb1e25] transition-colors"
                         />
-                        <span className="text-sm md:text-[15px] font-normal uppercase text-[#334155] group-hover:text-[#eb1e25] tracking-normal leading-relaxed transition-colors">
+                        <span className="text-sm md:text-[0.9375rem] font-normal uppercase text-[#334155] group-hover:text-[#eb1e25] tracking-normal leading-relaxed transition-colors">
                           {subGroup.title}
                         </span>
                         </a>

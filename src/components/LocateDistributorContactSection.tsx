@@ -172,7 +172,7 @@ export default function LocateDistributorContactSection({
             <div>
               {contactTitle && (
                 <>
-                  <h2 className="text-2xl sm:text-3xl lg:text-[32px] font-extrabold text-[#002b5c] uppercase leading-tight tracking-tight">
+                  <h2 className="text-2xl sm:text-3xl lg:text-[2rem] font-extrabold text-[#002b5c] uppercase leading-tight tracking-tight">
                     {contactTitle}
                   </h2>
                   <div className="w-[110px] h-[4px] bg-[#002b5c] mt-3 mb-6" />
@@ -191,7 +191,7 @@ export default function LocateDistributorContactSection({
               )}
 
               {/* Contact Information List */}
-              <div className="mt-8 flex flex-col gap-7 text-[15px] text-[#333333] leading-relaxed font-sans">
+              <div className="mt-8 flex flex-col gap-7 text-[0.9375rem] text-[#333333] leading-relaxed font-sans">
                 {/* Address Item */}
                 {address && (
                   <div className="flex gap-4 items-start">
@@ -199,7 +199,7 @@ export default function LocateDistributorContactSection({
                       className="text-[#002b5c] w-6 h-6 shrink-0 mt-0.5"
                       strokeWidth={1.8}
                     />
-                    <p className="text-[#333333] text-[15px] leading-relaxed">
+                    <p className="text-[#333333] text-[0.9375rem] leading-relaxed">
                       {companyName && (
                         <>
                           <strong className="font-bold text-[#002b5c]">
@@ -221,7 +221,7 @@ export default function LocateDistributorContactSection({
                       strokeWidth={1.8}
                     />
                     <div>
-                      <p className="text-[#333333] text-[15px]">
+                      <p className="text-[#333333] text-[0.9375rem]">
                         Direct Contact:{" "}
                         <strong className="font-bold text-[#002b5c]">
                           {phone}
@@ -243,7 +243,7 @@ export default function LocateDistributorContactSection({
                       className="text-[#002b5c] w-6 h-6 shrink-0"
                       strokeWidth={1.8}
                     />
-                    <p className="text-[#333333] text-[15px]">
+                    <p className="text-[#333333] text-[0.9375rem]">
                       Email:{" "}
                       <a
                         href={`mailto:${email}`}

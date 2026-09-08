@@ -17,8 +17,8 @@ import {
 import { useCMSStore, CMSProduct } from "@/store/useCMSStore";
 
 interface NavbarProps {
-  fontSizeMultiplier: number;
-  setFontSizeMultiplier: React.Dispatch<React.SetStateAction<number>>;
+  fontSizeMultiplier?: number;
+  setFontSizeMultiplier?: React.Dispatch<React.SetStateAction<number>>;
   language: "EN" | "HI";
   setLanguage: (lang: "EN" | "HI") => void;
 }
@@ -133,12 +133,55 @@ export default function Navbar({
 
   const logoSrc = globalSEO?.logo || "/mahalaxmi png logo .png";
 
+  const [currentFontSize, setCurrentFontSize] = useState<number>(16);
+
+  React.useEffect(() => {
+    try {
+      const saved = localStorage.getItem("mahalaxmi_font_size");
+      if (saved) {
+        const parsed = parseInt(saved, 10);
+        if (!isNaN(parsed) && parsed >= 12 && parsed <= 26) {
+          setCurrentFontSize(parsed);
+          document.documentElement.style.fontSize = `${parsed}px`;
+          return;
+        }
+      }
+      const computed =
+        Math.round(
+          parseFloat(getComputedStyle(document.documentElement).fontSize),
+        ) || 16;
+      setCurrentFontSize(computed);
+    } catch {
+      setCurrentFontSize(16);
+    }
+  }, []);
+
   const increaseFont = () => {
-    if (fontSizeMultiplier < 1.25) setFontSizeMultiplier((prev) => prev + 0.08);
+    setCurrentFontSize((prev) => {
+      const next = Math.min(26, prev + 1);
+      document.documentElement.style.fontSize = `${next}px`;
+      try {
+        localStorage.setItem("mahalaxmi_font_size", String(next));
+      } catch {}
+      if (setFontSizeMultiplier) {
+        setFontSizeMultiplier(next / 16);
+      }
+      return next;
+    });
   };
 
   const decreaseFont = () => {
-    if (fontSizeMultiplier > 0.85) setFontSizeMultiplier((prev) => prev - 0.08);
+    setCurrentFontSize((prev) => {
+      const next = Math.max(12, prev - 1);
+      document.documentElement.style.fontSize = `${next}px`;
+      try {
+        localStorage.setItem("mahalaxmi_font_size", String(next));
+      } catch {}
+      if (setFontSizeMultiplier) {
+        setFontSizeMultiplier(next / 16);
+      }
+      return next;
+    });
   };
 
   const navItems = [
@@ -203,7 +246,7 @@ export default function Navbar({
               placeholder="Search"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="outline-none border font-sans border-[#CCCCCC] border-r-0 px-2.5 text-[12px] sm:text-[13px] py-1 h-[28px] sm:h-[30px] w-[110px] sm:w-[140px] focus:w-[160px] transition-all"
+              className="outline-none border font-sans border-[#CCCCCC] border-r-0 px-2.5 text-xs sm:text-[0.8125rem] py-1 h-[28px] sm:h-[30px] w-[110px] sm:w-[140px] focus:w-[160px] transition-all"
             />
             <button
               type="submit"
@@ -215,21 +258,25 @@ export default function Navbar({
             </button>
           </form>
 
-          <div className="flex items-center gap-1">
-            <span className="text-gray-600 text-xs font-sans">Text</span>
+          <div className="flex items-center gap-1" title={`Text Size: ${currentFontSize}px`}>
+            <span className="text-gray-600 text-xs font-sans select-none">Text</span>
             <button
               onClick={increaseFont}
-              className="bg-[#002b5c] text-white p-0.5 flex items-center justify-center hover:bg-opacity-90 cursor-pointer"
-              title="Increase Font Size"
+              disabled={currentFontSize >= 26}
+              className="bg-[#002b5c] text-white p-0.5 flex items-center justify-center hover:bg-opacity-90 active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer transition-all"
+              title={`Increase Font Size (+1px) - Current: ${currentFontSize}px`}
               type="button"
+              aria-label="Increase font size"
             >
               <Plus size={12} strokeWidth={3} />
             </button>
             <button
               onClick={decreaseFont}
-              className="bg-[#002b5c] text-white p-0.5 flex items-center justify-center hover:bg-opacity-90 cursor-pointer"
-              title="Decrease Font Size"
+              disabled={currentFontSize <= 12}
+              className="bg-[#002b5c] text-white p-0.5 flex items-center justify-center hover:bg-opacity-90 active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer transition-all"
+              title={`Decrease Font Size (-1px) - Current: ${currentFontSize}px`}
               type="button"
+              aria-label="Decrease font size"
             >
               <Minus size={12} strokeWidth={3} />
             </button>
@@ -262,7 +309,7 @@ export default function Navbar({
               placeholder="Search"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="outline-none border border-[#CCCCCC] border-r-0 px-2 text-[11px] h-[26px] w-[90px]"
+              className="outline-none border border-[#CCCCCC] border-r-0 px-2 text-[0.6875rem] h-[26px] w-[90px]"
             />
             <button
               type="submit"
@@ -274,21 +321,25 @@ export default function Navbar({
             </button>
           </form>
 
-          <div className="flex items-center gap-1">
-            <span className="text-gray-500 text-[11px]">Text</span>
+          <div className="flex items-center gap-1" title={`Text Size: ${currentFontSize}px`}>
+            <span className="text-gray-500 text-[0.6875rem] select-none">Text</span>
             <button
               onClick={increaseFont}
-              className="bg-[#002b5c] text-white p-0.5 rounded-xs"
-              title="Increase Font Size"
+              disabled={currentFontSize >= 26}
+              className="bg-[#002b5c] text-white p-0.5 rounded-xs active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer transition-all"
+              title={`Increase Font Size (+1px) - Current: ${currentFontSize}px`}
               type="button"
+              aria-label="Increase font size"
             >
               <Plus size={10} strokeWidth={3} />
             </button>
             <button
               onClick={decreaseFont}
-              className="bg-[#002b5c] text-white p-0.5 rounded-xs"
-              title="Decrease Font Size"
+              disabled={currentFontSize <= 12}
+              className="bg-[#002b5c] text-white p-0.5 rounded-xs active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer transition-all"
+              title={`Decrease Font Size (-1px) - Current: ${currentFontSize}px`}
               type="button"
+              aria-label="Decrease font size"
             >
               <Minus size={10} strokeWidth={3} />
             </button>
@@ -325,7 +376,7 @@ export default function Navbar({
                 <Link
                   href={item.link}
                   onClick={() => setActiveTab(item.name)}
-                  className={`text-[14px] font-sans font-medium tracking-normal transition flex items-center gap-1 ${
+                  className={`text-sm font-sans font-medium tracking-normal transition flex items-center gap-1 ${
                     isActive
                       ? "text-[#eb1e25] font-bold"
                       : "text-[#37474f] hover:text-[#eb1e25]"
@@ -353,7 +404,7 @@ export default function Navbar({
                   >
                     {/* Left Column: Direct Category List with Exact Same Visual Style */}
                     <div className="col-span-5 border-r border-gray-100 pr-2.5 space-y-1 max-h-64 overflow-y-auto">
-                      <div className="text-[11px] font-extrabold text-gray-400 uppercase tracking-wider px-3 py-1 mb-1 flex items-center gap-1.5">
+                      <div className="text-[0.6875rem] font-extrabold text-gray-400 uppercase tracking-wider px-3 py-1 mb-1 flex items-center gap-1.5">
                         <Layers size={13} className="text-[#eb1e25]" />{" "}
                         Categories
                       </div>
@@ -410,9 +461,9 @@ export default function Navbar({
                         key={currentSubCat.anchor}
                         className="animate-in fade-in duration-150 space-y-2"
                       >
-                        <div className="text-[11px] font-extrabold text-[#002b5c] uppercase tracking-wider px-2 py-1 border-b border-gray-100 flex items-center justify-between">
+                        <div className="text-[0.6875rem] font-extrabold text-[#002b5c] uppercase tracking-wider px-2 py-1 border-b border-gray-100 flex items-center justify-between">
                           <span className="truncate pr-2">{currentSubCat.title}</span>
-                          <span className="text-[10px] text-[#eb1e25] font-bold bg-red-50 px-2 py-0.5 rounded shrink-0">
+                          <span className="text-[0.625rem] text-[#eb1e25] font-bold bg-red-50 px-2 py-0.5 rounded shrink-0">
                             {currentCategoryProducts.length} Products
                           </span>
                         </div>
@@ -434,7 +485,7 @@ export default function Navbar({
                                 {(prod.subCategoryTitle ||
                                   prod.tagline ||
                                   (prod as any).subtitle) && (
-                                  <div className="text-[10px] text-gray-500 font-normal truncate">
+                                  <div className="text-[0.625rem] text-gray-500 font-normal truncate">
                                     {prod.subCategoryTitle ||
                                       prod.tagline ||
                                       (prod as any).subtitle}
@@ -541,7 +592,7 @@ export default function Navbar({
                         {/* Collapsible Product Categories for PRODUCTS & SERVICES */}
                         {mobileProductsOpen && (
                           <div className="pl-3 mt-1 flex flex-col gap-1.5 border-l-2 border-[#eb1e25]/70 bg-gray-50/80 p-3 rounded-r-lg max-h-[360px] overflow-y-auto animate-in fade-in duration-150">
-                            <span className="text-[11px] font-bold uppercase text-gray-400 tracking-wider">
+                            <span className="text-[0.6875rem] font-bold uppercase text-gray-400 tracking-wider">
                               Product Categories
                             </span>
                             {productSubCategories.map((catItem, cIdx) => (
