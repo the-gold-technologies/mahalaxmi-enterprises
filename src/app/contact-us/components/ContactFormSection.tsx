@@ -77,6 +77,7 @@ export default function ContactFormSection() {
     try {
       const res = await submitEnquiry({
         name: formData.name,
+        company: formData.companyName,
         phone: formData.phone,
         email: formData.email || undefined,
         product: formData.product || "General Enquiry",
@@ -113,6 +114,7 @@ export default function ContactFormSection() {
   const isFormValid =
     formData.name.trim().length > 0 &&
     formData.phone.trim().length > 0 &&
+    formData.companyName.trim().length > 0 &&
     formData.message.trim().length > 0 &&
     captchaValid;
 
@@ -326,11 +328,12 @@ export default function ContactFormSection() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-xs font-bold text-gray-700 uppercase tracking-wide mb-1.5">
-                      Company Name
+                      Company Name <span className="text-[#eb1e25]">*</span>
                     </label>
                     <input
                       type="text"
                       name="companyName"
+                      required
                       value={formData.companyName}
                       onChange={handleChange}
                       placeholder="Your company / organization"

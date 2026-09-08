@@ -122,7 +122,7 @@ export default function LocateDistributorContactSection({
                   <button
                     onClick={() =>
                       onOpenEnquiry &&
-                      onOpenEnquiry(companyName || "Direct Contact Support")
+                      onOpenEnquiry("")
                     }
                     className="bg-[#eb1e25] hover:bg-[#d0171d] text-white font-extrabold px-6 py-2.5 rounded text-sm uppercase tracking-wider transition-all cursor-pointer"
                   >

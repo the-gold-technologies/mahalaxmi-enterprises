@@ -43,10 +43,11 @@ export default function DownloadModal({
     try {
       await submitEnquiry({
         name,
+        company,
+        email,
         phone: mobile,
-        email: email || undefined,
-        product: `${productName} (${pdfType} Download)`,
-        message: `Requested ${pdfType} document for ${productName}. Company: ${company || 'N/A'}`,
+        product: productName,
+        message: `Downloaded ${pdfType} Datasheet for ${productName} (Company: ${company})`,
       });
     } catch (err) {
       console.error("Download lead capture error:", err);
@@ -67,7 +68,8 @@ export default function DownloadModal({
   const isFormValid =
     name.trim().length > 0 &&
     mobile.trim().length > 0 &&
-    email.trim().length > 0;
+    email.trim().length > 0 &&
+    company.trim().length > 0;
 
   return (
     <div
@@ -149,11 +151,12 @@ export default function DownloadModal({
 
               <div>
                 <label className="block text-xs font-bold text-gray-700 mb-1.5">
-                  Company / Organization Name
+                  Company Name <span className="text-[#eb1e25]">*</span>
                 </label>
                 <input
                   type="text"
-                  placeholder="e.g. Mahalaxmi Industries"
+                  required
+                  placeholder="Your company / organization"
                   value={company}
                   onChange={(e) => setCompany(e.target.value)}
                   className="w-full px-3.5 py-2.5 text-xs sm:text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-[#002b5c] focus:ring-1 focus:ring-[#002b5c] transition-colors"

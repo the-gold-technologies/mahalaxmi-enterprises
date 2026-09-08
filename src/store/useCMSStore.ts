@@ -238,6 +238,7 @@ interface CMSStoreActions {
   } | null>;
   submitEnquiry: (data: {
     name: string;
+    company?: string;
     email?: string;
     phone?: string;
     product?: string;

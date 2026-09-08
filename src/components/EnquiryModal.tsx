@@ -29,13 +29,13 @@ export default function EnquiryModal({
   const { code, input: captchaInput, setInput: setCaptchaInput, refresh: refreshCaptcha, isValid: captchaValid } = useCaptcha();
 
   const { submitEnquiry, globalSEO } = useCMSStore();
-  const siteName = globalSEO?.siteName || 'HP Lubricants';
+  const siteName = (globalSEO as any)?.siteName || 'HP Lubricants';
 
   useEffect(() => {
-    if (initialProduct) {
-      setProduct(initialProduct);
+    if (isOpen) {
+      setProduct(initialProduct || '');
     }
-  }, [initialProduct]);
+  }, [isOpen, initialProduct]);
 
   if (!isOpen) return null;
 
@@ -48,6 +48,7 @@ export default function EnquiryModal({
     try {
       await submitEnquiry({
         name,
+        company: companyName,
         email: email || undefined,
         phone: mobile,
         product: product || 'General Enquiry',
@@ -65,6 +66,7 @@ export default function EnquiryModal({
   const isFormValid =
     name.trim().length > 0 &&
     mobile.trim().length > 0 &&
+    companyName.trim().length > 0 &&
     product.trim().length > 0 &&
     captchaValid;
 
@@ -74,7 +76,7 @@ export default function EnquiryModal({
       onClick={onClose}
     >
       <div
-        className="bg-white rounded-2xl max-w-md w-full p-6 sm:p-7 relative shadow-2xl border border-gray-100 animate-in fade-in zoom-in-95 duration-150"
+        className="bg-white rounded-2xl max-w-md w-full p-6 sm:p-7 relative shadow-2xl border border-gray-100 animate-in fade-in zoom-in-95 duration-150 max-h-[92vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close Button */}
@@ -108,7 +110,7 @@ export default function EnquiryModal({
                 <input
                   type="text"
                   required
-                  placeholder="Enter your name"
+                  placeholder="Enter your full name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   className="w-full px-3.5 py-2.5 text-xs sm:text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-[#002b5c] focus:ring-1 focus:ring-[#002b5c] transition-colors"
@@ -118,10 +120,11 @@ export default function EnquiryModal({
               {/* Company Name */}
               <div>
                 <label className="block text-xs font-bold text-gray-700 mb-1.5">
-                  Company Name
+                  Company Name <span className="text-[#eb1e25]">*</span>
                 </label>
                 <input
                   type="text"
+                  required
                   placeholder="Your company / organization"
                   value={companyName}
                   onChange={(e) => setCompanyName(e.target.value)}

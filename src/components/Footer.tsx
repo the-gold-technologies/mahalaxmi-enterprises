@@ -159,7 +159,7 @@ export default function Footer({ onOpenEnquiry }: FooterProps) {
 
       {/* Persistent Red Sticky ENQUIRY Button Fixed on Bottom Right Corner */}
       <button
-        onClick={() => onOpenEnquiry("Footer Site Enquiry")}
+        onClick={() => onOpenEnquiry("")}
         className="fixed bottom-1 right-0 z-50 bg-[#eb1e25] text-white text-xs font-extrabold uppercase tracking-wider px-4 py-2 rounded-tl-xs shadow-2xl flex items-center gap-1.5 hover:bg-[#d0171d] transition-all cursor-pointer"
       >
         <Mail size={14} />
