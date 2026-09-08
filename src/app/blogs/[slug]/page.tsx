@@ -18,13 +18,14 @@ import {
 } from "lucide-react";
 import { useCMSStore, PageSEO } from "@/store/useCMSStore";
 import SEOMeta from "@/components/SEOMeta";
+import { isHindiActive, useLanguage } from "@/components/GoogleTranslator";
 
 export default function BlogDetailPage() {
   const params = useParams();
   const slug = params?.slug as string;
 
   const [fontSizeMultiplier, setFontSizeMultiplier] = useState(1);
-  const [language, setLanguage] = useState<"EN" | "HI">("EN");
+  const language = useLanguage();
 
   const [isEnquiryOpen, setIsEnquiryOpen] = useState(false);
   const [enquiryProduct, setEnquiryProduct] = useState("");
@@ -64,7 +65,6 @@ export default function BlogDetailPage() {
           fontSizeMultiplier={fontSizeMultiplier}
           setFontSizeMultiplier={setFontSizeMultiplier}
           language={language}
-          setLanguage={setLanguage}
         />
         <div className="max-w-4xl mx-auto px-4 py-20 text-center">
           <h1 className="text-3xl font-extrabold text-[#002b5c] mb-4">
@@ -94,6 +94,76 @@ export default function BlogDetailPage() {
 
   const rawHtmlContent = typeof post.content === "string" ? post.content : null;
 
+  const articleRef = React.useRef<HTMLDivElement | null>(null);
+  const [contentReady, setContentReady] = useState(false);
+
+  useEffect(() => {
+    if (!rawHtmlContent) return;
+
+    if (!isHindiActive()) {
+      setContentReady(true);
+      return;
+    }
+
+    // If article already contains Devanagari text, reveal immediately
+    const currentText = articleRef.current?.textContent || "";
+    if (/[\u0900-\u097F]/.test(currentText)) {
+      setContentReady(true);
+      return;
+    }
+
+    setContentReady(false);
+    let active = true;
+    const start = Date.now();
+
+    const trigger = () => {
+      const select = document.querySelector(".goog-te-combo") as HTMLSelectElement | null;
+      if (select && select.value !== "hi") {
+        select.value = "hi";
+        select.dispatchEvent(new Event("change"));
+      }
+    };
+
+    trigger();
+    const t1 = setTimeout(trigger, 30);
+
+    const checkHindi = () => {
+      if (!active) return;
+      const el = articleRef.current;
+      const text = el?.textContent || "";
+      if (/[\u0900-\u097F]/.test(text) || Date.now() - start >= 450) {
+        setContentReady(true);
+        return;
+      }
+      requestAnimationFrame(checkHindi);
+    };
+
+    const observer = new MutationObserver(() => {
+      const el = articleRef.current;
+      const text = el?.textContent || "";
+      if (/[\u0900-\u097F]/.test(text)) {
+        setContentReady(true);
+        observer.disconnect();
+      }
+    });
+
+    if (articleRef.current) {
+      observer.observe(articleRef.current, {
+        childList: true,
+        subtree: true,
+        characterData: true,
+      });
+    }
+
+    requestAnimationFrame(checkHindi);
+
+    return () => {
+      active = false;
+      clearTimeout(t1);
+      observer.disconnect();
+    };
+  }, [rawHtmlContent, language]);
+
   const blogSEO: PageSEO = useMemo(() => {
     return {
       title: post?.metaTitle || post?.title,
@@ -114,7 +184,6 @@ export default function BlogDetailPage() {
         fontSizeMultiplier={fontSizeMultiplier}
         setFontSizeMultiplier={setFontSizeMultiplier}
         language={language}
-        setLanguage={setLanguage}
       />
 
       {/* Breadcrumb Navigation Bar */}
@@ -213,7 +282,10 @@ export default function BlogDetailPage() {
         {/* Rich Text WYSIWYG HTML Content with Consistent Theme Typography */}
         {rawHtmlContent && (
           <div
-            className="blog-rich-content text-gray-800 text-sm md:text-base leading-relaxed font-sans space-y-5 mb-10"
+            ref={articleRef}
+            className={`blog-rich-content text-gray-800 text-sm md:text-base leading-relaxed font-sans space-y-5 mb-10 transition-opacity duration-200 ${
+              !contentReady && isHindiActive() ? "opacity-0" : "opacity-100"
+            }`}
             dangerouslySetInnerHTML={{ __html: rawHtmlContent }}
           />
         )}

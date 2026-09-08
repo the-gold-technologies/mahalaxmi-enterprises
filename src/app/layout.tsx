@@ -1,5 +1,6 @@
-import type { Metadata } from 'next';
-import './globals.css';
+import type { Metadata } from "next";
+import "./globals.css";
+import GoogleTranslator from "@/components/GoogleTranslator";
 
 export default function RootLayout({
   children,
@@ -20,12 +21,23 @@ export default function RootLayout({
                     document.documentElement.style.fontSize = n + 'px';
                   }
                 }
+                var c = document.cookie || '';
+                var isHindi = c.indexOf('googtrans=/en/hi') !== -1 ||
+                              c.indexOf('googtrans=%2Fen%2Fhi') !== -1 ||
+                              localStorage.getItem('mahalaxmi_language') === 'HI';
+
+                if (isHindi) {
+                  document.documentElement.classList.add('translating-hi');
+                }
               } catch(e) {}
             `,
           }}
         />
       </head>
-      <body>{children}</body>
+      <body>
+        <GoogleTranslator />
+        {children}
+      </body>
     </html>
   );
 }

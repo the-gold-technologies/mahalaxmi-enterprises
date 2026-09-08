@@ -15,12 +15,13 @@ import {
   Droplet,
 } from "lucide-react";
 import { useCMSStore, CMSProduct } from "@/store/useCMSStore";
+import { changeLanguage, useLanguage } from "@/components/GoogleTranslator";
 
 interface NavbarProps {
   fontSizeMultiplier?: number;
   setFontSizeMultiplier?: React.Dispatch<React.SetStateAction<number>>;
-  language: "EN" | "HI";
-  setLanguage: (lang: "EN" | "HI") => void;
+  language?: "EN" | "HI";
+  setLanguage?: (lang: "EN" | "HI") => void;
 }
 
 interface ProductSubCategoryItem {
@@ -184,6 +185,13 @@ export default function Navbar({
     });
   };
 
+  const currentLanguage = useLanguage();
+
+  const handleLanguageChange = (lang: "EN" | "HI") => {
+    if (setLanguage) setLanguage(lang);
+    changeLanguage(lang);
+  };
+
   const navItems = [
     { name: "HOME", link: "/" },
     { name: "ABOUT US", link: "/about-us" },
@@ -226,15 +234,25 @@ export default function Navbar({
           {/* Language Selector */}
           <div className="flex items-center gap-1.5 text-xs text-[#337ab7]">
             <button
-              onClick={() => setLanguage("EN")}
-              className={`hover:underline cursor-pointer ${language === "EN" ? "font-bold text-[#eb1e25]" : ""}`}
+              onClick={() => handleLanguageChange("EN")}
+              className={`hover:underline cursor-pointer notranslate ${
+                currentLanguage === "EN" ? "font-bold text-[#eb1e25]" : ""
+              }`}
+              translate="no"
+              type="button"
+              title="Translate to English"
             >
               English
             </button>
-            <span className="text-gray-400">|</span>
+            <span className="text-gray-400 notranslate" translate="no">|</span>
             <button
-              onClick={() => setLanguage("HI")}
-              className={`hover:underline cursor-pointer ${language === "HI" ? "font-bold text-[#eb1e25]" : ""}`}
+              onClick={() => handleLanguageChange("HI")}
+              className={`hover:underline cursor-pointer notranslate ${
+                currentLanguage === "HI" ? "font-bold text-[#eb1e25]" : ""
+              }`}
+              translate="no"
+              type="button"
+              title="Translate to Hindi (हिन्दी)"
             >
               हिन्दी
             </button>
@@ -288,15 +306,25 @@ export default function Navbar({
       <div className="md:hidden flex justify-between items-center px-3 py-1.5 bg-[#f8fafc] border-b border-gray-200/70 text-xs">
         <div className="flex items-center gap-1.5 text-[#337ab7]">
           <button
-            onClick={() => setLanguage("EN")}
-            className={`cursor-pointer ${language === "EN" ? "font-bold text-[#eb1e25]" : ""}`}
+            onClick={() => handleLanguageChange("EN")}
+            className={`cursor-pointer notranslate ${
+              currentLanguage === "EN" ? "font-bold text-[#eb1e25]" : ""
+            }`}
+            translate="no"
+            type="button"
+            title="Translate to English"
           >
             English
           </button>
-          <span className="text-gray-300">|</span>
+          <span className="text-gray-300 notranslate" translate="no">|</span>
           <button
-            onClick={() => setLanguage("HI")}
-            className={`cursor-pointer ${language === "HI" ? "font-bold text-[#eb1e25]" : ""}`}
+            onClick={() => handleLanguageChange("HI")}
+            className={`cursor-pointer notranslate ${
+              currentLanguage === "HI" ? "font-bold text-[#eb1e25]" : ""
+            }`}
+            translate="no"
+            type="button"
+            title="Translate to Hindi (हिन्दी)"
           >
             हिन्दी
           </button>

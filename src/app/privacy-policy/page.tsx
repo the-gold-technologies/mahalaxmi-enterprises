@@ -8,6 +8,7 @@ import EnquiryModal from "@/components/EnquiryModal";
 import DistributorModal from "@/components/DistributorModal";
 import SEOMeta from "@/components/SEOMeta";
 import { useCMSStore, getHeadingTag } from "@/store/useCMSStore";
+import { isHindiActive, useLanguage } from "@/components/GoogleTranslator";
 import {
   ShieldCheck,
   Calendar,
@@ -20,7 +21,7 @@ import {
 
 export default function PrivacyPolicyPage() {
   const [fontSizeMultiplier, setFontSizeMultiplier] = useState(1);
-  const [language, setLanguage] = useState<"EN" | "HI">("EN");
+  const language = useLanguage();
 
   const [isEnquiryOpen, setIsEnquiryOpen] = useState(false);
   const [enquiryProduct, setEnquiryProduct] = useState("");
@@ -51,7 +52,7 @@ export default function PrivacyPolicyPage() {
   const HeadingTag = getHeadingTag(currentSEO?.headingOptions, "h1");
 
   const cmsPrivacy = pages["privacy-policy"];
-  const title = cmsPrivacy?.title || "PRIVACY POLICY";
+  const title = cmsPrivacy?.title || "Privacy Policy";
   const lastUpdated = cmsPrivacy?.lastUpdated;
   const rawHtmlContent = cmsPrivacy?.content;
   const pageLoading = isLoading["privacy-policy"] && !cmsPrivacy;
@@ -60,6 +61,76 @@ export default function PrivacyPolicyPage() {
     if (!rawHtmlContent) return "";
     return rawHtmlContent.replace(/&nbsp;/gi, " ").replace(/\u00a0/g, " ");
   }, [rawHtmlContent]);
+
+  const articleRef = React.useRef<HTMLElement | null>(null);
+  const [contentReady, setContentReady] = useState(false);
+
+  useEffect(() => {
+    if (!sanitizedContent) return;
+
+    if (!isHindiActive()) {
+      setContentReady(true);
+      return;
+    }
+
+    // If article already contains Devanagari text, reveal immediately
+    const currentText = articleRef.current?.textContent || "";
+    if (/[\u0900-\u097F]/.test(currentText)) {
+      setContentReady(true);
+      return;
+    }
+
+    setContentReady(false);
+    let active = true;
+    const start = Date.now();
+
+    const trigger = () => {
+      const select = document.querySelector(".goog-te-combo") as HTMLSelectElement | null;
+      if (select && select.value !== "hi") {
+        select.value = "hi";
+        select.dispatchEvent(new Event("change"));
+      }
+    };
+
+    trigger();
+    const t1 = setTimeout(trigger, 30);
+
+    const checkArticle = () => {
+      if (!active) return;
+      const el = articleRef.current;
+      const text = el?.textContent || "";
+      if (/[\u0900-\u097F]/.test(text) || Date.now() - start >= 450) {
+        setContentReady(true);
+        return;
+      }
+      requestAnimationFrame(checkArticle);
+    };
+
+    const observer = new MutationObserver(() => {
+      const el = articleRef.current;
+      const text = el?.textContent || "";
+      if (/[\u0900-\u097F]/.test(text)) {
+        setContentReady(true);
+        observer.disconnect();
+      }
+    });
+
+    if (articleRef.current) {
+      observer.observe(articleRef.current, {
+        childList: true,
+        subtree: true,
+        characterData: true,
+      });
+    }
+
+    requestAnimationFrame(checkArticle);
+
+    return () => {
+      active = false;
+      clearTimeout(t1);
+      observer.disconnect();
+    };
+  }, [sanitizedContent, language]);
 
   const address = globalSEO?.address;
   const phone = globalSEO?.phone;
@@ -74,7 +145,6 @@ export default function PrivacyPolicyPage() {
         fontSizeMultiplier={fontSizeMultiplier}
         setFontSizeMultiplier={setFontSizeMultiplier}
         language={language}
-        setLanguage={setLanguage}
       />
 
       {/* Hero Banner with Modern Breadcrumbs */}
@@ -117,24 +187,34 @@ export default function PrivacyPolicyPage() {
 
       {/* Main Content Area without box container */}
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-16 w-full grow">
-        {pageLoading ? (
-          /* Loading Skeleton State */
-          <div className="space-y-6 animate-pulse">
-            <div className="h-6 bg-gray-200 rounded w-2/3" />
-            <div className="h-4 bg-gray-100 rounded w-full" />
-            <div className="h-4 bg-gray-100 rounded w-5/6" />
-            <div className="h-4 bg-gray-100 rounded w-4/5" />
-            <div className="h-8 bg-gray-200 rounded w-1/3 mt-8" />
-            <div className="h-4 bg-gray-100 rounded w-full" />
-            <div className="h-4 bg-gray-100 rounded w-full" />
-          </div>
-        ) : sanitizedContent ? (
-          /* Dynamic Rich HTML Content from CMS */
-          <article
-            className="privacy-rich-content font-sans"
-            dangerouslySetInnerHTML={{ __html: sanitizedContent }}
-          />
-        ) : null}
+        <div className="relative min-h-[300px]">
+          {/* Loading Skeleton State shown while fetching CMS or waiting for Hindi translation */}
+          {(pageLoading || (!contentReady && isHindiActive())) && (
+            <div className="space-y-6 animate-pulse" aria-hidden="true">
+              <div className="h-6 bg-gray-200 rounded w-2/3" />
+              <div className="h-4 bg-gray-100 rounded w-full" />
+              <div className="h-4 bg-gray-100 rounded w-5/6" />
+              <div className="h-4 bg-gray-100 rounded w-4/5" />
+              <div className="h-8 bg-gray-200 rounded w-1/3 mt-8" />
+              <div className="h-4 bg-gray-100 rounded w-full" />
+              <div className="h-4 bg-gray-100 rounded w-full" />
+              <div className="h-4 bg-gray-100 rounded w-3/4" />
+            </div>
+          )}
+
+          {/* Dynamic Rich HTML Content from CMS - Kept in DOM so Google Translate parses its text nodes */}
+          {sanitizedContent ? (
+            <article
+              ref={articleRef}
+              className={`privacy-rich-content font-sans transition-opacity duration-300 ${
+                !contentReady && isHindiActive()
+                  ? "opacity-0 pointer-events-none absolute inset-0 overflow-hidden"
+                  : "opacity-100 relative"
+              }`}
+              dangerouslySetInnerHTML={{ __html: sanitizedContent }}
+            />
+          ) : null}
+        </div>
 
         {/* Quick Compliance Contact Block (Dynamically from Global SEO) */}
         {(address || phone || email) && (
