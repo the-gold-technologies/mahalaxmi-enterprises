@@ -108,33 +108,12 @@ export function changeLanguage(lang: "EN" | "HI") {
       domains.forEach((d) => {
         const domPart = d ? `; domain=${d}` : "";
         document.cookie = `googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=${p}${domPart};`;
+        document.cookie = `googtrans=/en/en; path=${p}${domPart};`;
       });
     });
 
-    const select = document.querySelector(".goog-te-combo") as HTMLSelectElement | null;
-    if (select) {
-      // Find original / empty option
-      let originalIndex = 0;
-      for (let i = 0; i < select.options.length; i++) {
-        if (select.options[i].value === "" || select.options[i].value === "en") {
-          originalIndex = i;
-          break;
-        }
-      }
-      select.selectedIndex = originalIndex;
-      select.value = select.options[originalIndex]?.value || "";
-      select.dispatchEvent(new Event("input", { bubbles: true }));
-      select.dispatchEvent(new Event("change", { bubbles: true }));
-    }
-
-    // Also trigger restore button in Google Translate frame if present
-    try {
-      const banner = document.querySelector(".goog-te-banner-frame") as HTMLIFrameElement | null;
-      if (banner && banner.contentDocument) {
-        const restoreBtn = banner.contentDocument.querySelector(".goog-te-button button, #\\:1\\.restore") as HTMLElement | null;
-        if (restoreBtn) restoreBtn.click();
-      }
-    } catch {}
+    // Cleanly restore pristine English page without corrupted Google Translate DOM
+    window.location.reload();
   } else {
     // Switching to Hindi
     document.documentElement.classList.add("translating-hi");
@@ -157,27 +136,10 @@ export function changeLanguage(lang: "EN" | "HI") {
       }
 
       if (hindiIndex !== -1) {
-        // If already at hindiIndex, reset first so change event fires
-        if (select.selectedIndex === hindiIndex) {
-          select.selectedIndex = 0;
-          select.value = select.options[0]?.value || "";
-          select.dispatchEvent(new Event("change", { bubbles: true }));
-        }
-
-        switchTimer = setTimeout(() => {
-          if (select) {
-            select.selectedIndex = hindiIndex;
-            select.value = "hi";
-            select.dispatchEvent(new Event("input", { bubbles: true }));
-            select.dispatchEvent(new Event("change", { bubbles: true }));
-          }
-          switchTimer = null;
-        }, 25);
-      } else {
-        select.value = "hi";
-        select.dispatchEvent(new Event("input", { bubbles: true }));
-        select.dispatchEvent(new Event("change", { bubbles: true }));
+        select.selectedIndex = hindiIndex;
       }
+      select.value = "hi";
+      select.dispatchEvent(new Event("change", { bubbles: true }));
 
       waitForHindi(() => {
         document.documentElement.classList.remove("translating-hi");
