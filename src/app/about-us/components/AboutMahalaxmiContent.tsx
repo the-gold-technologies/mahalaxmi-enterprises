@@ -57,46 +57,65 @@ export default function AboutMahalaxmiContent() {
         </HeadingTag>
       )}
 
-      {/* Proprietor Photo + Name Row */}
-      {subtitle && (
-        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6 mb-6">
-          {proprietorPhoto && (
-            <div className="shrink-0">
-              <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden border-4 border-[#002b5c]/20 shadow-md bg-gray-100 flex items-center justify-center">
-                <img
-                  src={proprietorPhoto}
-                  alt={proprietorPhotoAlt}
-                  className="w-full h-full object-cover"
-                  onError={(e) => {
-                    (e.target as HTMLImageElement).style.display = "none";
-                  }}
-                />
+      {/* Executive Leadership & Story Card */}
+      <div className="relative overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-sm hover:shadow-md transition-shadow duration-300 mb-12">
+        {/* Top Accent Gradient Bar */}
+        <div className="h-1.5 w-full bg-gradient-to-r from-[#002b5c] via-[#004b93] to-[#eb1e25]" />
+
+        <div className="p-6 sm:p-8 lg:p-10">
+          <div className="flex flex-col lg:flex-row gap-8 lg:gap-10 items-start">
+            {/* Proprietor Profile Frame */}
+            {proprietorPhoto && (
+              <div className="shrink-0 w-full sm:w-64 md:w-72 lg:w-80">
+                <div className="rounded-2xl overflow-hidden border border-slate-200 bg-gradient-to-b from-slate-50 to-white p-3 shadow-sm">
+                  <div className="aspect-[4/5] w-full rounded-xl overflow-hidden bg-slate-100 shadow-inner">
+                    <img
+                      src={proprietorPhoto}
+                      alt={proprietorPhotoAlt}
+                      className="w-full h-full object-cover object-top"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).style.display = "none";
+                      }}
+                    />
+                  </div>
+                  <div className="pt-4 pb-1 px-1 text-left">
+                    <h2 className="text-xl sm:text-2xl font-bold text-[#002b5c] tracking-tight">
+                      {subtitle}
+                    </h2>
+                    {proprietorRole && (
+                      <div className="mt-1.5 inline-flex items-center gap-1.5 bg-red-50 text-[#eb1e25] border border-red-100 text-[11px] sm:text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-md">
+                        {proprietorRole}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Narrative Paragraphs & Executive Details */}
+            <div className="flex-1 flex flex-col justify-between">
+              <div className="space-y-4 text-slate-700 text-sm md:text-base leading-relaxed font-sans">
+                {paragraphs.map((p, idx) => (
+                  <p key={idx} className="text-justify">
+                    <FormattedText text={p} />
+                  </p>
+                ))}
+              </div>
+
+              {/* Verified ILD Status Note inside Card */}
+              <div className="mt-6 pt-5 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3 text-xs text-slate-500 font-medium">
+                <span className="flex items-center gap-1.5 text-[#002b5c] font-semibold">
+                  <span className="inline-block w-2 h-2 rounded-full bg-[#eb1e25]" />
+                  Authorized Industrial Lubricants Distributor (ILD)
+                </span>
+                <span className="text-slate-400">
+                  Hindustan Petroleum Corporation Limited (HPCL)
+                </span>
               </div>
             </div>
-          )}
-          <div>
-            <h2 className="text-xl md:text-2xl font-bold text-[#eb1e25]">
-              {subtitle}
-            </h2>
-            {proprietorRole && (
-              <p className="text-xs text-gray-500 mt-1 font-medium uppercase tracking-wide">
-                {proprietorRole}
-              </p>
-            )}
           </div>
         </div>
-      )}
-
-      {/* Text Paragraphs */}
-      {paragraphs.length > 0 && (
-        <div className="space-y-6 text-gray-700 text-sm md:text-base leading-relaxed font-sans">
-          {paragraphs.map((p, idx) => (
-            <p key={idx} className="text-justify">
-              <FormattedText text={p} />
-            </p>
-          ))}
-        </div>
-      )}
+      </div>
 
       {/* HPCL Overview Card */}
       {hpclOverview && (hpclOverview.title || hpclOverview.description) && (
