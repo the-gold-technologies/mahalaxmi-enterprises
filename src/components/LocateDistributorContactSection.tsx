@@ -55,11 +55,11 @@ export default function LocateDistributorContactSection({
                 </>
               )}
 
-              {/* Contact Information */}
-              <div className="flex flex-col sm:flex-row flex-wrap gap-6 text-[0.9375rem] text-[#333333] leading-relaxed font-sans">
-                {/* Address */}
+              {/* Contact Information - Fixed 2-column grid layout that never shifts */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-4 text-[0.9375rem] text-[#333333] leading-relaxed font-sans max-w-4xl">
+                {/* Row 1, Column 1: Address */}
                 {address && (
-                  <div className="flex gap-3 items-start min-w-[220px]">
+                  <div className="md:col-start-1 md:row-start-1 flex gap-3 items-start">
                     <HomeIcon
                       className="text-[#002b5c] w-5 h-5 shrink-0 mt-0.5"
                       strokeWidth={1.8}
@@ -78,9 +78,9 @@ export default function LocateDistributorContactSection({
                   </div>
                 )}
 
-                {/* Phone */}
+                {/* Row 1, Column 2: Direct Contact Phone */}
                 {phone && (
-                  <div className="flex gap-3 items-start">
+                  <div className="md:col-start-2 md:row-start-1 flex gap-3 items-start">
                     <Phone
                       className="text-[#002b5c] w-5 h-5 shrink-0 mt-0.5"
                       strokeWidth={1.8}
@@ -96,9 +96,9 @@ export default function LocateDistributorContactSection({
                   </div>
                 )}
 
-                {/* Email */}
+                {/* Row 2, Column 1: Email (Always directly under Address) */}
                 {email && (
-                  <div className="flex gap-3 items-center">
+                  <div className="md:col-start-1 md:row-start-2 flex gap-3 items-center">
                     <Mail
                       className="text-[#002b5c] w-5 h-5 shrink-0"
                       strokeWidth={1.8}
