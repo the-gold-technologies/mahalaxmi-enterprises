@@ -115,7 +115,7 @@ export default function DistributorModal({
                 Apply for Dealership / Distributorship
               </h2>
               <p className="text-xs text-gray-500 mt-1">
-                Partner with Mahalaxmi Enterprises — Authorized HPCL Industrial & Automotive Lubricants Distributor.
+                Partner with Mahalaxmi Enterprises — Authorized HPCL Industrial Lube Distributor.
               </p>
             </div>
 

@@ -46,6 +46,9 @@ export default function AboutMahalaxmiContent() {
     cmsStory.proprietorPhotoAlt ||
     (subtitle ? `${subtitle} — ${proprietorRole || "Proprietor"}` : "");
 
+  const distributorBadge = cmsStory.distributorBadge || "";
+  const distributorCompany = cmsStory.distributorCompany || "";
+
   const HeadingTag = getHeadingTag(pageSEO["about-us"]?.headingOptions, "h1");
 
   return (
@@ -103,15 +106,21 @@ export default function AboutMahalaxmiContent() {
               </div>
 
               {/* Verified ILD Status Note inside Card */}
-              <div className="mt-6 pt-5 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3 text-xs text-slate-500 font-medium">
-                <span className="flex items-center gap-1.5 text-[#002b5c] font-semibold">
-                  <span className="inline-block w-2 h-2 rounded-full bg-[#eb1e25]" />
-                  Authorized Industrial Lubricants Distributor (ILD)
-                </span>
-                <span className="text-slate-400">
-                  Hindustan Petroleum Corporation Limited (HPCL)
-                </span>
-              </div>
+              {(distributorBadge || distributorCompany) && (
+                <div className="mt-6 pt-5 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3 text-xs text-slate-500 font-medium">
+                  {distributorBadge && (
+                    <span className="flex items-center gap-1.5 text-[#002b5c] font-semibold">
+                      <span className="inline-block w-2 h-2 rounded-full bg-[#eb1e25]" />
+                      {distributorBadge}
+                    </span>
+                  )}
+                  {distributorCompany && (
+                    <span className="text-slate-400">
+                      {distributorCompany}
+                    </span>
+                  )}
+                </div>
+              )}
             </div>
           </div>
         </div>

@@ -155,11 +155,11 @@ export default function Navbar({
       (p) =>
         p.categorySlug === "industrial-greases" &&
         ((p.name || "").toLowerCase().includes(q) ||
-          ((p as any).subCategoryTitle || "").toLowerCase().includes(q))
+          ((p as any).subCategoryTitle || "").toLowerCase().includes(q)),
     );
     const targetCat = isGrease ? "industrial-greases" : "industrial-oils";
     router.push(
-      `/products/${targetCat}?search=${encodeURIComponent(searchQuery.trim())}`
+      `/products/${targetCat}?search=${encodeURIComponent(searchQuery.trim())}`,
     );
   };
 
@@ -392,7 +392,10 @@ export default function Navbar({
           </div>
 
           <div className="relative" ref={searchDropdownRef}>
-            <form onSubmit={handleSearchSubmit} className="flex items-center font-sans">
+            <form
+              onSubmit={handleSearchSubmit}
+              className="flex items-center font-sans"
+            >
               <input
                 type="text"
                 placeholder="Search products..."
@@ -419,7 +422,9 @@ export default function Navbar({
               <div className="absolute right-0 mt-1 w-72 sm:w-80 bg-white rounded-xl shadow-2xl border border-gray-200 overflow-hidden z-50 text-left">
                 <div className="px-3 py-2 bg-gray-50 border-b border-gray-100 flex items-center justify-between text-[10px] font-bold text-gray-500 uppercase tracking-wider">
                   <span>Matching Products ({liveSearchResults.length})</span>
-                  <span className="text-[#eb1e25] truncate max-w-[120px]">&ldquo;{searchQuery}&rdquo;</span>
+                  <span className="text-[#eb1e25] truncate max-w-[120px]">
+                    &ldquo;{searchQuery}&rdquo;
+                  </span>
                 </div>
                 {liveSearchResults.length > 0 ? (
                   <div className="max-h-64 overflow-y-auto divide-y divide-gray-50">
@@ -436,7 +441,9 @@ export default function Navbar({
                             {p.name}
                           </span>
                           <span className="text-[10px] text-gray-400 uppercase mt-0.5 font-medium">
-                            {(p as any).subCategoryTitle || (p as any).subtitle || cat.replace("-", " ")}
+                            {(p as any).subCategoryTitle ||
+                              (p as any).subtitle ||
+                              cat.replace("-", " ")}
                           </span>
                         </Link>
                       );
@@ -520,7 +527,10 @@ export default function Navbar({
         </div>
 
         <div className="flex items-center gap-2">
-          <form onSubmit={handleSearchSubmit} className="flex items-center font-sans">
+          <form
+            onSubmit={handleSearchSubmit}
+            className="flex items-center font-sans"
+          >
             <input
               type="text"
               placeholder="Search"
@@ -883,7 +893,9 @@ export default function Navbar({
               </Link>
               <div className="text-center text-xs text-gray-500 font-medium">
                 Direct Contact:{" "}
-                <span className="font-bold text-gray-800">+91 98765 43210</span>
+                <span className="font-bold text-gray-800">
+                  {globalSEO?.phone || ""}
+                </span>
               </div>
             </div>
           </div>

@@ -74,7 +74,7 @@ export default function SEOMeta({
     // 3. Description & Keywords strictly from CMS
     const description = isLandingPage
       ? globalSEO?.siteDescription ||
-        "Authorized Industrial Lubricants Division (ILD) for HPCL lubricants, engine oils, greases, and fluids."
+        "Authorized Industrial Lube Distributor (ILD) for HPCL lubricants, engine oils, greases, and fluids."
       : activeSEO?.metaDescription || globalSEO?.siteDescription || "";
 
     const keywords =
@@ -329,8 +329,8 @@ function generatePageSchema({
   const origin = (process.env.NEXT_PUBLIC_SITE_URL || "").replace(/\/$/, "");
 
   const companyName = globalSEO?.siteTitle || "Mahalaxmi Enterprises";
-  const companyPhone = globalSEO?.phone || "+91 98765 43210";
-  const companyEmail = globalSEO?.email || "sales@mahalaxmienterprises.com";
+  const companyPhone = globalSEO?.phone || "+91 88007 78032";
+  const companyEmail = globalSEO?.email || "info@hplubricantscfa.com";
   const companyAddress =
     globalSEO?.address ||
     "Baghpat Region & Surrounding Industrial Belts, Uttar Pradesh, India";
@@ -352,7 +352,7 @@ function generatePageSchema({
     priceRange: "₹₹",
     description:
       globalSEO?.siteDescription ||
-      "Authorized Industrial Lubricants Division (ILD) for Hindustan Petroleum Corporation Limited (HPCL).",
+      "Authorized Industrial Lube Distributor (ILD) for Hindustan Petroleum Corporation Limited (HPCL).",
     address: {
       "@type": "PostalAddress",
       streetAddress: companyAddress,
@@ -393,7 +393,7 @@ function generatePageSchema({
       name: activeSEO?.metaTitle || "About Us | Mahalaxmi Enterprises",
       description:
         activeSEO?.metaDescription ||
-        "Authorized Industrial Lubricants Division (ILD) for Hindustan Petroleum Corporation Limited (HPCL).",
+        "Authorized Industrial Lube Distributor (ILD) for Hindustan Petroleum Corporation Limited (HPCL).",
       url: `${origin}/about-us`,
       mainEntity: {
         "@type": "Organization",
