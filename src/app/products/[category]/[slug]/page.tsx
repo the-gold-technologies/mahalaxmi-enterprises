@@ -67,7 +67,9 @@ export default function ProductDetailPage() {
     const catProducts = products.filter((p) => !categorySlug || p.categorySlug === categorySlug);
     const titles = Array.from(
       new Set(
-        catProducts.map((p) => p.subCategoryTitle || (p as any).subtitle || p.name).filter(Boolean),
+        catProducts
+          .map((p) => p.subCategoryTitle)
+          .filter((t): t is string => Boolean(t && t.trim())),
       ),
     );
     return titles.map((title) => ({ title }));
@@ -75,9 +77,9 @@ export default function ProductDetailPage() {
 
   const productSEO: PageSEO = useMemo(() => {
     return {
-      title: product?.metaTitle || product?.title || product?.name,
-      metaTitle: product?.metaTitle || product?.title || product?.name,
-      metaDescription: product?.metaDescription || product?.description || product?.tagline,
+      title: product?.name,
+      metaTitle: product?.metaTitle,
+      metaDescription: product?.metaDescription,
       targetKeywords: product?.targetKeywords,
       canonicalUrl: product?.canonicalUrl,
       schema: product?.schema,
@@ -88,7 +90,7 @@ export default function ProductDetailPage() {
     if (!product) return;
     setDownloadProductName(product.name);
     setDownloadPdfType(pdfType);
-    setDownloadPdfUrl(pdfType === "TDS" ? product.pdfUrl : product.msdsUrl || product.pdfUrl);
+    setDownloadPdfUrl(pdfType === "TDS" ? product.pdfUrl : product.msdsUrl);
     setIsDownloadOpen(true);
   };
 
@@ -123,10 +125,6 @@ export default function ProductDetailPage() {
       </main>
     );
   }
-
-  const currentGroup = {
-    title: product.subCategoryTitle || (product as any).subtitle || category.name,
-  };
 
   const HeadingTag = getHeadingTag(product?.headingOptions, "h1");
   const hasMultiCols = Boolean(product.tableHeaders && product.tableHeaders.length > 0);
@@ -163,9 +161,7 @@ export default function ProductDetailPage() {
         {/* Category Title with Dark Blue Underline Bar */}
         <div className="mb-8 border-b border-gray-200 pb-3 flex items-center justify-between">
           <h1 className="text-2xl md:text-3xl font-extrabold text-[#002b5c] uppercase tracking-wider inline-block relative">
-            <span className="border-b-4 border-[#002b5c] pb-3 inline-block">
-              {currentGroup?.title || product.subtitle || category.name}
-            </span>
+            <span className="border-b-4 border-[#002b5c] pb-3 inline-block">{category.name}</span>
           </h1>
           <span className="text-xs font-bold uppercase tracking-widest text-[#eb1e25] bg-red-50 px-3 py-1 rounded-full border border-red-100 hidden sm:inline-block">
             Industrial Grade
@@ -194,9 +190,11 @@ export default function ProductDetailPage() {
             {/* Center Column: Product Name, Subtitle, Specifications & Quick CTAs */}
             <div className="lg:col-span-4 flex flex-col justify-center space-y-4">
               <div>
-                <span className="text-[0.6875rem] font-extrabold text-[#eb1e25] uppercase tracking-wider block mb-1">
-                  {product.subtitle || currentGroup?.title || category.name}
-                </span>
+                {product.subtitle && (
+                  <span className="text-[0.6875rem] font-extrabold text-[#eb1e25] uppercase tracking-wider block mb-1">
+                    {product.subtitle}
+                  </span>
+                )}
                 <HeadingTag className="text-2xl sm:text-3xl font-extrabold text-[#002b5c] tracking-tight mb-2">
                   {product.name}
                 </HeadingTag>
@@ -462,9 +460,9 @@ export default function ProductDetailPage() {
                   >
                     {rowItems.map((subGroup, cIdx) => {
                       const isCurrentGroup = Boolean(
-                        currentGroup?.title &&
-                        subGroup.title.trim().toLowerCase() ===
-                          currentGroup.title.trim().toLowerCase(),
+                        product.subCategoryTitle &&
+                        subGroup.title?.trim().toLowerCase() ===
+                          product.subCategoryTitle.trim().toLowerCase(),
                       );
                       return (
                         <Link
