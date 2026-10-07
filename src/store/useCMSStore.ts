@@ -28,20 +28,14 @@ export interface PageSEO {
   canonicalUrl?: string | null;
   noIndex?: boolean;
   schema?: string | null;
-  headingOptions?: any;
+  headingOptions?: string | null;
 }
-export function getHeadingTag(headingOptions?: any, defaultTag: string = "h1"): React.ElementType {
+export function getHeadingTag(
+  headingOptions?: string | null,
+  defaultTag: string = "h1",
+): React.ElementType {
   if (!headingOptions) return defaultTag as React.ElementType;
-
-  let rawTag: any = defaultTag;
-
-  if (typeof headingOptions === "string") {
-    rawTag = headingOptions;
-  } else if (typeof headingOptions === "object" && headingOptions !== null) {
-    rawTag = headingOptions.heroHeadingTag || defaultTag;
-  }
-
-  const tag = (typeof rawTag === "string" ? rawTag : defaultTag).toLowerCase().trim();
+  const tag = String(headingOptions).toLowerCase().trim();
   const validTags = ["h1", "h2", "h3", "h4", "h5", "h6", "p", "div", "span"];
   return (validTags.includes(tag) ? tag : defaultTag) as React.ElementType;
 }
@@ -199,17 +193,6 @@ interface CMSStoreActions {
     email?: string;
     phone?: string;
     product?: string;
-    message?: string;
-  }) => Promise<{ success: boolean; data?: any; error?: string }>;
-  submitDistributorLead: (data: {
-    name: string;
-    firmName: string;
-    email: string;
-    phone: string;
-    city?: string;
-    state?: string;
-    address?: string;
-    businessType?: string;
     message?: string;
   }) => Promise<{ success: boolean; data?: any; error?: string }>;
 }
@@ -768,30 +751,6 @@ export const useCMSStore = create<CMSStoreState & CMSStoreActions>((set, get) =>
       return {
         success: false,
         error: error.message || "Failed to submit enquiry",
-      };
-    }
-  },
-
-  submitDistributorLead: async (data) => {
-    try {
-      const baseUrl = getApiBaseUrl();
-      const response = await fetch(`${baseUrl}/api/distributor-leads`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-
-      const json = await response.json();
-      return {
-        success: json.success ?? response.ok,
-        data: json.data,
-        error: json.error,
-      };
-    } catch (error: any) {
-      console.error("Error submitting distributor lead:", error);
-      return {
-        success: false,
-        error: error.message || "Failed to submit application",
       };
     }
   },

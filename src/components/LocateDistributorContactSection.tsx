@@ -6,7 +6,6 @@ import { useCMSStore } from "@/store/useCMSStore";
 
 interface ContactSectionProps {
   onOpenEnquiry?: (productName?: string) => void;
-  onOpenDistributor?: (type?: string) => void;
 }
 
 export default function LocateDistributorContactSection({ onOpenEnquiry }: ContactSectionProps) {

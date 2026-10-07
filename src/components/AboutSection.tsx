@@ -16,8 +16,8 @@ export default function AboutSection() {
   const title = cmsAbout.title || "";
   const subtitle = cmsAbout.subtitle || "";
   const description = cmsAbout.bodyText || "";
-  const buttonText = cmsAbout.buttonText || "Read More";
-  const buttonLink = cmsAbout.buttonLink || "/about-us";
+  const buttonText = cmsAbout.buttonText || "";
+  const buttonLink = cmsAbout.buttonLink || "";
 
   const HeadingTag = getHeadingTag(pageSEO["home"]?.headingOptions, "h1");
 

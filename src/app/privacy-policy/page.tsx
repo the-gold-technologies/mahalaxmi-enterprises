@@ -5,7 +5,6 @@ import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import EnquiryModal from "@/components/EnquiryModal";
-import DistributorModal from "@/components/DistributorModal";
 import SEOMeta from "@/components/SEOMeta";
 import { useCMSStore, getHeadingTag } from "@/store/useCMSStore";
 import { isHindiActive, useLanguage } from "@/components/GoogleTranslator";
@@ -18,9 +17,6 @@ export default function PrivacyPolicyPage() {
   const [isEnquiryOpen, setIsEnquiryOpen] = useState(false);
   const [enquiryProduct, setEnquiryProduct] = useState("");
 
-  const [isDistributorOpen, setIsDistributorOpen] = useState(false);
-  const [distributorType, setDistributorType] = useState("Industrial Lube Distributor (ILD)");
-
   const { fetchPage, pages, pageSEO, globalSEO, isLoading } = useCMSStore();
 
   useEffect(() => {
@@ -31,11 +27,6 @@ export default function PrivacyPolicyPage() {
     if (productName) setEnquiryProduct(productName);
     else setEnquiryProduct("");
     setIsEnquiryOpen(true);
-  };
-
-  const handleOpenDistributor = (type?: string) => {
-    if (type) setDistributorType(type);
-    setIsDistributorOpen(true);
   };
 
   const currentSEO = pageSEO["privacy-policy"];
@@ -346,12 +337,6 @@ export default function PrivacyPolicyPage() {
         isOpen={isEnquiryOpen}
         onClose={() => setIsEnquiryOpen(false)}
         initialProduct={enquiryProduct}
-      />
-
-      <DistributorModal
-        isOpen={isDistributorOpen}
-        onClose={() => setIsDistributorOpen(false)}
-        initialType={distributorType}
       />
     </main>
   );
