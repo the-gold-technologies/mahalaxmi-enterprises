@@ -87,6 +87,7 @@ export interface CMSProduct {
   subCategoryTitle?: string;
   containerImage?: string;
   tagline?: string;
+  descriptionTitle?: string;
   description?: string;
   coverImage?: string;
   productImages?: string[];
@@ -94,11 +95,15 @@ export interface CMSProduct {
   msdsUrl?: string;
   tdsPdfUrl?: string;
   msdsPdfUrl?: string;
-  applications?: string[];
+  applicationAreasTitle?: string;
   applicationAreas?: string;
+  applications?: string[];
+  performanceBenefitsTitle?: string;
   performanceBenefits?: string[];
+  specialFeaturesTitle?: string;
   specialFeatures?: string[];
   specsText?: string;
+  propertiesTableTitle?: string;
   propertiesTable?: Array<{
     property: string;
     value?: string;
@@ -107,6 +112,12 @@ export interface CMSProduct {
   tableHeaders?: string[];
   order?: number;
   isFeatured?: boolean;
+  metaTitle?: string;
+  metaDescription?: string;
+  targetKeywords?: string;
+  canonicalUrl?: string;
+  headingOptions?: string | Record<string, any>;
+  schema?: string;
 }
 
 export interface CMSProductCategory {

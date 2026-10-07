@@ -8,7 +8,7 @@ import Footer from "@/components/Footer";
 import EnquiryModal from "@/components/EnquiryModal";
 import DownloadModal from "@/components/DownloadModal";
 import { ArrowLeft, FileText, Droplet, Search } from "lucide-react";
-import { useCMSStore, PageSEO } from "@/store/useCMSStore";
+import { useCMSStore, PageSEO, getHeadingTag } from "@/store/useCMSStore";
 import { FormattedText } from "@/components/FormattedText";
 import SEOMeta from "@/components/SEOMeta";
 
@@ -73,6 +73,17 @@ export default function ProductDetailPage() {
     return titles.map((title) => ({ title }));
   }, [products, categorySlug]);
 
+  const productSEO: PageSEO = useMemo(() => {
+    return {
+      title: product?.metaTitle || product?.title || product?.name,
+      metaTitle: product?.metaTitle || product?.title || product?.name,
+      metaDescription: product?.metaDescription || product?.description || product?.tagline,
+      targetKeywords: product?.targetKeywords,
+      canonicalUrl: product?.canonicalUrl,
+      schema: product?.schema,
+    };
+  }, [product]);
+
   const handleOpenDownload = (pdfType: "TDS" | "MSDS") => {
     if (!product) return;
     setDownloadProductName(product.name);
@@ -117,19 +128,9 @@ export default function ProductDetailPage() {
     title: product.subCategoryTitle || (product as any).subtitle || category.name,
   };
 
+  const HeadingTag = getHeadingTag(product?.headingOptions, "h1");
   const hasMultiCols = Boolean(product.tableHeaders && product.tableHeaders.length > 0);
   const colCount = hasMultiCols ? product.tableHeaders!.length : 1;
-
-  const productSEO: PageSEO = useMemo(() => {
-    return {
-      title: product?.metaTitle || product?.title || product?.name,
-      metaTitle: product?.metaTitle || product?.title || product?.name,
-      metaDescription: product?.metaDescription || product?.description || product?.tagline,
-      targetKeywords: product?.targetKeywords,
-      canonicalUrl: product?.canonicalUrl,
-      schema: product?.schema,
-    };
-  }, [product]);
 
   return (
     <main className="min-h-screen bg-white text-gray-800 font-sans flex flex-col justify-between">
@@ -196,9 +197,9 @@ export default function ProductDetailPage() {
                 <span className="text-[0.6875rem] font-extrabold text-[#eb1e25] uppercase tracking-wider block mb-1">
                   {product.subtitle || currentGroup?.title || category.name}
                 </span>
-                <h2 className="text-2xl sm:text-3xl font-extrabold text-[#002b5c] tracking-tight mb-2">
+                <HeadingTag className="text-2xl sm:text-3xl font-extrabold text-[#002b5c] tracking-tight mb-2">
                   {product.name}
-                </h2>
+                </HeadingTag>
                 <div className="w-12 h-1 bg-[#002b5c] rounded-full mb-4" />
 
                 {/* Specifications or Key Highlights */}
@@ -284,7 +285,8 @@ export default function ProductDetailPage() {
           {product.description && (
             <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs">
               <h3 className="text-base sm:text-lg font-bold text-[#002b5c] mb-2 flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-[#eb1e25]" /> Description
+                <span className="w-2 h-2 rounded-full bg-[#eb1e25]" />{" "}
+                {product.descriptionTitle || "Description"}
               </h3>
               <p className="text-xs sm:text-sm text-slate-700 leading-relaxed font-sans font-normal">
                 <FormattedText text={product.description} />
@@ -298,7 +300,8 @@ export default function ProductDetailPage() {
             {product.applicationAreas && (
               <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs flex flex-col">
                 <h3 className="text-base sm:text-lg font-bold text-[#eb1e25] mb-3 flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-[#002b5c]" /> Application Areas:
+                  <span className="w-2 h-2 rounded-full bg-[#002b5c]" />{" "}
+                  {product.applicationAreasTitle || "Application Areas"}:
                 </h3>
                 <p className="text-xs sm:text-sm text-slate-700 leading-relaxed font-sans">
                   <FormattedText text={product.applicationAreas} />
@@ -310,7 +313,8 @@ export default function ProductDetailPage() {
             {product.performanceBenefits && product.performanceBenefits.length > 0 && (
               <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs flex flex-col">
                 <h3 className="text-base sm:text-lg font-bold text-[#eb1e25] mb-3 flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-[#002b5c]" /> Performance Benefits:
+                  <span className="w-2 h-2 rounded-full bg-[#002b5c]" />{" "}
+                  {product.performanceBenefitsTitle || "Performance Benefits"}:
                 </h3>
                 <ul className="space-y-2.5">
                   {product.performanceBenefits.map((benefit: string, bIdx: number) => (
@@ -333,7 +337,8 @@ export default function ProductDetailPage() {
           {product.specialFeatures && product.specialFeatures.length > 0 && (
             <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs">
               <h3 className="text-base sm:text-lg font-bold text-[#002b5c] mb-3 flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-[#eb1e25]" /> Special Features:
+                <span className="w-2 h-2 rounded-full bg-[#eb1e25]" />{" "}
+                {product.specialFeaturesTitle || "Special Features"}:
               </h3>
               <ul className="space-y-2">
                 {product.specialFeatures.map((feat: string, fIdx: number) => (
@@ -350,7 +355,8 @@ export default function ProductDetailPage() {
             <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-xs pt-4">
               <div className="px-6 pb-3">
                 <h3 className="text-base sm:text-lg font-bold text-[#002b5c] flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-[#eb1e25]" /> Physico-Chemical Properties
+                  <span className="w-2 h-2 rounded-full bg-[#eb1e25]" />{" "}
+                  {product.propertiesTableTitle || "Physico-Chemical Properties"}
                 </h3>
               </div>
               <div className="overflow-x-auto">

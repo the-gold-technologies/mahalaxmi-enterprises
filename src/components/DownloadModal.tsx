@@ -2,7 +2,8 @@
 
 import React, { useState, useEffect } from "react";
 import { X, Download, CheckCircle2, FileText, Loader2 } from "lucide-react";
-import { useCMSStore } from "@/store/useCMSStore";
+import { useCMSStore, getApiBaseUrl } from "@/store/useCMSStore";
+import { CaptchaInput, useCaptcha } from "@/components/CaptchaWidget";
 
 interface DownloadModalProps {
   isOpen: boolean;
@@ -23,14 +24,40 @@ export default function DownloadModal({
   const [mobile, setMobile] = useState("");
   const [email, setEmail] = useState("");
   const [company, setCompany] = useState("");
+  const [submittedName, setSubmittedName] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDownloaded, setIsDownloaded] = useState(false);
 
   const { submitEnquiry } = useCMSStore();
+  const {
+    code: captchaCode,
+    input: captchaInput,
+    setInput: setCaptchaInput,
+    refresh: refreshCaptcha,
+    isValid: captchaValid,
+  } = useCaptcha();
+
+  const resetForm = () => {
+    setName("");
+    setMobile("");
+    setEmail("");
+    setCompany("");
+    setCaptchaInput("");
+    refreshCaptcha();
+  };
+
+  const handleClose = () => {
+    resetForm();
+    setIsDownloaded(false);
+    setSubmittedName("");
+    onClose();
+  };
 
   useEffect(() => {
     if (isOpen) {
+      resetForm();
       setIsDownloaded(false);
+      setSubmittedName("");
     }
   }, [isOpen]);
 
@@ -38,43 +65,51 @@ export default function DownloadModal({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!captchaValid) {
+      return;
+    }
     setIsSubmitting(true);
+    const leadName = name;
+    setSubmittedName(leadName);
 
     try {
       await submitEnquiry({
-        name,
+        name: leadName,
         company,
-        email,
         phone: mobile,
-        product: productName,
+        email: email || undefined,
+        product: `${productName} (${pdfType} Download)`,
         message: `Downloaded ${pdfType} Datasheet for ${productName} (Company: ${company})`,
       });
     } catch (err) {
       console.error("Download lead capture error:", err);
     } finally {
       setIsSubmitting(false);
+      resetForm();
       setIsDownloaded(true);
     }
 
-    // Trigger PDF download simulation / file fetch
-    const link = document.createElement("a");
-    link.href = pdfUrl || "#";
-    link.download = `${productName.replace(/\s+/g, "_")}_${pdfType}.pdf`;
-    document.body.appendChild(link);
-    // In real app, link.click() downloads the asset
-    document.body.removeChild(link);
-  };
+    // Trigger direct file download to device without opening external Cloudinary tabs
+    if (pdfUrl && pdfUrl !== "#") {
+      const baseUrl = getApiBaseUrl();
+      const safeFilename = `${productName.replace(/[^a-zA-Z0-9_-]/g, "_")}_${pdfType}.pdf`;
+      const downloadEndpoint = `${baseUrl}/api/download?url=${encodeURIComponent(pdfUrl)}&name=${encodeURIComponent(safeFilename)}`;
 
-  const isFormValid =
-    name.trim().length > 0 &&
-    mobile.trim().length > 0 &&
-    email.trim().length > 0 &&
-    company.trim().length > 0;
+      const link = document.createElement("a");
+      link.href = downloadEndpoint;
+      link.setAttribute("download", safeFilename);
+      document.body.appendChild(link);
+      link.click();
+      if (link.parentNode) {
+        link.parentNode.removeChild(link);
+      }
+    }
+  };
 
   return (
     <div
       className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4"
-      onClick={onClose}
+      onClick={handleClose}
     >
       <div
         className="bg-white rounded-2xl max-w-md w-full p-6 sm:p-7 relative shadow-2xl border border-gray-100 animate-in fade-in zoom-in-95 duration-150"
@@ -82,7 +117,7 @@ export default function DownloadModal({
       >
         {/* Close Button */}
         <button
-          onClick={onClose}
+          onClick={handleClose}
           className="absolute top-5 right-5 text-gray-400 hover:text-gray-700 p-1 rounded-lg transition-colors cursor-pointer"
           aria-label="Close Modal"
         >
@@ -136,12 +171,11 @@ export default function DownloadModal({
                 </div>
                 <div>
                   <label className="block text-xs font-bold text-gray-700 mb-1.5">
-                    Email Address <span className="text-[#eb1e25]">*</span>
+                    Email Address
                   </label>
                   <input
                     type="email"
-                    required
-                    placeholder="name@domain.com"
+                    placeholder="name@domain.com (optional)"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     className="w-full px-3.5 py-2.5 text-xs sm:text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-[#002b5c] focus:ring-1 focus:ring-[#002b5c] transition-colors"
@@ -163,10 +197,24 @@ export default function DownloadModal({
                 />
               </div>
 
+              {/* Security CAPTCHA */}
+              <div>
+                <label className="block text-xs font-bold text-gray-700 mb-1.5">
+                  Security Verification <span className="text-[#eb1e25]">*</span>
+                </label>
+                <CaptchaInput
+                  code={captchaCode}
+                  value={captchaInput}
+                  onChange={setCaptchaInput}
+                  isValid={captchaValid}
+                  onRefresh={refreshCaptcha}
+                />
+              </div>
+
               <div className="pt-2">
                 <button
                   type="submit"
-                  disabled={isSubmitting || !isFormValid}
+                  disabled={isSubmitting || !captchaValid}
                   className="w-full bg-[#eb1e25] hover:bg-[#c4141a] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-[#eb1e25] text-white text-xs sm:text-sm font-bold uppercase tracking-wider py-3 rounded-lg transition-colors shadow-sm flex items-center justify-center gap-2 cursor-pointer"
                 >
                   {isSubmitting ? (
@@ -187,21 +235,20 @@ export default function DownloadModal({
             <CheckCircle2 size={44} className="mx-auto text-green-500 mb-3" />
             <h3 className="text-xl font-extrabold text-[#002b5c] mb-1">Download Started!</h3>
             <p className="text-xs text-gray-600 mb-6 leading-relaxed">
-              Thank you <strong>{name}</strong>. The technical document{" "}
+              Thank you <strong>{submittedName || "there"}</strong>. The technical document{" "}
               <strong>
                 {productName} ({pdfType})
               </strong>{" "}
               is downloading to your device.
             </p>
-            <button
-              onClick={() => {
-                setIsDownloaded(false);
-                onClose();
-              }}
-              className="bg-[#002b5c] hover:bg-[#001f42] text-white text-xs font-bold px-6 py-2.5 rounded-lg transition-colors cursor-pointer"
-            >
-              Done & Close
-            </button>
+            <div className="pt-2">
+              <button
+                onClick={handleClose}
+                className="bg-[#002b5c] hover:bg-[#001f42] text-white text-xs font-bold px-6 py-2.5 rounded-lg transition-colors cursor-pointer"
+              >
+                Done & Close
+              </button>
+            </div>
           </div>
         )}
       </div>
