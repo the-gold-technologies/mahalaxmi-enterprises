@@ -83,6 +83,8 @@ export default function ProductDetailPage() {
       targetKeywords: product?.targetKeywords,
       canonicalUrl: product?.canonicalUrl,
       schema: product?.schema,
+      noIndex: product?.noIndex,
+      headingOptions: product?.headingOptions,
     };
   }, [product]);
 

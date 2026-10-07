@@ -63,14 +63,8 @@ export default function CategoryProductsPage() {
     >();
 
     categoryProducts.forEach((p) => {
-      const subTitle =
-        p.subCategoryTitle ||
-        p.subtitle ||
-        (category?.name ? `${category.name} Range` : "Featured Products");
-      const cover =
-        p.containerImage ||
-        category?.bannerImage ||
-        "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&q=80&w=600";
+      const subTitle = p.subCategoryTitle || p.name;
+      const cover = p.containerImage || category?.coverImage || "";
 
       if (!groupMap.has(subTitle)) {
         groupMap.set(subTitle, {
@@ -105,7 +99,7 @@ export default function CategoryProductsPage() {
 
   return (
     <main className="min-h-screen bg-white text-gray-800 font-sans flex flex-col justify-between">
-      <SEOMeta pageSlug={`products/${categorySlug}`} />
+      <SEOMeta pageSlug={`products/${categorySlug}`} customSEO={currentSEO} />
 
       <Navbar
         fontSizeMultiplier={fontSizeMultiplier}
@@ -174,16 +168,18 @@ export default function CategoryProductsPage() {
               >
                 View All {categoryName}
               </Link>
-              <Link
-                href={
-                  categorySlug === "industrial-oils"
-                    ? "/products/industrial-greases"
-                    : "/products/industrial-oils"
-                }
-                className="px-4 py-2 border border-gray-300 text-gray-700 text-xs font-bold rounded-lg uppercase tracking-wider hover:bg-gray-50 transition-colors"
-              >
-                Search {categorySlug === "industrial-oils" ? "Greases" : "Industrial Oils"}
-              </Link>
+              {productCategories
+                ?.filter((c) => c.slug !== categorySlug)
+                .slice(0, 1)
+                .map((otherCat) => (
+                  <Link
+                    key={otherCat.id}
+                    href={`/products/${otherCat.slug}`}
+                    className="px-4 py-2 border border-gray-300 text-gray-700 text-xs font-bold rounded-lg uppercase tracking-wider hover:bg-gray-50 transition-colors"
+                  >
+                    Search {otherCat.name}
+                  </Link>
+                ))}
             </div>
           </div>
         )}

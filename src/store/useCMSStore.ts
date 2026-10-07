@@ -125,8 +125,11 @@ export interface CMSProductCategory {
   name: string;
   slug: string;
   description?: string;
+  shortDesc?: string;
+  fullDesc?: string;
   order?: number;
   bannerImage?: string;
+  coverImage?: string;
 }
 
 export interface CMSBlogPost {
