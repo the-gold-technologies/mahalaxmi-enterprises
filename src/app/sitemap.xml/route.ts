@@ -133,9 +133,7 @@ export async function GET() {
           if (b?.slug) {
             urls.push({
               loc: `${origin}/blogs/${b.slug}`,
-              lastmod: b.updatedAt
-                ? new Date(b.updatedAt).toISOString()
-                : new Date().toISOString(),
+              lastmod: b.updatedAt ? new Date(b.updatedAt).toISOString() : new Date().toISOString(),
               changefreq: "weekly",
               priority: "0.7",
             });

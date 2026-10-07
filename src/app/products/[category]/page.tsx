@@ -53,19 +53,24 @@ export default function CategoryProductsPage() {
       const q = searchQuery.toLowerCase();
       const name = (p.name || "").toLowerCase();
       const desc = (p.description || "").toLowerCase();
-      const sub = (
-        (p as any).subCategoryTitle ||
-        (p as any).subtitle ||
-        ""
-      ).toLowerCase();
+      const sub = (p.subCategoryTitle || p.subtitle || "").toLowerCase();
       return name.includes(q) || desc.includes(q) || sub.includes(q);
     });
 
-    const groupMap = new Map<string, { title: string; coverImage: string; products: CMSProduct[] }>();
+    const groupMap = new Map<
+      string,
+      { title: string; coverImage: string; products: CMSProduct[] }
+    >();
 
     categoryProducts.forEach((p) => {
-      const subTitle = (p as any).subCategoryTitle || (p as any).subtitle || (category?.name ? `${category.name} Range` : "Featured Products");
-      const cover = (p as any).containerImage || p.coverImage || category?.bannerImage || "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&q=80&w=600";
+      const subTitle =
+        p.subCategoryTitle ||
+        p.subtitle ||
+        (category?.name ? `${category.name} Range` : "Featured Products");
+      const cover =
+        p.containerImage ||
+        category?.bannerImage ||
+        "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&q=80&w=600";
 
       if (!groupMap.has(subTitle)) {
         groupMap.set(subTitle, {
@@ -91,7 +96,8 @@ export default function CategoryProductsPage() {
     setIsEnquiryOpen(true);
   };
 
-  const categoryName = category?.name || categorySlug?.replace(/-/g, " ").toUpperCase() || "Products";
+  const categoryName =
+    category?.name || categorySlug?.replace(/-/g, " ").toUpperCase() || "Products";
   const currentSEO = pageSEO[`products/${categorySlug}`] || pageSEO["products"];
   const categoryTitle = currentSEO?.title || categoryName;
   const categoryDesc = currentSEO?.metaDescription || category?.description;
@@ -127,9 +133,7 @@ export default function CategoryProductsPage() {
             {categoryTitle}
           </HeadingTag>
           {categoryDesc && (
-            <p className="mt-2 text-sm md:text-base text-gray-600 max-w-3xl">
-              {categoryDesc}
-            </p>
+            <p className="mt-2 text-sm md:text-base text-gray-600 max-w-3xl">{categoryDesc}</p>
           )}
         </div>
         {/* Search Results Filter Alert Banner */}
@@ -140,7 +144,9 @@ export default function CategoryProductsPage() {
                 Filtered By Search Keyword
               </span>
               <p className="text-sm font-semibold text-gray-800 mt-1">
-                Showing matching results for <span className="font-extrabold text-[#eb1e25]">&ldquo;{searchQuery}&rdquo;</span> in {categoryName}
+                Showing matching results for{" "}
+                <span className="font-extrabold text-[#eb1e25]">&ldquo;{searchQuery}&rdquo;</span>{" "}
+                in {categoryName}
               </p>
             </div>
             <Link
@@ -169,7 +175,11 @@ export default function CategoryProductsPage() {
                 View All {categoryName}
               </Link>
               <Link
-                href={categorySlug === "industrial-oils" ? "/products/industrial-greases" : "/products/industrial-oils"}
+                href={
+                  categorySlug === "industrial-oils"
+                    ? "/products/industrial-greases"
+                    : "/products/industrial-oils"
+                }
                 className="px-4 py-2 border border-gray-300 text-gray-700 text-xs font-bold rounded-lg uppercase tracking-wider hover:bg-gray-50 transition-colors"
               >
                 Search {categorySlug === "industrial-oils" ? "Greases" : "Industrial Oils"}
@@ -184,7 +194,10 @@ export default function CategoryProductsPage() {
             const words = group.title.split(" ");
             const firstWord = words[0];
             const remainingWords = words.slice(1).join(" ");
-            const anchorSlug = group.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+            const anchorSlug = group.title
+              .toLowerCase()
+              .replace(/[^a-z0-9]+/g, "-")
+              .replace(/^-|-$/g, "");
 
             return (
               <div
@@ -195,12 +208,8 @@ export default function CategoryProductsPage() {
                 {/* Header Title with Dark Blue Underline on First Word */}
                 <div className="border-b border-gray-200 pb-2">
                   <h2 className="text-lg md:text-xl font-extrabold text-[#002b5c] tracking-wide uppercase inline-block relative">
-                    <span className="border-b-4 border-[#002b5c] pb-2">
-                      {firstWord}
-                    </span>
-                    {remainingWords && (
-                      <span className="ml-2">{remainingWords}</span>
-                    )}
+                    <span className="border-b-4 border-[#002b5c] pb-2">{firstWord}</span>
+                    {remainingWords && <span className="ml-2">{remainingWords}</span>}
                   </h2>
                 </div>
 
@@ -239,7 +248,9 @@ export default function CategoryProductsPage() {
                         href={`/products/${categorySlug}/${prod.slug}`}
                         className="group/item bg-slate-100/80 hover:bg-white text-slate-700 hover:text-[#002b5c] text-xs font-semibold px-4 py-2.5 rounded-lg border border-slate-200/90 hover:border-sky-400/60 hover:shadow-2xs flex items-center justify-between transition-all uppercase tracking-tight leading-snug"
                       >
-                        <span className="pr-2 leading-relaxed break-words font-semibold">{prod.name}</span>
+                        <span className="pr-2 leading-relaxed break-words font-semibold">
+                          {prod.name}
+                        </span>
                         <span className="text-slate-400 group-hover/item:text-[#eb1e25] transition-transform duration-200 group-hover/item:translate-x-0.5 text-xs">
                           →
                         </span>
@@ -259,30 +270,30 @@ export default function CategoryProductsPage() {
               {Array.from({
                 length: Math.ceil(subCategoryGroups.length / 4),
               }).map((_, rIdx) => {
-                const rowItems = subCategoryGroups.slice(
-                  rIdx * 4,
-                  rIdx * 4 + 4
-                );
+                const rowItems = subCategoryGroups.slice(rIdx * 4, rIdx * 4 + 4);
                 return (
                   <div
                     key={rIdx}
                     className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 items-center py-5 border-b border-gray-200"
                   >
                     {rowItems.map((subGroup, cIdx) => {
-                      const anchorSlug = subGroup.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+                      const anchorSlug = subGroup.title
+                        .toLowerCase()
+                        .replace(/[^a-z0-9]+/g, "-")
+                        .replace(/^-|-$/g, "");
                       return (
                         <a
                           key={cIdx}
                           href={`#subcat-${anchorSlug}`}
                           className="flex items-center gap-3.5 group transition-colors py-1.5"
                         >
-                        <Droplet
-                          size={21}
-                          className="text-[#475569] fill-[#475569] shrink-0 group-hover:text-[#eb1e25] group-hover:fill-[#eb1e25] transition-colors"
-                        />
-                        <span className="text-sm md:text-[0.9375rem] font-normal uppercase text-[#334155] group-hover:text-[#eb1e25] tracking-normal leading-relaxed transition-colors">
-                          {subGroup.title}
-                        </span>
+                          <Droplet
+                            size={21}
+                            className="text-[#475569] fill-[#475569] shrink-0 group-hover:text-[#eb1e25] group-hover:fill-[#eb1e25] transition-colors"
+                          />
+                          <span className="text-sm md:text-[0.9375rem] font-normal uppercase text-[#334155] group-hover:text-[#eb1e25] tracking-normal leading-relaxed transition-colors">
+                            {subGroup.title}
+                          </span>
                         </a>
                       );
                     })}

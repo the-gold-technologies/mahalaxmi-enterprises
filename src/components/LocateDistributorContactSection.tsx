@@ -9,9 +9,7 @@ interface ContactSectionProps {
   onOpenDistributor?: (type?: string) => void;
 }
 
-export default function LocateDistributorContactSection({
-  onOpenEnquiry,
-}: ContactSectionProps) {
+export default function LocateDistributorContactSection({ onOpenEnquiry }: ContactSectionProps) {
   const { pages, globalSEO } = useCMSStore();
   const cmsLocate = pages["home"]?.LocateDistributorSection;
 
@@ -33,7 +31,6 @@ export default function LocateDistributorContactSection({
         {/* Contact Details */}
         <div className="w-full py-4 sm:py-6">
           <div className="flex flex-col lg:flex-row items-start gap-8">
-
             {/* Logo */}
             {logo && (
               <div className="flex items-start shrink-0">
@@ -67,9 +64,7 @@ export default function LocateDistributorContactSection({
                     <p className="text-[#333333] text-sm leading-relaxed">
                       {companyName && (
                         <>
-                          <strong className="font-bold text-[#002b5c]">
-                            {companyName}
-                          </strong>
+                          <strong className="font-bold text-[#002b5c]">{companyName}</strong>
                           <br />
                         </>
                       )}
@@ -81,16 +76,11 @@ export default function LocateDistributorContactSection({
                 {/* Row 1, Column 2: Direct Contact Phone */}
                 {phone && (
                   <div className="md:col-start-2 md:row-start-1 flex gap-3 items-start">
-                    <Phone
-                      className="text-[#002b5c] w-5 h-5 shrink-0 mt-0.5"
-                      strokeWidth={1.8}
-                    />
+                    <Phone className="text-[#002b5c] w-5 h-5 shrink-0 mt-0.5" strokeWidth={1.8} />
                     <div>
                       <p className="text-sm text-[#333333]">
                         Direct Contact:{" "}
-                        <strong className="font-bold text-[#002b5c]">
-                          {phone}
-                        </strong>
+                        <strong className="font-bold text-[#002b5c]">{phone}</strong>
                       </p>
                     </div>
                   </div>
@@ -99,10 +89,7 @@ export default function LocateDistributorContactSection({
                 {/* Row 2, Column 1: Email (Always directly under Address) */}
                 {email && (
                   <div className="md:col-start-1 md:row-start-2 flex gap-3 items-center">
-                    <Mail
-                      className="text-[#002b5c] w-5 h-5 shrink-0"
-                      strokeWidth={1.8}
-                    />
+                    <Mail className="text-[#002b5c] w-5 h-5 shrink-0" strokeWidth={1.8} />
                     <p className="text-sm text-[#333333]">
                       Email:{" "}
                       <a
@@ -120,10 +107,7 @@ export default function LocateDistributorContactSection({
               {contactBtnText && (
                 <div className="mt-6">
                   <button
-                    onClick={() =>
-                      onOpenEnquiry &&
-                      onOpenEnquiry("")
-                    }
+                    onClick={() => onOpenEnquiry && onOpenEnquiry("")}
                     className="bg-[#eb1e25] hover:bg-[#d0171d] text-white font-extrabold px-6 py-2.5 rounded text-sm uppercase tracking-wider transition-all cursor-pointer"
                   >
                     {contactBtnText}

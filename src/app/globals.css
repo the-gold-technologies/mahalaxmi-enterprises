@@ -1,17 +1,20 @@
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap");
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
-  *, ::before, ::after {
-    font-family: 'Open Sans', sans-serif;
+  *,
+  ::before,
+  ::after {
+    font-family: "Open Sans", sans-serif;
   }
 }
 
-html, body {
-  font-family: 'Open Sans', sans-serif;
+html,
+body {
+  font-family: "Open Sans", sans-serif;
   color: #333333;
   background-color: #ffffff;
   overflow-x: hidden;
@@ -24,7 +27,7 @@ html, body {
 }
 
 .section-underline::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: 0;
   left: 50%;
@@ -188,7 +191,7 @@ html.translating-hi body {
 
 /* Subtle sleek brand progress line while Hindi translates */
 html.translating-hi::before {
-  content: '';
+  content: "";
   position: fixed;
   top: 0;
   left: 0;
@@ -201,12 +204,14 @@ html.translating-hi::before {
 }
 
 @keyframes translate-progress {
-  0% { background-position: 100% 0; }
-  100% { background-position: -100% 0; }
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
 }
 
 body {
   transition: opacity 0.2s ease-in-out;
 }
-
-

@@ -30,14 +30,10 @@ export default function TestimonialsSection() {
   const { pages } = useCMSStore();
 
   const cmsTestimonialsSection = pages["home"]?.TestimonialsSection;
-  const testimonials: TestimonialItem[] =
-    cmsTestimonialsSection?.testimonials || [];
+  const testimonials: TestimonialItem[] = cmsTestimonialsSection?.testimonials || [];
 
   const title = cmsTestimonialsSection?.title || "";
-  const subtitle =
-    cmsTestimonialsSection?.subtitle ||
-    cmsTestimonialsSection?.description ||
-    "";
+  const subtitle = cmsTestimonialsSection?.description || "";
 
   // Dynamically update cardsPerPage based on window width
   useEffect(() => {
@@ -90,10 +86,7 @@ export default function TestimonialsSection() {
   }
 
   return (
-    <section
-      id="testimonials"
-      className="py-16 text-center font-sans overflow-hidden"
-    >
+    <section id="testimonials" className="py-16 text-center font-sans overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 relative">
         {/* Section Title */}
         {title && (

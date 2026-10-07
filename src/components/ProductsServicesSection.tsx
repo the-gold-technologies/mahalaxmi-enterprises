@@ -8,9 +8,7 @@ interface ProductsServicesProps {
   onSelectCategory?: (category: string) => void;
 }
 
-export default function ProductsServicesSection({
-  onSelectCategory,
-}: ProductsServicesProps) {
+export default function ProductsServicesSection({ onSelectCategory }: ProductsServicesProps) {
   const [hoveredId, setHoveredId] = useState<string | null>(null);
   const { pages } = useCMSStore();
 
@@ -20,9 +18,9 @@ export default function ProductsServicesSection({
     return null;
   }
 
-  const title = cmsSection.title || "OUR PRODUCTS AND SERVICES";
-  const subtitle = cmsSection.subtitle || cmsSection.description || "";
-  const items: any[] = cmsSection.items || cmsSection.categories || [];
+  const title = cmsSection.title || "";
+  const subtitle = cmsSection.subtitle || "";
+  const items: any[] = cmsSection.items || [];
 
   if (items.length === 0) {
     return null;
@@ -47,10 +45,10 @@ export default function ProductsServicesSection({
         {/* Category Items Centered */}
         <div className="mt-12 flex justify-center items-center gap-12 sm:gap-20 flex-wrap">
           {items.map((item, idx) => {
-            const itemId = item.id || item.slug || `cat-${idx}`;
+            const itemId = item.id || `cat-${idx}`;
             const isHovered = hoveredId === itemId;
-            const bgImage = isHovered ? (item.hoverImg || item.img) : (item.img || item.hoverImg);
-            const link = item.link || `/products/${item.slug || itemId}`;
+            const bgImage = isHovered && item.hoverImg ? item.hoverImg : item.img;
+            const link = item.link || `/products/${itemId}`;
 
             return (
               <Link
@@ -72,7 +70,7 @@ export default function ProductsServicesSection({
                 )}
 
                 <h3 className="mt-4 text-sm sm:text-base font-bold text-[#002b5c] group-hover:text-[#eb1e25] transition-colors">
-                  {item.name || item.title}
+                  {item.name}
                 </h3>
               </Link>
             );

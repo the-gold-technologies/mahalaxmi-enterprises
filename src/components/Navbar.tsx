@@ -119,8 +119,7 @@ export default function Navbar({
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileProductsOpen, setMobileProductsOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
-  const [activeHoverCategory, setActiveHoverCategory] =
-    useState<string>("compressor-oils");
+  const [activeHoverCategory, setActiveHoverCategory] = useState<string>("compressor-oils");
   const [activeTab, setActiveTab] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearchDropdownOpen, setIsSearchDropdownOpen] = useState(false);
@@ -136,11 +135,7 @@ export default function Navbar({
       .filter((p) => {
         const name = (p.name || "").toLowerCase();
         const desc = (p.description || "").toLowerCase();
-        const sub = (
-          (p as any).subCategoryTitle ||
-          (p as any).subtitle ||
-          ""
-        ).toLowerCase();
+        const sub = ((p as any).subCategoryTitle || (p as any).subtitle || "").toLowerCase();
         return name.includes(q) || desc.includes(q) || sub.includes(q);
       })
       .slice(0, 6);
@@ -158,17 +153,12 @@ export default function Navbar({
           ((p as any).subCategoryTitle || "").toLowerCase().includes(q)),
     );
     const targetCat = isGrease ? "industrial-greases" : "industrial-oils";
-    router.push(
-      `/products/${targetCat}?search=${encodeURIComponent(searchQuery.trim())}`,
-    );
+    router.push(`/products/${targetCat}?search=${encodeURIComponent(searchQuery.trim())}`);
   };
 
   React.useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (
-        searchDropdownRef.current &&
-        !searchDropdownRef.current.contains(event.target as Node)
-      ) {
+      if (searchDropdownRef.current && !searchDropdownRef.current.contains(event.target as Node)) {
         setIsSearchDropdownOpen(false);
       }
     };
@@ -190,17 +180,13 @@ export default function Navbar({
     const map = new Map<string, ProductSubCategoryItem>();
     products
       .filter(
-        (p) =>
-          p.categorySlug === "industrial-oils" ||
-          p.categorySlug === "industrial-greases",
+        (p) => p.categorySlug === "industrial-oils" || p.categorySlug === "industrial-greases",
       )
       .forEach((p) => {
         const title =
           (p as any).subCategoryTitle ||
           (p as any).subtitle ||
-          (p.categorySlug === "industrial-greases"
-            ? "INDUSTRIAL GREASES"
-            : "INDUSTRIAL OILS");
+          (p.categorySlug === "industrial-greases" ? "INDUSTRIAL GREASES" : "INDUSTRIAL OILS");
         const upperTitle = title.toUpperCase().trim();
         if (!map.has(upperTitle)) {
           const anchor = upperTitle
@@ -224,9 +210,7 @@ export default function Navbar({
       });
     }
 
-    const list = Array.from(map.values()).sort((a, b) =>
-      a.title.localeCompare(b.title),
-    );
+    const list = Array.from(map.values()).sort((a, b) => a.title.localeCompare(b.title));
     return list.length > 0 ? list : DEFAULT_PRODUCT_CATEGORIES;
   }, [products]);
 
@@ -246,10 +230,7 @@ export default function Navbar({
         .replace(/[^a-z0-9]+/g, "-")
         .replace(/^-|-$/g, "");
       if (currentSubCat.anchor === "industrial-greases") {
-        return (
-          p.categorySlug === "industrial-greases" ||
-          pAnchor === "industrial-greases"
-        );
+        return p.categorySlug === "industrial-greases" || pAnchor === "industrial-greases";
       }
       return pAnchor === currentSubCat.anchor;
     });
@@ -271,9 +252,7 @@ export default function Navbar({
         }
       }
       const computed =
-        Math.round(
-          parseFloat(getComputedStyle(document.documentElement).fontSize),
-        ) || 16;
+        Math.round(parseFloat(getComputedStyle(document.documentElement).fontSize)) || 16;
       setCurrentFontSize(computed);
     } catch {
       setCurrentFontSize(16);
@@ -392,10 +371,7 @@ export default function Navbar({
           </div>
 
           <div className="relative" ref={searchDropdownRef}>
-            <form
-              onSubmit={handleSearchSubmit}
-              className="flex items-center font-sans"
-            >
+            <form onSubmit={handleSearchSubmit} className="flex items-center font-sans">
               <input
                 type="text"
                 placeholder="Search products..."
@@ -465,13 +441,8 @@ export default function Navbar({
             )}
           </div>
 
-          <div
-            className="flex items-center gap-1"
-            title={`Text Size: ${currentFontSize}px`}
-          >
-            <span className="text-gray-600 text-xs font-sans select-none">
-              Text
-            </span>
+          <div className="flex items-center gap-1" title={`Text Size: ${currentFontSize}px`}>
+            <span className="text-gray-600 text-xs font-sans select-none">Text</span>
             <button
               onClick={increaseFont}
               disabled={currentFontSize >= 26}
@@ -527,10 +498,7 @@ export default function Navbar({
         </div>
 
         <div className="flex items-center gap-2">
-          <form
-            onSubmit={handleSearchSubmit}
-            className="flex items-center font-sans"
-          >
+          <form onSubmit={handleSearchSubmit} className="flex items-center font-sans">
             <input
               type="text"
               placeholder="Search"
@@ -548,13 +516,8 @@ export default function Navbar({
             </button>
           </form>
 
-          <div
-            className="flex items-center gap-1"
-            title={`Text Size: ${currentFontSize}px`}
-          >
-            <span className="text-gray-500 text-[0.6875rem] select-none">
-              Text
-            </span>
+          <div className="flex items-center gap-1" title={`Text Size: ${currentFontSize}px`}>
+            <span className="text-gray-500 text-[0.6875rem] select-none">Text</span>
             <button
               onClick={increaseFont}
               disabled={currentFontSize >= 26}
@@ -609,9 +572,7 @@ export default function Navbar({
                   href={item.link}
                   onClick={() => setActiveTab(item.name)}
                   className={`text-sm font-sans font-medium tracking-normal transition flex items-center gap-1 ${
-                    isActive
-                      ? "text-[#eb1e25] font-bold"
-                      : "text-[#37474f] hover:text-[#eb1e25]"
+                    isActive ? "text-[#eb1e25] font-bold" : "text-[#37474f] hover:text-[#eb1e25]"
                   }`}
                 >
                   {item.name}
@@ -619,9 +580,7 @@ export default function Navbar({
                     <ChevronDown
                       size={14}
                       className={
-                        isActive
-                          ? "text-[#eb1e25]"
-                          : "text-gray-500 group-hover:text-[#eb1e25]"
+                        isActive ? "text-[#eb1e25]" : "text-gray-500 group-hover:text-[#eb1e25]"
                       }
                     />
                   )}
@@ -637,17 +596,14 @@ export default function Navbar({
                     {/* Left Column: Direct Category List with Exact Same Visual Style */}
                     <div className="col-span-5 border-r border-gray-100 pr-2.5 space-y-1 max-h-64 overflow-y-auto">
                       <div className="text-[0.6875rem] font-extrabold text-gray-400 uppercase tracking-wider px-3 py-1 mb-1 flex items-center gap-1.5">
-                        <Layers size={13} className="text-[#eb1e25]" />{" "}
-                        Categories
+                        <Layers size={13} className="text-[#eb1e25]" /> Categories
                       </div>
                       {productSubCategories.map((cat) => {
                         const isCatActive = activeHoverCategory === cat.anchor;
                         return (
                           <div
                             key={cat.anchor}
-                            onMouseEnter={() =>
-                              setActiveHoverCategory(cat.anchor)
-                            }
+                            onMouseEnter={() => setActiveHoverCategory(cat.anchor)}
                             className="block"
                           >
                             <Link
@@ -679,11 +635,7 @@ export default function Navbar({
                               </div>
                               <ChevronRight
                                 size={14}
-                                className={
-                                  isCatActive
-                                    ? "text-[#eb1e25]"
-                                    : "text-gray-400"
-                                }
+                                className={isCatActive ? "text-[#eb1e25]" : "text-gray-400"}
                               />
                             </Link>
                           </div>
@@ -698,9 +650,7 @@ export default function Navbar({
                         className="animate-in fade-in duration-150 space-y-2"
                       >
                         <div className="text-[0.6875rem] font-extrabold text-[#002b5c] uppercase tracking-wider px-2 py-1 border-b border-gray-100 flex items-center justify-between">
-                          <span className="truncate pr-2">
-                            {currentSubCat.title}
-                          </span>
+                          <span className="truncate pr-2">{currentSubCat.title}</span>
                           <span className="text-[0.625rem] text-[#eb1e25] font-bold bg-red-50 px-2 py-0.5 rounded shrink-0">
                             {currentCategoryProducts.length} Products
                           </span>
@@ -740,8 +690,7 @@ export default function Navbar({
                               }}
                               className="block px-3 py-4 text-xs text-gray-500 italic hover:text-[#002b5c]"
                             >
-                              Explore all products in {currentSubCat.title}{" "}
-                              &rarr;
+                              Explore all products in {currentSubCat.title} &rarr;
                             </Link>
                           )}
                         </div>
@@ -769,11 +718,7 @@ export default function Navbar({
         <div className="fixed inset-0 z-[100] bg-white flex flex-col lg:hidden animate-in fade-in slide-in-from-top-4 duration-200 overflow-y-auto">
           {/* Header Bar inside Mobile Overlay */}
           <div className="flex justify-between items-center px-4 py-3 border-b border-gray-200 bg-white sticky top-0 z-10 shadow-xs">
-            <Link
-              href="/"
-              onClick={() => setMobileMenuOpen(false)}
-              className="flex items-center"
-            >
+            <Link href="/" onClick={() => setMobileMenuOpen(false)} className="flex items-center">
               <img
                 src={logoSrc}
                 alt="Mahalaxmi Enterprises"
@@ -805,9 +750,7 @@ export default function Navbar({
                       <div key={idx} className="border-b border-gray-100 pb-2">
                         <button
                           type="button"
-                          onClick={() =>
-                            setMobileProductsOpen(!mobileProductsOpen)
-                          }
+                          onClick={() => setMobileProductsOpen(!mobileProductsOpen)}
                           className={`w-full flex items-center justify-between text-base font-extrabold py-2.5 transition-colors text-left cursor-pointer ${
                             isActive || mobileProductsOpen
                               ? "text-[#eb1e25]"
@@ -844,13 +787,8 @@ export default function Navbar({
                                 }}
                                 className="text-xs text-gray-700 hover:text-[#eb1e25] font-semibold py-1.5 px-2 rounded hover:bg-white flex items-center justify-between transition-colors uppercase"
                               >
-                                <span className="truncate">
-                                  {catItem.title}
-                                </span>
-                                <ChevronRight
-                                  size={14}
-                                  className="text-gray-400"
-                                />
+                                <span className="truncate">{catItem.title}</span>
+                                <ChevronRight size={14} className="text-gray-400" />
                               </Link>
                             ))}
                           </div>
@@ -869,9 +807,7 @@ export default function Navbar({
                           setMobileProductsOpen(false);
                         }}
                         className={`flex items-center justify-between text-base font-extrabold py-2.5 transition-colors ${
-                          isActive
-                            ? "text-[#eb1e25]"
-                            : "text-[#002b5c] hover:text-[#eb1e25]"
+                          isActive ? "text-[#eb1e25]" : "text-[#002b5c] hover:text-[#eb1e25]"
                         }`}
                       >
                         <span>{item.name}</span>
@@ -893,9 +829,7 @@ export default function Navbar({
               </Link>
               <div className="text-center text-xs text-gray-500 font-medium">
                 Direct Contact:{" "}
-                <span className="font-bold text-gray-800">
-                  {globalSEO?.phone || ""}
-                </span>
+                <span className="font-bold text-gray-800">{globalSEO?.phone || ""}</span>
               </div>
             </div>
           </div>

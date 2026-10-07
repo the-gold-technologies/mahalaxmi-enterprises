@@ -28,13 +28,8 @@ export default function ProductDetailPage() {
   const [downloadPdfType, setDownloadPdfType] = useState<"TDS" | "MSDS">("TDS");
   const [downloadPdfUrl, setDownloadPdfUrl] = useState("");
 
-  const {
-    productDetails,
-    products,
-    productCategories,
-    fetchProductBySlug,
-    fetchProducts,
-  } = useCMSStore();
+  const { productDetails, products, productCategories, fetchProductBySlug, fetchProducts } =
+    useCMSStore();
 
   useEffect(() => {
     if (productSlug) {
@@ -45,9 +40,7 @@ export default function ProductDetailPage() {
     }
   }, [productSlug, categorySlug, fetchProductBySlug, fetchProducts]);
 
-  const product: any =
-    productDetails[productSlug] ||
-    products?.find((p) => p.slug === productSlug);
+  const product: any = productDetails[productSlug] || products?.find((p) => p.slug === productSlug);
 
   const category = useMemo(() => {
     const found = productCategories?.find((c) => c.slug === categorySlug);
@@ -55,9 +48,7 @@ export default function ProductDetailPage() {
     return {
       slug: categorySlug,
       name: categorySlug
-        ? categorySlug
-            .replace(/-/g, " ")
-            .replace(/\b\w/g, (l) => l.toUpperCase())
+        ? categorySlug.replace(/-/g, " ").replace(/\b\w/g, (l) => l.toUpperCase())
         : "Products",
       shortDesc: "",
       fullDesc: "",
@@ -67,22 +58,16 @@ export default function ProductDetailPage() {
   const siblingProducts = useMemo(() => {
     if (!products) return [];
     return products.filter(
-      (p) =>
-        (!categorySlug || p.categorySlug === categorySlug) &&
-        p.slug !== productSlug,
+      (p) => (!categorySlug || p.categorySlug === categorySlug) && p.slug !== productSlug,
     );
   }, [products, categorySlug, productSlug]);
 
   const subCategoryList = useMemo(() => {
     if (!products) return [];
-    const catProducts = products.filter(
-      (p) => !categorySlug || p.categorySlug === categorySlug,
-    );
+    const catProducts = products.filter((p) => !categorySlug || p.categorySlug === categorySlug);
     const titles = Array.from(
       new Set(
-        catProducts
-          .map((p) => p.subCategoryTitle || (p as any).subtitle || p.name)
-          .filter(Boolean),
+        catProducts.map((p) => p.subCategoryTitle || (p as any).subtitle || p.name).filter(Boolean),
       ),
     );
     return titles.map((title) => ({ title }));
@@ -92,11 +77,7 @@ export default function ProductDetailPage() {
     if (!product) return;
     setDownloadProductName(product.name);
     setDownloadPdfType(pdfType);
-    setDownloadPdfUrl(
-      pdfType === "TDS"
-        ? product.tdsPdfUrl || product.pdfUrl
-        : product.msdsPdfUrl || product.msdsUrl || product.pdfUrl,
-    );
+    setDownloadPdfUrl(pdfType === "TDS" ? product.pdfUrl : product.msdsUrl || product.pdfUrl);
     setIsDownloadOpen(true);
   };
 
@@ -116,9 +97,7 @@ export default function ProductDetailPage() {
           setLanguage={setLanguage}
         />
         <div className="max-w-4xl mx-auto px-4 py-20 text-center">
-          <h1 className="text-3xl font-extrabold text-[#002b5c] mb-4">
-            Product Not Found
-          </h1>
+          <h1 className="text-3xl font-extrabold text-[#002b5c] mb-4">Product Not Found</h1>
           <p className="text-gray-600 mb-8">
             The requested lubricant product could not be located.
           </p>
@@ -135,13 +114,10 @@ export default function ProductDetailPage() {
   }
 
   const currentGroup = {
-    title:
-      product.subCategoryTitle || (product as any).subtitle || category.name,
+    title: product.subCategoryTitle || (product as any).subtitle || category.name,
   };
 
-  const hasMultiCols = Boolean(
-    product.tableHeaders && product.tableHeaders.length > 0,
-  );
+  const hasMultiCols = Boolean(product.tableHeaders && product.tableHeaders.length > 0);
   const colCount = hasMultiCols ? product.tableHeaders!.length : 1;
 
   const productSEO: PageSEO = useMemo(() => {
@@ -173,10 +149,7 @@ export default function ProductDetailPage() {
             Home
           </Link>
           <span className="text-gray-400">/</span>
-          <Link
-            href={`/products/${category.slug}`}
-            className="text-[#337ab7] hover:underline"
-          >
+          <Link href={`/products/${category.slug}`} className="text-[#337ab7] hover:underline">
             {category.name}
           </Link>
           <span className="text-gray-400">/</span>
@@ -204,7 +177,7 @@ export default function ProductDetailPage() {
             {/* Left Column: Product Image Frame Container */}
             <div className="lg:col-span-5 rounded-2xl bg-gradient-to-b from-slate-50 via-slate-50/60 to-slate-100/90 border border-slate-200/80 p-6 relative flex items-center justify-center min-h-[320px] group shadow-inner">
               <img
-                src={product.containerImage || product.coverImage}
+                src={product.containerImage}
                 alt={product.name}
                 className="max-h-72 object-contain mx-auto transition-transform duration-300 group-hover:scale-105"
                 onError={(e) => {
@@ -296,9 +269,7 @@ export default function ProductDetailPage() {
                       }`}
                     >
                       <span className="truncate">{sib.name}</span>
-                      {isCurrent && (
-                        <span className="text-xs text-sky-300">●</span>
-                      )}
+                      {isCurrent && <span className="text-xs text-sky-300">●</span>}
                     </Link>
                   );
                 })}
@@ -313,8 +284,7 @@ export default function ProductDetailPage() {
           {product.description && (
             <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs">
               <h3 className="text-base sm:text-lg font-bold text-[#002b5c] mb-2 flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-[#eb1e25]" />{" "}
-                Description
+                <span className="w-2 h-2 rounded-full bg-[#eb1e25]" /> Description
               </h3>
               <p className="text-xs sm:text-sm text-slate-700 leading-relaxed font-sans font-normal">
                 <FormattedText text={product.description} />
@@ -328,8 +298,7 @@ export default function ProductDetailPage() {
             {product.applicationAreas && (
               <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs flex flex-col">
                 <h3 className="text-base sm:text-lg font-bold text-[#eb1e25] mb-3 flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-[#002b5c]" />{" "}
-                  Application Areas:
+                  <span className="w-2 h-2 rounded-full bg-[#002b5c]" /> Application Areas:
                 </h3>
                 <p className="text-xs sm:text-sm text-slate-700 leading-relaxed font-sans">
                   <FormattedText text={product.applicationAreas} />
@@ -338,38 +307,33 @@ export default function ProductDetailPage() {
             )}
 
             {/* Performance Benefits */}
-            {product.performanceBenefits &&
-              product.performanceBenefits.length > 0 && (
-                <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs flex flex-col">
-                  <h3 className="text-base sm:text-lg font-bold text-[#eb1e25] mb-3 flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-[#002b5c]" />{" "}
-                    Performance Benefits:
-                  </h3>
-                  <ul className="space-y-2.5">
-                    {product.performanceBenefits.map(
-                      (benefit: string, bIdx: number) => (
-                        <li
-                          key={bIdx}
-                          className="flex items-start gap-2.5 text-xs sm:text-sm text-slate-700"
-                        >
-                          <span className="text-[#eb1e25] font-bold text-sm leading-none mt-0.5">
-                            •
-                          </span>
-                          <span>{benefit}</span>
-                        </li>
-                      ),
-                    )}
-                  </ul>
-                </div>
-              )}
+            {product.performanceBenefits && product.performanceBenefits.length > 0 && (
+              <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs flex flex-col">
+                <h3 className="text-base sm:text-lg font-bold text-[#eb1e25] mb-3 flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-[#002b5c]" /> Performance Benefits:
+                </h3>
+                <ul className="space-y-2.5">
+                  {product.performanceBenefits.map((benefit: string, bIdx: number) => (
+                    <li
+                      key={bIdx}
+                      className="flex items-start gap-2.5 text-xs sm:text-sm text-slate-700"
+                    >
+                      <span className="text-[#eb1e25] font-bold text-sm leading-none mt-0.5">
+                        •
+                      </span>
+                      <span>{benefit}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
 
           {/* Special Features */}
           {product.specialFeatures && product.specialFeatures.length > 0 && (
             <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs">
               <h3 className="text-base sm:text-lg font-bold text-[#002b5c] mb-3 flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-[#eb1e25]" /> Special
-                Features:
+                <span className="w-2 h-2 rounded-full bg-[#eb1e25]" /> Special Features:
               </h3>
               <ul className="space-y-2">
                 {product.specialFeatures.map((feat: string, fIdx: number) => (
@@ -386,8 +350,7 @@ export default function ProductDetailPage() {
             <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-xs pt-4">
               <div className="px-6 pb-3">
                 <h3 className="text-base sm:text-lg font-bold text-[#002b5c] flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-[#eb1e25]" />{" "}
-                  Physico-Chemical Properties
+                  <span className="w-2 h-2 rounded-full bg-[#eb1e25]" /> Physico-Chemical Properties
                 </h3>
               </div>
               <div className="overflow-x-auto">
@@ -404,25 +367,20 @@ export default function ProductDetailPage() {
                     {hasMultiCols && (
                       <tr className="bg-[#002b5c] text-white border-t border-white/20">
                         <th className="py-2 px-4 border-r border-white/20"></th>
-                        {product.tableHeaders!.map(
-                          (hdr: string, hIdx: number) => (
-                            <th
-                              key={hIdx}
-                              className="py-2 px-4 text-center font-bold border-r border-white/20 last:border-r-0"
-                            >
-                              {hdr}
-                            </th>
-                          ),
-                        )}
+                        {product.tableHeaders!.map((hdr: string, hIdx: number) => (
+                          <th
+                            key={hIdx}
+                            className="py-2 px-4 text-center font-bold border-r border-white/20 last:border-r-0"
+                          >
+                            {hdr}
+                          </th>
+                        ))}
                       </tr>
                     )}
                   </thead>
                   <tbody>
                     {product.propertiesTable.map((row: any, rIdx: number) => (
-                      <tr
-                        key={rIdx}
-                        className={rIdx % 2 === 0 ? "bg-white" : "bg-slate-50"}
-                      >
+                      <tr key={rIdx} className={rIdx % 2 === 0 ? "bg-white" : "bg-slate-50"}>
                         <td className="py-2.5 px-4 font-semibold text-slate-700 border-b border-r border-slate-200">
                           {row.property}
                         </td>

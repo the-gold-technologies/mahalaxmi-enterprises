@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import { X, Send, CheckCircle2, Loader2 } from 'lucide-react';
-import { CaptchaInput, useCaptcha } from '@/components/CaptchaWidget';
-import { useCMSStore } from '@/store/useCMSStore';
+import React, { useState, useEffect } from "react";
+import { X, Send, CheckCircle2, Loader2 } from "lucide-react";
+import { CaptchaInput, useCaptcha } from "@/components/CaptchaWidget";
+import { useCMSStore } from "@/store/useCMSStore";
 
 interface EnquiryModalProps {
   isOpen: boolean;
@@ -11,35 +11,33 @@ interface EnquiryModalProps {
   initialProduct?: string;
 }
 
-
-
-export default function EnquiryModal({
-  isOpen,
-  onClose,
-  initialProduct = ''
-}: EnquiryModalProps) {
-  const [name, setName] = useState('');
-  const [mobile, setMobile] = useState('');
-  const [email, setEmail] = useState('');
-  const [companyName, setCompanyName] = useState('');
-  const [product, setProduct] = useState(initialProduct || '');
+export default function EnquiryModal({ isOpen, onClose, initialProduct = "" }: EnquiryModalProps) {
+  const [name, setName] = useState("");
+  const [mobile, setMobile] = useState("");
+  const [email, setEmail] = useState("");
+  const [companyName, setCompanyName] = useState("");
+  const [product, setProduct] = useState(initialProduct || "");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const { code, input: captchaInput, setInput: setCaptchaInput, refresh: refreshCaptcha, isValid: captchaValid } = useCaptcha();
+  const {
+    code,
+    input: captchaInput,
+    setInput: setCaptchaInput,
+    refresh: refreshCaptcha,
+    isValid: captchaValid,
+  } = useCaptcha();
 
   const { submitEnquiry, globalSEO } = useCMSStore();
-  const siteName = (globalSEO as any)?.siteName || 'HP Lubricants';
+  const siteName = (globalSEO as any)?.siteName || "HP Lubricants";
 
   useEffect(() => {
     if (isOpen) {
-      setProduct(initialProduct || '');
+      setProduct(initialProduct || "");
     }
   }, [isOpen, initialProduct]);
 
   if (!isOpen) return null;
-
-
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -51,7 +49,7 @@ export default function EnquiryModal({
         company: companyName,
         email: email || undefined,
         phone: mobile,
-        product: product || 'General Enquiry',
+        product: product || "General Enquiry",
         message: companyName ? `Company: ${companyName}` : undefined,
       });
       setIsSubmitted(true);
@@ -95,9 +93,7 @@ export default function EnquiryModal({
               <span className="text-[0.6875rem] font-extrabold text-[#eb1e25] uppercase tracking-wider block mb-1">
                 {siteName} — Product Enquiry
               </span>
-              <h2 className="text-2xl font-black text-[#002b5c]">
-                Request Product Quote
-              </h2>
+              <h2 className="text-2xl font-black text-[#002b5c]">Request Product Quote</h2>
             </div>
 
             {/* Form */}
@@ -147,9 +143,7 @@ export default function EnquiryModal({
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-gray-700 mb-1.5">
-                    Email
-                  </label>
+                  <label className="block text-xs font-bold text-gray-700 mb-1.5">Email</label>
                   <input
                     type="email"
                     placeholder="name@domain.com"
@@ -211,11 +205,10 @@ export default function EnquiryModal({
         ) : (
           <div className="text-center py-6">
             <CheckCircle2 size={44} className="mx-auto text-green-500 mb-3" />
-            <h3 className="text-xl font-extrabold text-[#002b5c] mb-1">
-              Enquiry Submitted!
-            </h3>
+            <h3 className="text-xl font-extrabold text-[#002b5c] mb-1">Enquiry Submitted!</h3>
             <p className="text-xs text-gray-600 mb-6 leading-relaxed">
-              Thank you <strong>{name}</strong>. Our {siteName} representative will contact you at <strong>{mobile}</strong> shortly.
+              Thank you <strong>{name}</strong>. Our {siteName} representative will contact you at{" "}
+              <strong>{mobile}</strong> shortly.
             </p>
             <button
               onClick={() => {

@@ -21,8 +21,6 @@ export default function Home() {
   const [isEnquiryOpen, setIsEnquiryOpen] = useState(false);
   const [enquiryProduct, setEnquiryProduct] = useState("");
 
-
-
   const { fetchPage } = useCMSStore();
 
   useEffect(() => {
@@ -34,7 +32,6 @@ export default function Home() {
     else setEnquiryProduct("");
     setIsEnquiryOpen(true);
   };
-
 
   return (
     <main className="min-h-screen bg-white text-gray-800">
@@ -64,9 +61,7 @@ export default function Home() {
       <TrustedClientsSection />
 
       {/* 8. Contact Details Section */}
-      <LocateDistributorContactSection
-        onOpenEnquiry={handleOpenEnquiry}
-      />
+      <LocateDistributorContactSection onOpenEnquiry={handleOpenEnquiry} />
 
       {/* 9. Dark Navy Footer & Sticky Enquiry Button */}
       <Footer onOpenEnquiry={handleOpenEnquiry} />
@@ -77,7 +72,6 @@ export default function Home() {
         onClose={() => setIsEnquiryOpen(false)}
         initialProduct={enquiryProduct}
       />
-
     </main>
   );
 }

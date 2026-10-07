@@ -17,9 +17,7 @@ const iconMap = [Building2, Boxes, Wrench, Truck, ShieldCheck, Headphones];
 
 export default function AboutMahalaxmiContent() {
   const { pages, pageSEO } = useCMSStore();
-  const cmsStory =
-    pages["about-us"]?.AboutMahalaxmiContent ||
-    pages["about-us"]?.MahalaxmiStory;
+  const cmsStory = pages["about-us"]?.AboutMahalaxmiContent;
 
   if (!cmsStory) {
     return null;
@@ -27,24 +25,16 @@ export default function AboutMahalaxmiContent() {
 
   const title = cmsStory.title || "";
   const subtitle = cmsStory.subtitle || "";
-  const proprietorRole =
-    cmsStory.proprietorRole || cmsStory.proprietorDesignation || "";
-  const paragraphs: string[] = Array.isArray(cmsStory.paragraphs)
-    ? cmsStory.paragraphs
-    : cmsStory.description
-      ? [cmsStory.description]
-      : [];
+  const proprietorRole = cmsStory.proprietorRole || "";
+  const paragraphs: string[] = Array.isArray(cmsStory.paragraphs) ? cmsStory.paragraphs : [];
 
   const hpclOverview = cmsStory.hpclOverview;
   const whyChooseTitle = cmsStory.whyChooseTitle || "";
   const whyChooseSubtitle = cmsStory.whyChooseSubtitle || "";
-  const whyChooseItems: { title: string; description: string }[] =
-    cmsStory.whyChooseItems || [];
+  const whyChooseItems: { title: string; description: string }[] = cmsStory.whyChooseItems || [];
 
   const proprietorPhoto = cmsStory.proprietorPhoto || "";
-  const proprietorPhotoAlt =
-    cmsStory.proprietorPhotoAlt ||
-    (subtitle ? `${subtitle} — ${proprietorRole || "Proprietor"}` : "");
+  const proprietorPhotoAlt = cmsStory.proprietorPhotoAlt || "";
 
   const distributorBadge = cmsStory.distributorBadge || "";
   const distributorCompany = cmsStory.distributorCompany || "";
@@ -115,9 +105,7 @@ export default function AboutMahalaxmiContent() {
                     </span>
                   )}
                   {distributorCompany && (
-                    <span className="text-slate-400">
-                      {distributorCompany}
-                    </span>
+                    <span className="text-slate-400">{distributorCompany}</span>
                   )}
                 </div>
               )}
@@ -130,23 +118,20 @@ export default function AboutMahalaxmiContent() {
       {hpclOverview && (hpclOverview.title || hpclOverview.description) && (
         <div className="mt-8 p-6 bg-slate-50 border border-slate-200 rounded-xl">
           {hpclOverview.title && (
-            <h3 className="text-lg font-bold text-[#002b5c] mb-2">
-              {hpclOverview.title}
-            </h3>
+            <h3 className="text-lg font-bold text-[#002b5c] mb-2">{hpclOverview.title}</h3>
           )}
           {hpclOverview.description && (
             <p className="text-sm text-gray-700 leading-relaxed mb-3">
               <FormattedText text={hpclOverview.description} />
             </p>
           )}
-          {Array.isArray(hpclOverview.bullets) &&
-            hpclOverview.bullets.length > 0 && (
-              <ul className="space-y-1.5 text-xs text-gray-600 list-disc list-inside">
-                {hpclOverview.bullets.map((b: string, idx: number) => (
-                  <li key={idx}>{b}</li>
-                ))}
-              </ul>
-            )}
+          {Array.isArray(hpclOverview.bullets) && hpclOverview.bullets.length > 0 && (
+            <ul className="space-y-1.5 text-xs text-gray-600 list-disc list-inside">
+              {hpclOverview.bullets.map((b: string, idx: number) => (
+                <li key={idx}>{b}</li>
+              ))}
+            </ul>
+          )}
         </div>
       )}
 
@@ -168,8 +153,7 @@ export default function AboutMahalaxmiContent() {
           {whyChooseItems.length > 0 && (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {whyChooseItems.map((item, index) => {
-                const IconComp =
-                  iconMap[index % iconMap.length] || CheckCircle2;
+                const IconComp = iconMap[index % iconMap.length] || CheckCircle2;
                 return (
                   <div
                     key={index}
@@ -178,12 +162,8 @@ export default function AboutMahalaxmiContent() {
                     <div className="w-12 h-12 rounded-lg bg-[#002b5c] text-white flex items-center justify-center mb-4">
                       <IconComp size={24} />
                     </div>
-                    <h3 className="text-lg font-bold text-[#002b5c] mb-2">
-                      {item.title}
-                    </h3>
-                    <p className="text-gray-600 text-sm leading-relaxed">
-                      {item.description}
-                    </p>
+                    <h3 className="text-lg font-bold text-[#002b5c] mb-2">{item.title}</h3>
+                    <p className="text-gray-600 text-sm leading-relaxed">{item.description}</p>
                   </div>
                 );
               })}

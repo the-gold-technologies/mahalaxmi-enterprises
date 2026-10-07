@@ -19,7 +19,7 @@ export default function DistributorBanner({
     return null;
   }
 
-  const btnLabel = cmsBanner.btnLabel || cmsBanner.buttonText || "";
+  const btnLabel = cmsBanner.btnLabel || "";
   const enquirySubject = cmsBanner.enquirySubject || "Industrial Lube Distributor (ILD)";
 
   if (!btnLabel) {

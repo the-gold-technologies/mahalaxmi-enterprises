@@ -7,15 +7,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import EnquiryModal from "@/components/EnquiryModal";
 import BlogsBreadcrumb from "@/app/blogs/components/BlogsBreadcrumb";
-import {
-  Calendar,
-  Clock,
-  User,
-  ArrowLeft,
-  Tag,
-  CheckCircle2,
-  Send,
-} from "lucide-react";
+import { Calendar, Clock, User, ArrowLeft, Tag, CheckCircle2, Send } from "lucide-react";
 import { useCMSStore, PageSEO } from "@/store/useCMSStore";
 import SEOMeta from "@/components/SEOMeta";
 import { isHindiActive, useLanguage } from "@/components/GoogleTranslator";
@@ -67,11 +59,10 @@ export default function BlogDetailPage() {
           language={language}
         />
         <div className="max-w-4xl mx-auto px-4 py-20 text-center">
-          <h1 className="text-3xl font-extrabold text-[#002b5c] mb-4">
-            Blog Post Not Found
-          </h1>
+          <h1 className="text-3xl font-extrabold text-[#002b5c] mb-4">Blog Post Not Found</h1>
           <p className="text-gray-600 mb-8">
-            The technical lubrication article you are looking for does not exist or has been relocated.
+            The technical lubrication article you are looking for does not exist or has been
+            relocated.
           </p>
           <Link
             href="/blogs"
@@ -88,9 +79,12 @@ export default function BlogDetailPage() {
   // Handle both Structured JSON Content and WYSIWYG HTML Content from CMS Rich Text Editor
   const isStructuredContent = typeof post.content === "object" && post.content !== null;
   const intro = isStructuredContent ? post.content.intro : "";
-  const sections = isStructuredContent && Array.isArray(post.content.sections) ? post.content.sections : [];
+  const sections =
+    isStructuredContent && Array.isArray(post.content.sections) ? post.content.sections : [];
   const conclusion = isStructuredContent ? post.content.conclusion : "";
-  const recommendedProducts = isStructuredContent ? post.content.recommendedProducts : (post.recommendedProducts || []);
+  const recommendedProducts = isStructuredContent
+    ? post.content.recommendedProducts
+    : post.recommendedProducts || [];
 
   const rawHtmlContent = typeof post.content === "string" ? post.content : null;
 
@@ -234,11 +228,7 @@ export default function BlogDetailPage() {
         {/* Feature Cover Image */}
         {post.coverImage && (
           <div className="w-full h-72 md:h-[480px] overflow-hidden rounded-2xl mb-10 shadow-md bg-gray-100">
-            <img
-              src={post.coverImage}
-              alt={post.title}
-              className="w-full h-full object-cover"
-            />
+            <img src={post.coverImage} alt={post.title} className="w-full h-full object-cover" />
           </div>
         )}
 
@@ -267,14 +257,8 @@ export default function BlogDetailPage() {
                 {section.bulletPoints && (
                   <ul className="space-y-2.5 pt-2 pl-2">
                     {section.bulletPoints.map((point: string, bIdx: number) => (
-                      <li
-                        key={bIdx}
-                        className="flex items-start gap-3 text-gray-700"
-                      >
-                        <CheckCircle2
-                          size={18}
-                          className="text-[#eb1e25] shrink-0 mt-1"
-                        />
+                      <li key={bIdx} className="flex items-start gap-3 text-gray-700">
+                        <CheckCircle2 size={18} className="text-[#eb1e25] shrink-0 mt-1" />
                         <span>{point}</span>
                       </li>
                     ))}
@@ -303,8 +287,8 @@ export default function BlogDetailPage() {
               <Tag size={20} className="text-[#eb1e25]" /> Recommended Industrial Lubricants
             </h3>
             <p className="text-xs md:text-sm text-gray-200 mb-4">
-              Mahalaxmi Enterprises supplies genuine industrial lubricants for
-              industrial & fleet operations across Baghpat and Uttar Pradesh.
+              Mahalaxmi Enterprises supplies genuine industrial lubricants for industrial & fleet
+              operations across Baghpat and Uttar Pradesh.
             </p>
             <div className="flex flex-wrap items-center gap-3">
               {recommendedProducts.map((prod: string, pIdx: number) => (

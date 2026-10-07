@@ -15,11 +15,7 @@ export default function EventsHero() {
 
   return (
     <section className="w-full relative overflow-hidden leading-none">
-      <img
-        src={image}
-        alt={altText}
-        className="w-full h-auto object-cover block"
-      />
+      <img src={image} alt={altText} className="w-full h-auto object-cover block" />
     </section>
   );
 }

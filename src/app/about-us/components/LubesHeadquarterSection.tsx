@@ -28,9 +28,7 @@ export default function LubesHeadquarterSection() {
             {badge && (
               <>
                 <br />
-                <span className="border-b-[3px] border-[#002b5c] pb-1 inline-block">
-                  {badge}
-                </span>
+                <span className="border-b-[3px] border-[#002b5c] pb-1 inline-block">{badge}</span>
               </>
             )}
           </h2>

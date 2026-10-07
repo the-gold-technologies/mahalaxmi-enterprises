@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import { X, Send, CheckCircle2, Loader2 } from 'lucide-react';
-import { useCMSStore } from '@/store/useCMSStore';
+import React, { useState } from "react";
+import { X, Send, CheckCircle2, Loader2 } from "lucide-react";
+import { useCMSStore } from "@/store/useCMSStore";
 
 interface DistributorModalProps {
   isOpen: boolean;
@@ -13,22 +13,22 @@ interface DistributorModalProps {
 export default function DistributorModal({
   isOpen,
   onClose,
-  initialType = 'Industrial Lube Distributor (ILD)',
+  initialType = "Industrial Lube Distributor (ILD)",
 }: DistributorModalProps) {
-  const [name, setName] = useState('');
-  const [firmName, setFirmName] = useState('');
-  const [phone, setPhone] = useState('');
-  const [email, setEmail] = useState('');
-  const [city, setCity] = useState('');
-  const [state, setState] = useState('');
+  const [name, setName] = useState("");
+  const [firmName, setFirmName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
+  const [city, setCity] = useState("");
+  const [state, setState] = useState("");
   const [businessType, setBusinessType] = useState(initialType);
-  const [annualTurnover, setAnnualTurnover] = useState('');
-  const [experienceYears, setExperienceYears] = useState('');
-  const [message, setMessage] = useState('');
+  const [annualTurnover, setAnnualTurnover] = useState("");
+  const [experienceYears, setExperienceYears] = useState("");
+  const [message, setMessage] = useState("");
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState("");
 
   const { submitDistributorLead } = useCMSStore();
 
@@ -37,19 +37,19 @@ export default function DistributorModal({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    setErrorMessage('');
+    setErrorMessage("");
 
     try {
       const res = await submitDistributorLead({
         name,
         firmName,
         phone,
-        email: email || 'noemail@provided.com',
+        email: email || "noemail@provided.com",
         city,
         state,
         businessType,
         address: `${city}, ${state}`,
-        message: `${businessType ? `[Distributor Type: ${businessType}] ` : ''}${message}`,
+        message: `${businessType ? `[Distributor Type: ${businessType}] ` : ""}${message}`,
       });
 
       if (res.success) {
@@ -59,7 +59,7 @@ export default function DistributorModal({
         setIsSubmitted(true);
       }
     } catch (err: any) {
-      console.error('Distributor application submission error:', err);
+      console.error("Distributor application submission error:", err);
       // Show success screen to customer so their user experience is not disrupted
       setIsSubmitted(true);
     } finally {
@@ -69,13 +69,13 @@ export default function DistributorModal({
 
   const handleResetAndClose = () => {
     setIsSubmitted(false);
-    setName('');
-    setFirmName('');
-    setPhone('');
-    setEmail('');
-    setCity('');
-    setState('');
-    setMessage('');
+    setName("");
+    setFirmName("");
+    setPhone("");
+    setEmail("");
+    setCity("");
+    setState("");
+    setMessage("");
     onClose();
   };
 
@@ -222,11 +222,17 @@ export default function DistributorModal({
                     onChange={(e) => setBusinessType(e.target.value)}
                     className="w-full px-3.5 py-2.5 text-xs sm:text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-[#002b5c] focus:ring-1 focus:ring-[#002b5c] transition-colors bg-white cursor-pointer"
                   >
-                    <option value="Industrial Lube Distributor (ILD)">Industrial Lube Distributor (ILD)</option>
-                    <option value="Bazaar Lube Distributor (BLD)">Bazaar Lube Distributor (BLD)</option>
+                    <option value="Industrial Lube Distributor (ILD)">
+                      Industrial Lube Distributor (ILD)
+                    </option>
+                    <option value="Bazaar Lube Distributor (BLD)">
+                      Bazaar Lube Distributor (BLD)
+                    </option>
                     <option value="CFA Distributor">CFA Distributor</option>
                     <option value="Caltex Distributor">Caltex Distributor</option>
-                    <option value="Direct Fleet / Workshop Supply">Direct Fleet / Workshop Supply</option>
+                    <option value="Direct Fleet / Workshop Supply">
+                      Direct Fleet / Workshop Supply
+                    </option>
                   </select>
                 </div>
 
@@ -261,9 +267,7 @@ export default function DistributorModal({
                 />
               </div>
 
-              {errorMessage && (
-                <p className="text-xs text-red-600 font-semibold">{errorMessage}</p>
-              )}
+              {errorMessage && <p className="text-xs text-red-600 font-semibold">{errorMessage}</p>}
 
               <div className="pt-2">
                 <button
@@ -287,11 +291,15 @@ export default function DistributorModal({
         ) : (
           <div className="text-center py-8">
             <CheckCircle2 size={50} className="mx-auto text-green-500 mb-3" />
-            <h3 className="text-2xl font-black text-[#002b5c] mb-2">
-              Application Received!
-            </h3>
+            <h3 className="text-2xl font-black text-[#002b5c] mb-2">Application Received!</h3>
             <p className="text-xs sm:text-sm text-gray-600 mb-6 max-w-md mx-auto leading-relaxed">
-              Thank you <strong>{name}</strong> from <strong>{firmName}</strong>. Your distributorship application for <strong>{city}, {state}</strong> has been registered with Mahalaxmi Enterprises. Our channel development team will get in touch with you shortly at <strong>{phone}</strong>.
+              Thank you <strong>{name}</strong> from <strong>{firmName}</strong>. Your
+              distributorship application for{" "}
+              <strong>
+                {city}, {state}
+              </strong>{" "}
+              has been registered with Mahalaxmi Enterprises. Our channel development team will get
+              in touch with you shortly at <strong>{phone}</strong>.
             </p>
             <button
               onClick={handleResetAndClose}

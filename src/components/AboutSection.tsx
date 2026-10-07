@@ -15,7 +15,7 @@ export default function AboutSection() {
 
   const title = cmsAbout.title || "";
   const subtitle = cmsAbout.subtitle || "";
-  const description = cmsAbout.description || cmsAbout.bodyText || "";
+  const description = cmsAbout.bodyText || "";
   const buttonText = cmsAbout.buttonText || "Read More";
   const buttonLink = cmsAbout.buttonLink || "/about-us";
 

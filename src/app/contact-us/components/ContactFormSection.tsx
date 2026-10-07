@@ -17,7 +17,6 @@ import {
 import { useCMSStore, getHeadingTag } from "@/store/useCMSStore";
 import { CaptchaInput, useCaptcha } from "@/components/CaptchaWidget";
 
-
 export default function ContactFormSection() {
   const { pages, pageSEO, submitEnquiry } = useCMSStore();
 
@@ -34,7 +33,13 @@ export default function ContactFormSection() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  const { code, input: captchaInput, setInput: setCaptchaInput, refresh: refreshCaptcha, isValid: captchaValid } = useCaptcha();
+  const {
+    code,
+    input: captchaInput,
+    setInput: setCaptchaInput,
+    refresh: refreshCaptcha,
+    isValid: captchaValid,
+  } = useCaptcha();
 
   // Exact CMS API Sections
   const sections = pages["contact-us"] || {};
@@ -62,9 +67,7 @@ export default function ContactFormSection() {
   // Dynamic SEO Heading
   const HeadingTag = getHeadingTag(pageSEO["contact-us"]?.headingOptions, "h1");
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
@@ -81,10 +84,7 @@ export default function ContactFormSection() {
         phone: formData.phone,
         email: formData.email || undefined,
         product: formData.product || "General Enquiry",
-        message: [
-          formData.companyName ? `Company: ${formData.companyName}` : "",
-          formData.message,
-        ]
+        message: [formData.companyName ? `Company: ${formData.companyName}` : "", formData.message]
           .filter(Boolean)
           .join("\n"),
       });
@@ -140,9 +140,7 @@ export default function ContactFormSection() {
               )}
 
               {description && (
-                <p className="text-gray-600 text-sm leading-relaxed text-justify">
-                  {description}
-                </p>
+                <p className="text-gray-600 text-sm leading-relaxed text-justify">{description}</p>
               )}
             </div>
 
@@ -178,9 +176,7 @@ export default function ContactFormSection() {
                     <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
                       Proprietor
                     </div>
-                    <p className="text-sm font-semibold text-gray-800 mt-0.5">
-                      {proprietor}
-                    </p>
+                    <p className="text-sm font-semibold text-gray-800 mt-0.5">{proprietor}</p>
                   </div>
                 </div>
               )}
@@ -254,9 +250,7 @@ export default function ContactFormSection() {
                   </h2>
                 )}
                 {formSubtitle && (
-                  <p className="text-gray-500 text-xs sm:text-sm mt-1">
-                    {formSubtitle}
-                  </p>
+                  <p className="text-gray-500 text-xs sm:text-sm mt-1">{formSubtitle}</p>
                 )}
               </div>
             )}
@@ -271,8 +265,8 @@ export default function ContactFormSection() {
                 </h3>
                 <p className="text-sm text-gray-600 max-w-sm mx-auto leading-relaxed">
                   Thank you for contacting{" "}
-                  {companyNameDisplay ? <strong>{companyNameDisplay}</strong> : "us"}. We will
-                  get back to you shortly.
+                  {companyNameDisplay ? <strong>{companyNameDisplay}</strong> : "us"}. We will get
+                  back to you shortly.
                 </p>
                 <button
                   type="button"
@@ -374,8 +368,7 @@ export default function ContactFormSection() {
                 {/* Message */}
                 <div>
                   <label className="block text-xs font-bold text-gray-700 uppercase tracking-wide mb-1.5">
-                    Your Message / Requirement Details{" "}
-                    <span className="text-[#eb1e25]">*</span>
+                    Your Message / Requirement Details <span className="text-[#eb1e25]">*</span>
                   </label>
                   <textarea
                     name="message"

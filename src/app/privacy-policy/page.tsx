@@ -9,15 +9,7 @@ import DistributorModal from "@/components/DistributorModal";
 import SEOMeta from "@/components/SEOMeta";
 import { useCMSStore, getHeadingTag } from "@/store/useCMSStore";
 import { isHindiActive, useLanguage } from "@/components/GoogleTranslator";
-import {
-  ShieldCheck,
-  Calendar,
-  ChevronRight,
-  Mail,
-  Phone,
-  MapPin,
-  Lock,
-} from "lucide-react";
+import { ShieldCheck, Calendar, ChevronRight, Mail, Phone, MapPin, Lock } from "lucide-react";
 
 export default function PrivacyPolicyPage() {
   const [fontSizeMultiplier, setFontSizeMultiplier] = useState(1);
@@ -27,9 +19,7 @@ export default function PrivacyPolicyPage() {
   const [enquiryProduct, setEnquiryProduct] = useState("");
 
   const [isDistributorOpen, setIsDistributorOpen] = useState(false);
-  const [distributorType, setDistributorType] = useState(
-    "Industrial Lube Distributor (ILD)"
-  );
+  const [distributorType, setDistributorType] = useState("Industrial Lube Distributor (ILD)");
 
   const { fetchPage, pages, pageSEO, globalSEO, isLoading } = useCMSStore();
 
@@ -161,7 +151,10 @@ export default function PrivacyPolicyPage() {
 
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           {/* Breadcrumb Links */}
-          <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs md:text-sm text-gray-300 font-medium mb-4">
+          <nav
+            aria-label="Breadcrumb"
+            className="flex items-center gap-2 text-xs md:text-sm text-gray-300 font-medium mb-4"
+          >
             <Link href="/" className="hover:text-white transition flex items-center gap-1">
               Home
             </Link>
@@ -184,7 +177,9 @@ export default function PrivacyPolicyPage() {
             {lastUpdated && (
               <div className="inline-flex items-center gap-2 text-xs md:text-sm text-gray-300 bg-black/20 px-3.5 py-1.5 rounded-lg border border-white/10 shrink-0">
                 <Calendar size={15} className="text-[#eb1e25]" />
-                <span>Last Updated: <strong className="text-white font-semibold">{lastUpdated}</strong></span>
+                <span>
+                  Last Updated: <strong className="text-white font-semibold">{lastUpdated}</strong>
+                </span>
               </div>
             )}
           </div>

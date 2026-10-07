@@ -1,14 +1,14 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import { X, Download, CheckCircle2, FileText, Loader2 } from 'lucide-react';
-import { useCMSStore } from '@/store/useCMSStore';
+import React, { useState, useEffect } from "react";
+import { X, Download, CheckCircle2, FileText, Loader2 } from "lucide-react";
+import { useCMSStore } from "@/store/useCMSStore";
 
 interface DownloadModalProps {
   isOpen: boolean;
   onClose: () => void;
   productName: string;
-  pdfType: 'TDS' | 'MSDS';
+  pdfType: "TDS" | "MSDS";
   pdfUrl?: string;
 }
 
@@ -16,13 +16,13 @@ export default function DownloadModal({
   isOpen,
   onClose,
   productName,
-  pdfType = 'TDS',
-  pdfUrl = ''
+  pdfType = "TDS",
+  pdfUrl = "",
 }: DownloadModalProps) {
-  const [name, setName] = useState('');
-  const [mobile, setMobile] = useState('');
-  const [email, setEmail] = useState('');
-  const [company, setCompany] = useState('');
+  const [name, setName] = useState("");
+  const [mobile, setMobile] = useState("");
+  const [email, setEmail] = useState("");
+  const [company, setCompany] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDownloaded, setIsDownloaded] = useState(false);
 
@@ -57,9 +57,9 @@ export default function DownloadModal({
     }
 
     // Trigger PDF download simulation / file fetch
-    const link = document.createElement('a');
-    link.href = pdfUrl || '#';
-    link.download = `${productName.replace(/\s+/g, '_')}_${pdfType}.pdf`;
+    const link = document.createElement("a");
+    link.href = pdfUrl || "#";
+    link.download = `${productName.replace(/\s+/g, "_")}_${pdfType}.pdf`;
     document.body.appendChild(link);
     // In real app, link.click() downloads the asset
     document.body.removeChild(link);
@@ -185,11 +185,13 @@ export default function DownloadModal({
         ) : (
           <div className="text-center py-6">
             <CheckCircle2 size={44} className="mx-auto text-green-500 mb-3" />
-            <h3 className="text-xl font-extrabold text-[#002b5c] mb-1">
-              Download Started!
-            </h3>
+            <h3 className="text-xl font-extrabold text-[#002b5c] mb-1">Download Started!</h3>
             <p className="text-xs text-gray-600 mb-6 leading-relaxed">
-              Thank you <strong>{name}</strong>. The technical document <strong>{productName} ({pdfType})</strong> is downloading to your device.
+              Thank you <strong>{name}</strong>. The technical document{" "}
+              <strong>
+                {productName} ({pdfType})
+              </strong>{" "}
+              is downloading to your device.
             </p>
             <button
               onClick={() => {

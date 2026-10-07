@@ -6,9 +6,9 @@ import { RefreshCw } from "lucide-react";
 const CHARS = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
 
 function genCode(len = 6): string {
-  return Array.from({ length: len }, () =>
-    CHARS[Math.floor(Math.random() * CHARS.length)]
-  ).join("");
+  return Array.from({ length: len }, () => CHARS[Math.floor(Math.random() * CHARS.length)]).join(
+    "",
+  );
 }
 
 // --- Canvas Wave CAPTCHA Renderer ---
@@ -28,13 +28,7 @@ function drawCaptcha(canvas: HTMLCanvasElement, code: string) {
   // Noise dots
   for (let i = 0; i < 80; i++) {
     ctx.beginPath();
-    ctx.arc(
-      Math.random() * W,
-      Math.random() * H,
-      Math.random() * 2,
-      0,
-      Math.PI * 2
-    );
+    ctx.arc(Math.random() * W, Math.random() * H, Math.random() * 2, 0, Math.PI * 2);
     ctx.fillStyle = `hsla(${Math.random() * 360}, 60%, 60%, 0.4)`;
     ctx.fill();
   }
@@ -119,13 +113,7 @@ interface CaptchaProps {
   code: string;
 }
 
-export function CaptchaInput({
-  value,
-  onChange,
-  isValid,
-  onRefresh,
-  code,
-}: CaptchaProps) {
+export function CaptchaInput({ value, onChange, isValid, onRefresh, code }: CaptchaProps) {
   return (
     <div className="flex flex-col gap-2">
       <div className="flex items-center gap-2">

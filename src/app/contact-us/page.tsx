@@ -60,7 +60,6 @@ export default function ContactUsPage() {
         onClose={() => setIsEnquiryOpen(false)}
         initialProduct={enquiryProduct}
       />
-
     </main>
   );
 }

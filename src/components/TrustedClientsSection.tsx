@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { useCMSStore } from '@/store/useCMSStore';
+import React from "react";
+import { useCMSStore } from "@/store/useCMSStore";
 
 export interface TrustedClientItem {
   id?: string | number;
@@ -25,15 +25,10 @@ export default function TrustedClientsSection() {
   }
 
   const title = cmsClientsSection.title || "";
-  const subtitle = cmsClientsSection.subtitle || cmsClientsSection.description || "";
+  const subtitle = cmsClientsSection.subtitle || "";
 
   // Multiple clones for seamless infinite looping
-  const marqueeClients = [
-    ...rawClients,
-    ...rawClients,
-    ...rawClients,
-    ...rawClients,
-  ];
+  const marqueeClients = [...rawClients, ...rawClients, ...rawClients, ...rawClients];
 
   return (
     <section

@@ -1,13 +1,7 @@
 "use client";
 
 import React, { useEffect } from "react";
-import {
-  Facebook,
-  Youtube,
-  Instagram,
-  Mail,
-  Linkedin,
-} from "lucide-react";
+import { Facebook, Youtube, Instagram, Mail, Linkedin } from "lucide-react";
 import { useCMSStore } from "@/store/useCMSStore";
 
 interface FooterProps {
@@ -41,16 +35,10 @@ export default function Footer({ onOpenEnquiry }: FooterProps) {
 
           {/* Middle Links */}
           <div className="flex items-center gap-8 text-white">
-            <a
-              href="/sitemap.xml"
-              className="underline hover:text-gray-300 transition"
-            >
+            <a href="/sitemap.xml" className="underline hover:text-gray-300 transition">
               Site Map
             </a>
-            <a
-              href="/privacy-policy"
-              className="underline hover:text-gray-300 transition"
-            >
+            <a href="/privacy-policy" className="underline hover:text-gray-300 transition">
               Privacy Policy
             </a>
           </div>
@@ -61,11 +49,7 @@ export default function Footer({ onOpenEnquiry }: FooterProps) {
               {/* HPCL Logo */}
               {hpclBadge && (
                 <div className="bg-white rounded p-1.5 shadow-xs flex items-center justify-center">
-                  <img
-                    src={hpclBadge}
-                    alt="HPCL Logo"
-                    className="h-[69px] w-auto object-contain"
-                  />
+                  <img src={hpclBadge} alt="HPCL Logo" className="h-[69px] w-auto object-contain" />
                 </div>
               )}
 

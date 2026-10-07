@@ -10,32 +10,16 @@ interface SEOMetaProps {
   customSEO?: PageSEO | null;
 }
 
-export default function SEOMeta({
-  pageSlug,
-  isLandingPage = false,
-  customSEO,
-}: SEOMetaProps) {
-  const {
-    globalSEO,
-    pageSEO,
-    pages,
-    productDetails,
-    blogPosts,
-    products,
-    blogs,
-  } = useCMSStore();
+export default function SEOMeta({ pageSlug, isLandingPage = false, customSEO }: SEOMetaProps) {
+  const { globalSEO, pageSEO, pages, productDetails, blogPosts, products, blogs } = useCMSStore();
 
-  const activeSEO: PageSEO | null =
-    customSEO || (pageSlug ? pageSEO[pageSlug] : null) || null;
+  const activeSEO: PageSEO | null = customSEO || (pageSlug ? pageSEO[pageSlug] : null) || null;
 
   useEffect(() => {
     // 1. Determine Title & Description strictly from CMS data
     const title = isLandingPage
       ? globalSEO?.siteTitle || "Mahalaxmi Enterprises | HP Lubricants Distributor"
-      : activeSEO?.metaTitle ||
-        activeSEO?.title ||
-        globalSEO?.siteTitle ||
-        "Mahalaxmi Enterprises";
+      : activeSEO?.metaTitle || activeSEO?.title || globalSEO?.siteTitle || "Mahalaxmi Enterprises";
 
     if (title) {
       document.title = title;
@@ -45,12 +29,10 @@ export default function SEOMeta({
     const setMetaTag = (
       attr: "name" | "property",
       key: string,
-      content: string | null | undefined
+      content: string | null | undefined,
     ) => {
       if (!content) return;
-      let tag = document.querySelector<HTMLMetaElement>(
-        `meta[${attr}="${key}"]`
-      );
+      let tag = document.querySelector<HTMLMetaElement>(`meta[${attr}="${key}"]`);
       if (!tag) {
         tag = document.createElement("meta");
         tag.setAttribute(attr, key);
@@ -82,8 +64,7 @@ export default function SEOMeta({
       "Mahalaxmi Enterprises, HPCL, HP Lubricants, Industrial Oils, Greases, Engine Oil Dealer, Baghpat, Uttar Pradesh";
 
     const currentUrl =
-      activeSEO?.canonicalUrl ||
-      (typeof window !== "undefined" ? window.location.href : "");
+      activeSEO?.canonicalUrl || (typeof window !== "undefined" ? window.location.href : "");
 
     if (description) {
       setMetaTag("name", "description", description);
@@ -92,11 +73,7 @@ export default function SEOMeta({
       setMetaTag("name", "keywords", keywords);
     }
     if (typeof activeSEO?.noIndex === "boolean") {
-      setMetaTag(
-        "name",
-        "robots",
-        activeSEO.noIndex ? "noindex, nofollow" : "index, follow"
-      );
+      setMetaTag("name", "robots", activeSEO.noIndex ? "noindex, nofollow" : "index, follow");
     }
 
     if (currentUrl) {
@@ -126,11 +103,7 @@ export default function SEOMeta({
 
     // 5. Google Search Console Verification
     if (globalSEO?.searchConsoleId) {
-      setMetaTag(
-        "name",
-        "google-site-verification",
-        globalSEO.searchConsoleId
-      );
+      setMetaTag("name", "google-site-verification", globalSEO.searchConsoleId);
     }
 
     // 6. Favicon Dynamic Update
@@ -175,9 +148,7 @@ export default function SEOMeta({
         document.head.appendChild(scriptTag);
       }
       scriptTag.textContent =
-        typeof finalSchema === "string"
-          ? finalSchema
-          : JSON.stringify(finalSchema, null, 2);
+        typeof finalSchema === "string" ? finalSchema : JSON.stringify(finalSchema, null, 2);
     } else {
       const existingScript = document.getElementById("dynamic-json-ld");
       if (existingScript) {
@@ -332,8 +303,7 @@ function generatePageSchema({
   const companyPhone = globalSEO?.phone || "+91 88007 78032";
   const companyEmail = globalSEO?.email || "info@hplubricantscfa.com";
   const companyAddress =
-    globalSEO?.address ||
-    "Baghpat Region & Surrounding Industrial Belts, Uttar Pradesh, India";
+    globalSEO?.address || "Baghpat Region & Surrounding Industrial Belts, Uttar Pradesh, India";
   const companyLogo =
     globalSEO?.logo ||
     "https://res.cloudinary.com/dpa93copz/image/upload/v1787731177/mahalaxmi/footer/rnrmsenowtlzykcxuprr.jpg";
@@ -400,8 +370,7 @@ function generatePageSchema({
         name: "Mahalaxmi Enterprises",
         url: origin,
         logo: companyLogo,
-        description:
-          "Official distributor of HP Lubricants across Uttar Pradesh and Delhi-NCR.",
+        description: "Official distributor of HP Lubricants across Uttar Pradesh and Delhi-NCR.",
         parentOrganization: {
           "@type": "Organization",
           name: "Hindustan Petroleum Corporation Limited (HPCL)",
@@ -477,9 +446,7 @@ function generatePageSchema({
     const post = blogPosts[blogSlug] || {};
     const articleTitle = post.title || activeSEO?.metaTitle || "Technical Article";
     const articleDesc =
-      post.excerpt ||
-      activeSEO?.metaDescription ||
-      `Technical article on ${articleTitle}`;
+      post.excerpt || activeSEO?.metaDescription || `Technical article on ${articleTitle}`;
     const articleImage = post.coverImage || companyLogo;
 
     return {
