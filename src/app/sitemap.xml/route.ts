@@ -3,8 +3,16 @@ import { getApiBaseUrl } from "@/store/useCMSStore";
 
 export const dynamic = "force-dynamic";
 
-export async function GET() {
-  const origin = process.env.NEXT_PUBLIC_SITE_URL || "";
+export async function GET(request: Request) {
+  // Dynamically determine origin from request host or environment variable
+  const host = request.headers.get("x-forwarded-host") || request.headers.get("host");
+  const proto =
+    request.headers.get("x-forwarded-proto") ||
+    (host && host.includes("localhost") ? "http" : "https");
+  const origin = (process.env.NEXT_PUBLIC_SITE_URL || (host ? `${proto}://${host}` : "")).replace(
+    /\/$/,
+    "",
+  );
   try {
     const apiUrl = getApiBaseUrl();
     const seoRes = await fetch(`${apiUrl}/api/seo`, {
