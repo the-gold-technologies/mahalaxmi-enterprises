@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import Script from "next/script";
 import { useCMSStore, PageSEO } from "@/store/useCMSStore";
 
@@ -10,17 +10,70 @@ interface SEOMetaProps {
   customSEO?: PageSEO | null;
 }
 
-export default function SEOMeta({ pageSlug, isLandingPage = false, customSEO }: SEOMetaProps) {
-  const { globalSEO, pageSEO, pages, productDetails, blogPosts, products, blogs } = useCMSStore();
+export default function SEOMeta({
+  pageSlug = "home",
+  isLandingPage = false,
+  customSEO,
+}: SEOMetaProps) {
+  const { globalSEO, fetchGlobalSEO, pageSEO, pages, productDetails, blogPosts, products, blogs } =
+    useCMSStore();
 
-  const activeSEO: PageSEO | null = customSEO || (pageSlug ? pageSEO[pageSlug] : null) || null;
+  const isHome = isLandingPage || pageSlug === "home";
+  const activeSEO: PageSEO = customSEO?.metaTitle ? customSEO : pageSEO?.[pageSlug] || {};
+
+  // Auto fetch global SEO if not loaded yet
+  useEffect(() => {
+    if (!globalSEO) {
+      fetchGlobalSEO().catch(console.error);
+    }
+  }, [globalSEO, fetchGlobalSEO]);
+
+  let title = activeSEO.metaTitle || "";
+  if (isHome && !title) {
+    title = globalSEO?.siteTitle || "";
+  }
+
+  let description = activeSEO.metaDescription || "";
+  if (isHome && !description) {
+    description = globalSEO?.siteDescription || "";
+  }
+
+  const keywords = activeSEO.targetKeywords || "";
+  const currentUrl = (activeSEO.canonicalUrl || "").trim();
+
+  // Derive JSON-LD Structured Data:
+  // For home: use CMS globalSEO?.schema (or activeSEO?.schema) if provided; otherwise generate default Organization/WebSite schema.
+  // For subpages: use CMS activeSEO?.schema if provided; otherwise generate default contextual page schema.
+  const schemaString = useMemo(() => {
+    let customSchema = activeSEO.schema || "";
+    if (isHome && !customSchema) {
+      customSchema = globalSEO?.schema || "";
+    }
+    const rawCustomSchema = customSchema.trim();
+
+    if (rawCustomSchema) {
+      const parsed = parseCustomSchema(rawCustomSchema);
+      if (parsed) {
+        return formatSchemaString(parsed);
+      }
+    }
+
+    const generated = generatePageSchema({
+      pageSlug,
+      isLandingPage: isHome,
+      activeSEO,
+      globalSEO,
+      pages,
+      productDetails,
+      blogPosts,
+      products,
+      blogs,
+    });
+
+    return formatSchemaString(generated);
+  }, [isHome, globalSEO, activeSEO, pageSlug, pages, productDetails, blogPosts, products, blogs]);
 
   useEffect(() => {
-    // 1. Determine Title & Description strictly from CMS data
-    const title = isLandingPage
-      ? globalSEO?.siteTitle || "Mahalaxmi Enterprises | HP Lubricants Distributor"
-      : activeSEO?.metaTitle || activeSEO?.title || globalSEO?.siteTitle || "Mahalaxmi Enterprises";
-
     if (title) {
       document.title = title;
     }
@@ -53,93 +106,68 @@ export default function SEOMeta({ pageSlug, isLandingPage = false, customSEO }: 
       link.setAttribute("href", href);
     };
 
-    // 3. Description & Keywords strictly from CMS
-    const description = isLandingPage
-      ? globalSEO?.siteDescription ||
-        "Authorized Industrial Lube Distributor (ILD) for HPCL lubricants, engine oils, greases, and fluids."
-      : activeSEO?.metaDescription || globalSEO?.siteDescription || "";
-
-    const keywords =
-      activeSEO?.targetKeywords ||
-      "Mahalaxmi Enterprises, HPCL, HP Lubricants, Industrial Oils, Greases, Engine Oil Dealer, Baghpat, Uttar Pradesh";
-
-    const currentUrl =
-      activeSEO?.canonicalUrl || (typeof window !== "undefined" ? window.location.href : "");
-
     if (description) {
       setMetaTag("name", "description", description);
     }
     if (keywords) {
       setMetaTag("name", "keywords", keywords);
     }
+
+    // Robots meta tag
     if (typeof activeSEO?.noIndex === "boolean") {
       setMetaTag("name", "robots", activeSEO.noIndex ? "noindex, nofollow" : "index, follow");
     }
 
+    // Canonical link tag
     if (currentUrl) {
       setLinkTag("canonical", currentUrl);
-      setMetaTag("property", "og:url", currentUrl);
     }
 
-    // 4. OpenGraph & Twitter Tags
+    // 4. OpenGraph Tags
     if (title) {
       setMetaTag("property", "og:title", title);
-      setMetaTag("name", "twitter:title", title);
     }
     if (description) {
       setMetaTag("property", "og:description", description);
-      setMetaTag("name", "twitter:description", description);
+    }
+    if (currentUrl) {
+      setMetaTag("property", "og:url", currentUrl);
     }
     setMetaTag("property", "og:type", pageSlug?.startsWith("blogs/") ? "article" : "website");
-    setMetaTag("name", "twitter:card", "summary_large_image");
 
-    if (globalSEO?.siteTitle) {
-      setMetaTag("property", "og:site_name", globalSEO.siteTitle);
+    // Twitter Card Tags
+    setMetaTag("name", "twitter:card", "summary_large_image");
+    if (title) {
+      setMetaTag("name", "twitter:title", title);
     }
-    if (globalSEO?.logo) {
-      setMetaTag("property", "og:image", globalSEO.logo);
-      setMetaTag("name", "twitter:image", globalSEO.logo);
+    if (description) {
+      setMetaTag("name", "twitter:description", description);
     }
 
     // 5. Google Search Console Verification
     if (globalSEO?.searchConsoleId) {
-      setMetaTag("name", "google-site-verification", globalSEO.searchConsoleId);
-    }
-
-    // 6. Favicon Dynamic Update
-    if (globalSEO?.favicon) {
-      setLinkTag("icon", globalSEO.favicon);
-      setLinkTag("shortcut icon", globalSEO.favicon);
-      setLinkTag("apple-touch-icon", globalSEO.favicon);
-    }
-
-    // 7. Structured Data (JSON-LD) - Dynamic per page content with custom override
-    let finalSchema: any = null;
-    const rawCustomSchema = activeSEO?.schema?.trim();
-
-    if (rawCustomSchema) {
-      try {
-        const cleaned = rawCustomSchema.replace(/<\/?script[^>]*>/gi, "").trim();
-        finalSchema = JSON.parse(cleaned);
-      } catch {
-        finalSchema = rawCustomSchema.replace(/<\/?script[^>]*>/gi, "").trim();
+      let token = globalSEO.searchConsoleId.trim();
+      const contentMatch = token.match(/content=["']([^"']+)["']/i);
+      if (contentMatch) {
+        token = contentMatch[1];
       }
-    } else {
-      // Automatically generate contextual JSON-LD structured data for this page
-      finalSchema = generatePageSchema({
-        pageSlug,
-        isLandingPage,
-        activeSEO,
-        globalSEO,
-        pages,
-        productDetails,
-        blogPosts,
-        products,
-        blogs,
-      });
+      if (token) {
+        setMetaTag("name", "google-site-verification", token);
+      }
     }
 
-    if (finalSchema) {
+    // 6. Favicon Dynamic Update from CMS Global Settings
+    if (globalSEO?.favicon) {
+      const fav = globalSEO.favicon.trim();
+      if (fav) {
+        setLinkTag("icon", fav);
+        setLinkTag("shortcut icon", fav);
+        setLinkTag("apple-touch-icon", fav);
+      }
+    }
+
+    // 7. Structured Data (JSON-LD) DOM sync
+    if (schemaString) {
       let scriptTag = document.getElementById("dynamic-json-ld");
       if (!scriptTag) {
         scriptTag = document.createElement("script");
@@ -147,8 +175,7 @@ export default function SEOMeta({ pageSlug, isLandingPage = false, customSEO }: 
         scriptTag.setAttribute("type", "application/ld+json");
         document.head.appendChild(scriptTag);
       }
-      scriptTag.textContent =
-        typeof finalSchema === "string" ? finalSchema : JSON.stringify(finalSchema, null, 2);
+      scriptTag.textContent = schemaString;
     } else {
       const existingScript = document.getElementById("dynamic-json-ld");
       if (existingScript) {
@@ -207,19 +234,50 @@ export default function SEOMeta({ pageSlug, isLandingPage = false, customSEO }: 
   }, [
     activeSEO,
     globalSEO,
-    isLandingPage,
+    isHome,
     pageSlug,
-    pages,
-    productDetails,
-    blogPosts,
-    products,
-    blogs,
+    schemaString,
+    title,
+    description,
+    keywords,
+    currentUrl,
   ]);
+
+  const rawGtmId = globalSEO?.gtmId?.trim();
+  const gtmId = rawGtmId ? rawGtmId.match(/GTM-[A-Z0-9]+/i)?.[0] || rawGtmId : null;
+
+  const rawGaId = globalSEO?.googleAnalyticsId?.trim();
+  const gaId = rawGaId ? rawGaId.match(/(G-[A-Z0-9]+|UA-[0-9-]+)/i)?.[0] || rawGaId : null;
 
   return (
     <>
+      {/* Native Head Meta Tags for SSR / Search Engine Crawlers */}
+      {title && <title>{title}</title>}
+      {description && <meta name="description" content={description} />}
+      {keywords && <meta name="keywords" content={keywords} />}
+      {typeof activeSEO?.noIndex === "boolean" && (
+        <meta name="robots" content={activeSEO.noIndex ? "noindex, nofollow" : "index, follow"} />
+      )}
+      {currentUrl && <link rel="canonical" href={currentUrl} />}
+      {title && <meta property="og:title" content={title} />}
+      {description && <meta property="og:description" content={description} />}
+      {currentUrl && <meta property="og:url" content={currentUrl} />}
+      <meta property="og:type" content={pageSlug?.startsWith("blogs/") ? "article" : "website"} />
+      <meta name="twitter:card" content="summary_large_image" />
+      {title && <meta name="twitter:title" content={title} />}
+      {description && <meta name="twitter:description" content={description} />}
+
+      {/* Structured Data (JSON-LD Schema Markup) */}
+      {schemaString && (
+        <script
+          id="dynamic-json-ld"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: schemaString }}
+        />
+      )}
+
       {/* Google Tag Manager (GTM) Native Scripts */}
-      {globalSEO?.gtmId && (
+      {gtmId && (
         <>
           <Script
             id="google-tag-manager-script"
@@ -229,14 +287,14 @@ export default function SEOMeta({ pageSlug, isLandingPage = false, customSEO }: 
                 (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
                 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
                 j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-                'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-                })(window,document,'script','dataLayer','${globalSEO.gtmId}');
+                'https://www.googletagmanager.com/gtm.js?id=${gtmId}';f.parentNode.insertBefore(j,f);
+                })(window,document,'script','dataLayer','${gtmId}');
               `,
             }}
           />
           <noscript>
             <iframe
-              src={`https://www.googletagmanager.com/ns.html?id=${globalSEO.gtmId}`}
+              src={`https://www.googletagmanager.com/ns.html?id=${gtmId}`}
               height="0"
               width="0"
               style={{ display: "none", visibility: "hidden" }}
@@ -246,12 +304,12 @@ export default function SEOMeta({ pageSlug, isLandingPage = false, customSEO }: 
       )}
 
       {/* Google Analytics (GA4) Native Scripts */}
-      {globalSEO?.googleAnalyticsId && (
+      {gaId && (
         <>
           <Script
-            id="google-analytics-src"
+            id="google-analytics-script"
             strategy="afterInteractive"
-            src={`https://www.googletagmanager.com/gtag/js?id=${globalSEO.googleAnalyticsId}`}
+            src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
           />
           <Script
             id="google-analytics-init"
@@ -261,9 +319,7 @@ export default function SEOMeta({ pageSlug, isLandingPage = false, customSEO }: 
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){dataLayer.push(arguments);}
                 gtag('js', new Date());
-                gtag('config', '${globalSEO.googleAnalyticsId}', {
-                  page_path: window.location.pathname,
-                });
+                gtag('config', '${gaId}');
               `,
             }}
           />
@@ -271,6 +327,37 @@ export default function SEOMeta({ pageSlug, isLandingPage = false, customSEO }: 
       )}
     </>
   );
+}
+
+/**
+ * Safely parses raw schema strings which may contain script tag wrappers or malformed formatting
+ */
+function parseCustomSchema(raw: string): any {
+  if (!raw) return null;
+  const cleaned = raw.replace(/<\/?script[^>]*>/gi, "").trim();
+  if (!cleaned) return null;
+  try {
+    return JSON.parse(cleaned);
+  } catch {
+    return cleaned;
+  }
+}
+
+function formatSchemaString(schema: any): string {
+  if (!schema) return "";
+  if (typeof schema === "string") {
+    try {
+      const parsed = JSON.parse(schema);
+      return JSON.stringify(parsed, null, 2);
+    } catch {
+      return schema;
+    }
+  }
+  try {
+    return JSON.stringify(schema, null, 2);
+  } catch {
+    return "";
+  }
 }
 
 /**
@@ -287,8 +374,8 @@ function generatePageSchema({
   products,
   blogs,
 }: {
-  pageSlug?: string;
-  isLandingPage?: boolean;
+  pageSlug: string;
+  isLandingPage: boolean;
   activeSEO: PageSEO | null;
   globalSEO: any;
   pages: Record<string, any>;
@@ -309,10 +396,10 @@ function generatePageSchema({
     "https://res.cloudinary.com/dpa93copz/image/upload/v1787731177/mahalaxmi/footer/rnrmsenowtlzykcxuprr.jpg";
 
   // Base Organization Schema Node
-  const organizationNode = {
+  const organizationNode: any = {
     "@type": ["LocalBusiness", "AutoPartsStore"],
     "@id": `${origin}/#organization`,
-    name: "Mahalaxmi Enterprises",
+    name: companyName,
     alternateName: "HP Lubricants Distributor Mahalaxmi Enterprises",
     url: origin,
     logo: companyLogo,
@@ -330,6 +417,14 @@ function generatePageSchema({
       addressRegion: "Uttar Pradesh",
       addressCountry: "IN",
     },
+    openingHoursSpecification: [
+      {
+        "@type": "OpeningHoursSpecification",
+        dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+        opens: "09:00",
+        closes: "19:00",
+      },
+    ],
   };
 
   // 1. Home / Landing Page Schema
@@ -432,9 +527,9 @@ function generatePageSchema({
       url: `${origin}/blogs`,
       blogPost: blogList.map((b: any) => ({
         "@type": "BlogPosting",
-        headline: b.title,
-        url: `${origin}/blogs/${b.slug}`,
-        datePublished: b.publishDate || b.createdAt,
+        headline: b.title || "",
+        url: `${origin}/blogs/${b.slug || ""}`,
+        datePublished: b.publishDate || b.createdAt || "",
         image: b.coverImage || companyLogo,
       })),
     };
@@ -444,9 +539,9 @@ function generatePageSchema({
   if (pageSlug.startsWith("blogs/")) {
     const blogSlug = pageSlug.replace("blogs/", "").trim();
     const post = blogPosts[blogSlug] || {};
-    const articleTitle = post.title || activeSEO?.metaTitle || "Technical Article";
-    const articleDesc =
-      post.excerpt || activeSEO?.metaDescription || `Technical article on ${articleTitle}`;
+    const fallbackTitle = blogSlug.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+    const articleTitle = post.title || activeSEO?.metaTitle || fallbackTitle;
+    const articleDesc = post.excerpt || activeSEO?.metaDescription || "";
     const articleImage = post.coverImage || companyLogo;
 
     return {
@@ -459,19 +554,12 @@ function generatePageSchema({
       headline: articleTitle,
       description: articleDesc,
       image: articleImage,
-      datePublished: post.publishDate || post.createdAt || new Date().toISOString(),
+      datePublished: post.publishDate || post.createdAt || "",
       author: {
         "@type": "Person",
-        name: post.author || "HPCL Technical Lubricants Team",
+        name: post.author || "",
       },
-      publisher: {
-        "@type": "Organization",
-        name: "Mahalaxmi Enterprises",
-        logo: {
-          "@type": "ImageObject",
-          url: companyLogo,
-        },
-      },
+      publisher: organizationNode,
     };
   }
 
@@ -479,13 +567,14 @@ function generatePageSchema({
   if (pageSlug.startsWith("product:")) {
     const prodSlug = pageSlug.replace("product:", "").trim();
     const product = productDetails[prodSlug] || {};
-    const prodName = product.name || activeSEO?.metaTitle || "Industrial Lubricant";
+    const fallbackName = prodSlug.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+    const prodName = product.name || activeSEO?.metaTitle || fallbackName;
     const prodDesc =
       product.description ||
       product.tagline ||
       activeSEO?.metaDescription ||
       `Buy genuine HPCL ${prodName} lubricants and oils from Mahalaxmi Enterprises.`;
-    const prodImage = product.image || companyLogo;
+    const prodImage = product.containerImage || product.image || companyLogo;
 
     return {
       "@context": "https://schema.org",
@@ -504,12 +593,8 @@ function generatePageSchema({
         url: `${origin}/products/${product.categorySlug || "industrial-oils"}/${prodSlug}`,
         priceCurrency: "INR",
         price: "0",
-        priceValidUntil: "2027-12-31",
         availability: "https://schema.org/InStock",
-        seller: {
-          "@type": "Organization",
-          name: "Mahalaxmi Enterprises",
-        },
+        seller: organizationNode,
       },
     };
   }
@@ -530,9 +615,9 @@ function generatePageSchema({
         itemListElement: prodList.map((p: any, idx: number) => ({
           "@type": "ListItem",
           position: idx + 1,
-          name: p.name,
-          url: `${origin}/products/${p.categorySlug || "industrial-oils"}/${p.slug}`,
-          image: p.image || companyLogo,
+          name: p.name || "",
+          url: `${origin}/products/${p.categorySlug || "industrial-oils"}/${p.slug || ""}`,
+          image: p.containerImage || p.image || companyLogo,
         })),
       },
     };
@@ -543,7 +628,7 @@ function generatePageSchema({
     "@context": "https://schema.org",
     "@type": "WebPage",
     name: activeSEO?.metaTitle || companyName,
-    description: activeSEO?.metaDescription || globalSEO?.siteDescription || "",
+    description: activeSEO?.metaDescription || "",
     url: `${origin}/${pageSlug}`,
   };
 }
@@ -553,7 +638,11 @@ function generatePageSchema({
  */
 function injectHtmlWithScripts(container: HTMLElement, rawHtml: string) {
   if (!rawHtml || !container) return;
-  container.innerHTML = rawHtml;
+  const trimmed = rawHtml.trim();
+  if (!trimmed) return;
+  if (container.dataset.renderedContent === trimmed) return;
+  container.dataset.renderedContent = trimmed;
+  container.innerHTML = trimmed;
   const scripts = Array.from(container.querySelectorAll("script"));
   scripts.forEach((oldScript) => {
     const newScript = document.createElement("script");

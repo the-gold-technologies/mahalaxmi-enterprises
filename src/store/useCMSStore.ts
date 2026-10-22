@@ -273,7 +273,7 @@ export const useCMSStore = create<CMSStoreState & CMSStoreActions>((set, get) =>
         }
 
         const pageData = json.data;
-        const pageSEO = json.seo || pageData?.seo || pageData?.sections?.seo || null;
+        const pageSEO = json.seo || null;
 
         // Normalize pageData sections
         let normalizedData = pageData;
@@ -451,7 +451,7 @@ export const useCMSStore = create<CMSStoreState & CMSStoreActions>((set, get) =>
         const json = await response.json();
         if (json.success && json.data) {
           const { products: fetchedProducts, categories } = json.data;
-          const prodSEO = json.seo || json.data?.seo || null;
+          const prodSEO = json.seo || null;
 
           set((state) => {
             let updatedProducts = state.products;
@@ -520,12 +520,33 @@ export const useCMSStore = create<CMSStoreState & CMSStoreActions>((set, get) =>
 
         const json = await response.json();
         if (json.success && json.data) {
-          const prodSEO = json.seo || json.data?.seo || null;
-          set((state) => ({
-            productDetails: { ...state.productDetails, [slug]: json.data },
-            pageSEO: prodSEO ? { ...state.pageSEO, [`product:${slug}`]: prodSEO } : state.pageSEO,
-          }));
-          return json.data;
+          const prodSEO = json.seo || {};
+          const mergedProduct = {
+            ...json.data,
+            metaTitle: prodSEO.metaTitle || "",
+            metaDescription: prodSEO.metaDescription || "",
+            targetKeywords: prodSEO.targetKeywords || "",
+            canonicalUrl: prodSEO.canonicalUrl || "",
+            schema: prodSEO.schema || "",
+            headingOptions: prodSEO.headingOptions || "",
+          };
+          set((state) => {
+            const existingProducts = state.products || [];
+            const productIndex = existingProducts.findIndex(
+              (p) => p.slug === slug || p.id === json.data.id,
+            );
+            let updatedProducts = existingProducts;
+            if (productIndex !== -1) {
+              updatedProducts = [...existingProducts];
+              updatedProducts[productIndex] = mergedProduct;
+            }
+            return {
+              productDetails: { ...state.productDetails, [slug]: mergedProduct },
+              products: updatedProducts,
+              pageSEO: { ...state.pageSEO, [`product:${slug}`]: prodSEO },
+            };
+          });
+          return mergedProduct;
         }
         return null;
       } catch (error) {
@@ -570,7 +591,7 @@ export const useCMSStore = create<CMSStoreState & CMSStoreActions>((set, get) =>
               ? json.data
               : [];
 
-          const blogsSEO = json.seo || json.data?.seo || null;
+          const blogsSEO = json.seo || null;
 
           if (json.data.sections) {
             set((state) => ({
@@ -627,12 +648,21 @@ export const useCMSStore = create<CMSStoreState & CMSStoreActions>((set, get) =>
 
         const json = await response.json();
         if (json.success && json.data) {
-          const blogSEO = json.seo || json.data?.seo || null;
+          const blogSEO = json.seo || {};
+          const mergedBlog = {
+            ...json.data,
+            metaTitle: blogSEO.metaTitle || "",
+            metaDescription: blogSEO.metaDescription || "",
+            targetKeywords: blogSEO.targetKeywords || "",
+            canonicalUrl: blogSEO.canonicalUrl || "",
+            schema: blogSEO.schema || "",
+            headingOptions: blogSEO.headingOptions || "",
+          };
           set((state) => ({
-            blogPosts: { ...state.blogPosts, [slug]: json.data },
-            pageSEO: blogSEO ? { ...state.pageSEO, [`blogs/${slug}`]: blogSEO } : state.pageSEO,
+            blogPosts: { ...state.blogPosts, [slug]: mergedBlog },
+            pageSEO: { ...state.pageSEO, [`blogs/${slug}`]: blogSEO },
           }));
-          return json.data;
+          return mergedBlog;
         }
         return null;
       } catch (error) {
@@ -672,7 +702,7 @@ export const useCMSStore = create<CMSStoreState & CMSStoreActions>((set, get) =>
         const json = await response.json();
         if (json.success && json.data) {
           const eventData = json.data;
-          const eventSEO = json.seo || eventData?.seo || null;
+          const eventSEO = json.seo || null;
 
           if (Array.isArray(eventData)) {
             set((state) => ({
@@ -720,7 +750,7 @@ export const useCMSStore = create<CMSStoreState & CMSStoreActions>((set, get) =>
         const json = await response.json();
         if (json.success && json.data) {
           const { sections, offices } = json.data;
-          const contactSEO = json.seo || json.data?.seo || null;
+          const contactSEO = json.seo || null;
 
           set((state) => ({
             pages: { ...state.pages, "contact-us": sections || {} },

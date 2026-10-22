@@ -8,7 +8,7 @@ import Footer from "@/components/Footer";
 import EnquiryModal from "@/components/EnquiryModal";
 import BlogsBreadcrumb from "@/app/blogs/components/BlogsBreadcrumb";
 import { Calendar, Clock, User, ArrowLeft, Tag, CheckCircle2, Send } from "lucide-react";
-import { useCMSStore, PageSEO } from "@/store/useCMSStore";
+import { useCMSStore, PageSEO, getHeadingTag } from "@/store/useCMSStore";
 import SEOMeta from "@/components/SEOMeta";
 import { isHindiActive, useLanguage } from "@/components/GoogleTranslator";
 
@@ -50,49 +50,44 @@ export default function BlogDetailPage() {
     setIsEnquiryOpen(true);
   };
 
-  if (!post) {
-    return (
-      <main className="min-h-screen bg-white text-gray-800 font-sans flex flex-col justify-between">
-        <Navbar
-          fontSizeMultiplier={fontSizeMultiplier}
-          setFontSizeMultiplier={setFontSizeMultiplier}
-          language={language}
-        />
-        <div className="max-w-4xl mx-auto px-4 py-20 text-center">
-          <h1 className="text-3xl font-extrabold text-[#002b5c] mb-4">Blog Post Not Found</h1>
-          <p className="text-gray-600 mb-8">
-            The technical lubrication article you are looking for does not exist or has been
-            relocated.
-          </p>
-          <Link
-            href="/blogs"
-            className="inline-flex items-center gap-2 bg-[#002b5c] text-white font-bold px-6 py-3 rounded-lg hover:bg-[#eb1e25] transition"
-          >
-            <ArrowLeft size={16} /> Return to All Technical Articles
-          </Link>
-        </div>
-        <Footer onOpenEnquiry={() => setIsEnquiryOpen(true)} />
-      </main>
-    );
-  }
+  const blogSEO: PageSEO = useMemo(() => {
+    return {
+      title: post?.title,
+      metaTitle: post?.metaTitle,
+      metaDescription: post?.metaDescription,
+      targetKeywords: post?.targetKeywords,
+      canonicalUrl: post?.canonicalUrl,
+      schema: post?.schema,
+      headingOptions: post?.headingOptions,
+    };
+  }, [post]);
 
   // Handle both Structured JSON Content and WYSIWYG HTML Content from CMS Rich Text Editor
-  const isStructuredContent = typeof post.content === "object" && post.content !== null;
-  const intro = isStructuredContent ? post.content.intro : "";
+  const isStructuredContent = typeof post?.content === "object" && post?.content !== null;
+  const intro = isStructuredContent ? post.content.intro || "" : "";
   const sections =
     isStructuredContent && Array.isArray(post.content.sections) ? post.content.sections : [];
-  const conclusion = isStructuredContent ? post.content.conclusion : "";
+  const conclusion = isStructuredContent ? post.content.conclusion || "" : "";
   const recommendedProducts = isStructuredContent
-    ? post.content.recommendedProducts
-    : post.recommendedProducts || [];
+    ? post.content.recommendedProducts || []
+    : post?.recommendedProducts || [];
 
-  const rawHtmlContent = typeof post.content === "string" ? post.content : null;
+  const rawHtmlContent =
+    typeof post?.content === "string"
+      ? post.content
+      : isStructuredContent
+        ? post.content.bodyHtml || null
+        : null;
+
+  const cleanHtmlContent = rawHtmlContent
+    ? rawHtmlContent.replace(/&nbsp;/gi, " ").replace(/\u00a0/g, " ")
+    : null;
 
   const articleRef = React.useRef<HTMLDivElement | null>(null);
   const [contentReady, setContentReady] = useState(false);
 
   useEffect(() => {
-    if (!rawHtmlContent) return;
+    if (!cleanHtmlContent) return;
 
     if (!isHindiActive()) {
       setContentReady(true);
@@ -162,18 +157,34 @@ export default function BlogDetailPage() {
       clearTimeout(t1);
       observer.disconnect();
     };
-  }, [rawHtmlContent, language]);
+  }, [cleanHtmlContent, language]);
 
-  const blogSEO: PageSEO = useMemo(() => {
-    return {
-      title: post?.metaTitle || post?.title,
-      metaTitle: post?.metaTitle || post?.title,
-      metaDescription: post?.metaDescription || post?.excerpt,
-      targetKeywords: post?.targetKeywords || post?.keywords,
-      canonicalUrl: post?.canonicalUrl,
-      schema: post?.schema,
-    };
-  }, [post]);
+  if (!post) {
+    return (
+      <main className="min-h-screen bg-white text-gray-800 font-sans flex flex-col justify-between">
+        <SEOMeta pageSlug={`blogs/${slug}`} customSEO={blogSEO} />
+        <Navbar
+          fontSizeMultiplier={fontSizeMultiplier}
+          setFontSizeMultiplier={setFontSizeMultiplier}
+          language={language}
+        />
+        <div className="max-w-4xl mx-auto px-4 py-20 text-center">
+          <h1 className="text-3xl font-extrabold text-[#002b5c] mb-4">Blog Post Not Found</h1>
+          <p className="text-gray-600 mb-8">
+            The technical lubrication article you are looking for does not exist or has been
+            relocated.
+          </p>
+          <Link
+            href="/blogs"
+            className="inline-flex items-center gap-2 bg-[#002b5c] text-white font-bold px-6 py-3 rounded-lg hover:bg-[#eb1e25] transition"
+          >
+            <ArrowLeft size={16} /> Return to All Technical Articles
+          </Link>
+        </div>
+        <Footer onOpenEnquiry={() => setIsEnquiryOpen(true)} />
+      </main>
+    );
+  }
 
   return (
     <main className="min-h-screen bg-white text-gray-800 font-sans flex flex-col justify-between">
@@ -198,9 +209,14 @@ export default function BlogDetailPage() {
               {post.category}
             </span>
           )}
-          <h1 className="text-2xl sm:text-3xl md:text-5xl font-extrabold text-[#002b5c] leading-tight mb-5">
-            {post.title}
-          </h1>
+          {(() => {
+            const HeadingTag = getHeadingTag(post?.headingOptions, "h1");
+            return (
+              <HeadingTag className="text-2xl sm:text-3xl md:text-5xl font-extrabold text-[#002b5c] leading-tight mb-5">
+                {post.title}
+              </HeadingTag>
+            );
+          })()}
 
           {/* Author & Publishing Meta */}
           <div className="flex flex-wrap items-center gap-6 text-xs md:text-sm text-gray-500 pb-6 border-b border-gray-200 font-medium">
@@ -228,19 +244,25 @@ export default function BlogDetailPage() {
         {/* Feature Cover Image */}
         {post.coverImage && (
           <div className="w-full h-72 md:h-[480px] overflow-hidden rounded-2xl mb-10 shadow-md bg-gray-100">
-            <img src={post.coverImage} alt={post.title} className="w-full h-full object-cover" />
+            <img
+              src={post.coverImage}
+              alt={post.title}
+              fetchPriority="high"
+              decoding="async"
+              className="w-full h-full object-cover"
+            />
           </div>
         )}
 
         {/* Intro Highlight Box */}
-        {intro && (
+        {!cleanHtmlContent && intro && (
           <div className="bg-[#f8f9fa] border-l-4 border-[#002b5c] p-6 rounded-r-xl mb-10 text-gray-700 text-sm md:text-base leading-relaxed italic font-sans">
             &ldquo;{intro}&rdquo;
           </div>
         )}
 
         {/* Structured Sections (if available) */}
-        {sections.length > 0 && (
+        {!cleanHtmlContent && sections.length > 0 && (
           <div className="space-y-10 text-gray-800 text-sm md:text-base leading-relaxed font-sans mb-10">
             {sections.map((section: any, idx: number) => (
               <div key={idx} className="space-y-4">
@@ -270,13 +292,13 @@ export default function BlogDetailPage() {
         )}
 
         {/* Rich Text WYSIWYG HTML Content with Consistent Theme Typography */}
-        {rawHtmlContent && (
+        {cleanHtmlContent && (
           <div
             ref={articleRef}
             className={`blog-rich-content text-gray-800 text-sm md:text-base leading-relaxed font-sans space-y-5 mb-10 transition-opacity duration-200 ${
               !contentReady && isHindiActive() ? "opacity-0" : "opacity-100"
             }`}
-            dangerouslySetInnerHTML={{ __html: rawHtmlContent }}
+            dangerouslySetInnerHTML={{ __html: cleanHtmlContent }}
           />
         )}
 
@@ -305,7 +327,7 @@ export default function BlogDetailPage() {
         )}
 
         {/* Conclusion */}
-        {conclusion && (
+        {!cleanHtmlContent && conclusion && (
           <div className="pt-6 border-t border-gray-200 text-gray-700 text-sm md:text-base leading-relaxed mb-12">
             <h3 className="text-lg font-bold text-[#002b5c] mb-2">Conclusion</h3>
             <p>{conclusion}</p>
@@ -344,6 +366,8 @@ export default function BlogDetailPage() {
                     <img
                       src={rel.coverImage || "/blogs-banner.jpg"}
                       alt={rel.title}
+                      loading="lazy"
+                      decoding="async"
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />
                   </div>

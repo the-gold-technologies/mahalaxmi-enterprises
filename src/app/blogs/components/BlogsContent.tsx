@@ -67,7 +67,7 @@ export default function BlogsContent() {
             {/* Image Container with Floating Badges */}
             <div className="relative w-full h-48 sm:h-52 overflow-hidden bg-slate-100">
               <img
-                src={post.coverImage || "/blogs-banner.jpg"}
+                src={post.coverImage || ""}
                 alt={post.title}
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-108"
               />
