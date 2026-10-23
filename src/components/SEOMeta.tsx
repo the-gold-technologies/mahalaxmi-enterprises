@@ -393,7 +393,7 @@ function generatePageSchema({
     globalSEO?.address || "Baghpat Region & Surrounding Industrial Belts, Uttar Pradesh, India";
   const companyLogo =
     globalSEO?.logo ||
-    "https://res.cloudinary.com/dpa93copz/image/upload/v1787731177/mahalaxmi/footer/rnrmsenowtlzykcxuprr.jpg";
+    "https://res.cloudinary.com/lfsnye1i/image/upload/v1792748020/mahalaxmi-enterprises/footer/rnrmsenowtlzykcxuprr.webp";
 
   // Base Organization Schema Node
   const organizationNode: any = {
