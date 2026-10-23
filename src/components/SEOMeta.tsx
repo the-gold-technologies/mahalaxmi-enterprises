@@ -2,7 +2,7 @@
 
 import React, { useEffect, useMemo } from "react";
 import Script from "next/script";
-import { useCMSStore, PageSEO } from "@/store/useCMSStore";
+import { useCMSStore, PageSEO, getApiBaseUrl } from "@/store/useCMSStore";
 
 interface SEOMetaProps {
   pageSlug?: string;
@@ -15,11 +15,48 @@ export default function SEOMeta({
   isLandingPage = false,
   customSEO,
 }: SEOMetaProps) {
-  const { globalSEO, fetchGlobalSEO, pageSEO, pages, productDetails, blogPosts, products, blogs } =
-    useCMSStore();
+  const {
+    globalSEO,
+    fetchGlobalSEO,
+    pageSEO,
+    setPageSEO,
+    pages,
+    productDetails,
+    blogPosts,
+    products,
+    blogs,
+  } = useCMSStore();
 
   const isHome = isLandingPage || pageSlug === "home";
-  const activeSEO: PageSEO = customSEO?.metaTitle ? customSEO : pageSEO?.[pageSlug] || {};
+  const storeSEO = pageSEO?.[pageSlug] || {};
+  const activeSEO: PageSEO = {
+    ...storeSEO,
+    ...(customSEO || {}),
+  };
+
+  // Auto-fetch SEO for current page if not yet populated in store
+  useEffect(() => {
+    if (!pageSlug || isHome || activeSEO.schema || activeSEO.metaTitle) return;
+    const cleanSlug = pageSlug.replace(/^product:/, "products/").replace(/^\//, "");
+    const apiUrl = getApiBaseUrl();
+    if (!apiUrl) return;
+    fetch(apiUrl + "/api/seo/pages/" + encodeURIComponent(cleanSlug), { cache: "no-store" })
+      .then((res) => (res.ok ? res.json() : null))
+      .then((json) => {
+        if (json?.success && json?.data) {
+          setPageSEO(pageSlug, {
+            metaTitle: json.data.metaTitle,
+            metaDescription: json.data.metaDescription,
+            targetKeywords: json.data.targetKeywords,
+            canonicalUrl: json.data.canonicalUrl,
+            schema: json.data.schema,
+            noIndex: json.data.noIndex,
+            headingOptions: json.data.headingOptions,
+          });
+        }
+      })
+      .catch(() => {});
+  }, [pageSlug, isHome, activeSEO.schema, activeSEO.metaTitle, setPageSEO]);
 
   // Auto fetch global SEO if not loaded yet
   useEffect(() => {
@@ -332,9 +369,12 @@ export default function SEOMeta({
 /**
  * Safely parses raw schema strings which may contain script tag wrappers or malformed formatting
  */
-function parseCustomSchema(raw: string): any {
+function parseCustomSchema(raw: any): any {
   if (!raw) return null;
-  const cleaned = raw.replace(/<\/?script[^>]*>/gi, "").trim();
+  if (typeof raw === "object") return raw;
+  const cleaned = String(raw)
+    .replace(/<\/?script[^>]*>/gi, "")
+    .trim();
   if (!cleaned) return null;
   try {
     return JSON.parse(cleaned);
@@ -346,11 +386,12 @@ function parseCustomSchema(raw: string): any {
 function formatSchemaString(schema: any): string {
   if (!schema) return "";
   if (typeof schema === "string") {
+    const cleaned = schema.replace(/<\/?script[^>]*>/gi, "").trim();
     try {
-      const parsed = JSON.parse(schema);
+      const parsed = JSON.parse(cleaned);
       return JSON.stringify(parsed, null, 2);
     } catch {
-      return schema;
+      return cleaned;
     }
   }
   try {

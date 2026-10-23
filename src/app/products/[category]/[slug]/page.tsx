@@ -105,6 +105,7 @@ export default function ProductDetailPage() {
   if (!product) {
     return (
       <main className="min-h-screen bg-white text-gray-800 font-sans flex flex-col justify-between">
+        <SEOMeta pageSlug={`products/${categorySlug}/${productSlug}`} customSEO={productSEO} />
         <Navbar
           fontSizeMultiplier={fontSizeMultiplier}
           setFontSizeMultiplier={setFontSizeMultiplier}
@@ -134,7 +135,7 @@ export default function ProductDetailPage() {
 
   return (
     <main className="min-h-screen bg-white text-gray-800 font-sans flex flex-col justify-between">
-      <SEOMeta pageSlug={`product:${productSlug}`} customSEO={productSEO} />
+      <SEOMeta pageSlug={`products/${categorySlug}/${productSlug}`} customSEO={productSEO} />
 
       <Navbar
         fontSizeMultiplier={fontSizeMultiplier}

@@ -2,9 +2,9 @@ import { NextResponse } from "next/server";
 import { getApiBaseUrl } from "@/store/useCMSStore";
 
 export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export async function GET(request: Request) {
-  // Dynamically determine origin from request host or environment variable
   const host = request.headers.get("x-forwarded-host") || request.headers.get("host");
   const proto =
     request.headers.get("x-forwarded-proto") ||
@@ -13,10 +13,11 @@ export async function GET(request: Request) {
     /\/$/,
     "",
   );
+
   try {
     const apiUrl = getApiBaseUrl();
     const seoRes = await fetch(`${apiUrl}/api/seo`, {
-      next: { revalidate: 60 },
+      cache: "no-store",
     });
     const seoJson = seoRes.ok ? await seoRes.json() : null;
     const globalSEO = seoJson?.data;
@@ -29,69 +30,88 @@ export async function GET(request: Request) {
       });
     }
 
-    // 2. If custom uploaded XML file is provided in CMS
+    // 2. If custom uploaded XML file is provided in CMS and is a valid sitemap (<urlset or <sitemapindex)
     if (
       globalSEO?.sitemapCustomContent &&
-      (globalSEO.sitemapCustomContent.trim().startsWith("<?xml") ||
-        globalSEO.sitemapCustomContent.includes("<urlset"))
+      (globalSEO.sitemapCustomContent.includes("<urlset") ||
+        globalSEO.sitemapCustomContent.includes("<sitemapindex"))
     ) {
       return new NextResponse(globalSEO.sitemapCustomContent.trim(), {
         headers: {
           "Content-Type": "application/xml; charset=utf-8",
-          "Cache-Control": "public, max-age=60, s-maxage=60",
+          "Cache-Control": "no-cache, no-store, max-age=0, must-revalidate",
         },
       });
     }
 
-    // 3. Dynamic XML compilation from live pages & blog posts
-    const urls: Array<{
-      loc: string;
-      lastmod: string;
-      changefreq: string;
-      priority: string;
-    }> = [
-      {
-        loc: `${origin}`,
-        lastmod: new Date().toISOString(),
-        changefreq: "daily",
-        priority: "1.0",
-      },
-      {
-        loc: `${origin}/about-us`,
-        lastmod: new Date().toISOString(),
-        changefreq: "weekly",
-        priority: "0.8",
-      },
-      {
-        loc: `${origin}/contact-us`,
-        lastmod: new Date().toISOString(),
-        changefreq: "weekly",
-        priority: "0.8",
-      },
-      {
-        loc: `${origin}/events`,
-        lastmod: new Date().toISOString(),
-        changefreq: "weekly",
-        priority: "0.7",
-      },
-      {
-        loc: `${origin}/blogs`,
-        lastmod: new Date().toISOString(),
-        changefreq: "daily",
-        priority: "0.8",
-      },
-      {
-        loc: `${origin}/privacy-policy`,
-        lastmod: new Date().toISOString(),
-        changefreq: "monthly",
-        priority: "0.5",
-      },
+    // 3. Dynamic XML compilation from live pages, products, & blogs
+    const now = new Date().toISOString();
+    const urlsMap = new Map<
+      string,
+      { loc: string; lastmod: string; changefreq: string; priority: string }
+    >();
+
+    // Root home page
+    urlsMap.set("/", {
+      loc: `${origin}`,
+      lastmod: now,
+      changefreq: "daily",
+      priority: "1.0",
+    });
+
+    // Fetch all dynamic pages from CMS (/api/seo/pages)
+    try {
+      const pagesRes = await fetch(`${apiUrl}/api/seo/pages`, {
+        cache: "no-store",
+      });
+      if (pagesRes.ok) {
+        const pagesJson = await pagesRes.json();
+        const pagesList = Array.isArray(pagesJson?.data) ? pagesJson.data : [];
+
+        for (const p of pagesList) {
+          if (!p?.slug || p.slug === "home" || p.noIndex === true || p.visibility === "draft") {
+            continue;
+          }
+          const cleanSlug = p.slug.startsWith("/") ? p.slug : `/${p.slug}`;
+          const isCategory = p.type === "Category" || cleanSlug.startsWith("/products/");
+          const isBlog = p.type === "Blog Article" || cleanSlug.startsWith("/blogs/");
+
+          urlsMap.set(cleanSlug, {
+            loc: `${origin}${cleanSlug}`,
+            lastmod: now,
+            changefreq: isBlog ? "weekly" : isCategory ? "weekly" : "monthly",
+            priority: isCategory ? "0.8" : isBlog ? "0.7" : "0.8",
+          });
+        }
+      }
+    } catch (e) {
+      console.error("Error fetching pages for sitemap:", e);
+    }
+
+    // Fallback static core pages if CMS pages weren't populated
+    const fallbackStaticRoutes = [
+      { path: "/about-us", priority: "0.8", changefreq: "weekly" },
+      { path: "/products", priority: "0.8", changefreq: "weekly" },
+      { path: "/events", priority: "0.7", changefreq: "weekly" },
+      { path: "/blogs", priority: "0.8", changefreq: "daily" },
+      { path: "/contact-us", priority: "0.8", changefreq: "weekly" },
+      { path: "/privacy-policy", priority: "0.5", changefreq: "monthly" },
     ];
+    for (const r of fallbackStaticRoutes) {
+      if (!urlsMap.has(r.path)) {
+        urlsMap.set(r.path, {
+          loc: `${origin}${r.path}`,
+          lastmod: now,
+          changefreq: r.changefreq,
+          priority: r.priority,
+        });
+      }
+    }
 
     // Dynamic products & categories
     try {
       const prodRes = await fetch(`${apiUrl}/api/products`, {
-        next: { revalidate: 60 },
+        cache: "no-store",
       });
       if (prodRes.ok) {
         const prodJson = await prodRes.json();
@@ -100,9 +120,10 @@ export async function GET(request: Request) {
 
         categories.forEach((cat: any) => {
           if (cat?.slug) {
-            urls.push({
-              loc: `${origin}/products/${cat.slug}`,
-              lastmod: new Date().toISOString(),
+            const path = `/products/${cat.slug}`;
+            urlsMap.set(path, {
+              loc: `${origin}${path}`,
+              lastmod: now,
               changefreq: "weekly",
               priority: "0.8",
             });
@@ -111,9 +132,10 @@ export async function GET(request: Request) {
 
         products.forEach((prod: any) => {
           if (prod?.categorySlug && prod?.slug) {
-            urls.push({
-              loc: `${origin}/products/${prod.categorySlug}/${prod.slug}`,
-              lastmod: new Date().toISOString(),
+            const path = `/products/${prod.categorySlug}/${prod.slug}`;
+            urlsMap.set(path, {
+              loc: `${origin}${path}`,
+              lastmod: prod.updatedAt ? new Date(prod.updatedAt).toISOString() : now,
               changefreq: "weekly",
               priority: "0.7",
             });
@@ -127,7 +149,7 @@ export async function GET(request: Request) {
     // Dynamic blog articles
     try {
       const blogRes = await fetch(`${apiUrl}/api/blogs`, {
-        next: { revalidate: 60 },
+        cache: "no-store",
       });
       if (blogRes.ok) {
         const blogJson = await blogRes.json();
@@ -138,10 +160,11 @@ export async function GET(request: Request) {
             : [];
 
         blogList.forEach((b: any) => {
-          if (b?.slug) {
-            urls.push({
-              loc: `${origin}/blogs/${b.slug}`,
-              lastmod: b.updatedAt ? new Date(b.updatedAt).toISOString() : new Date().toISOString(),
+          if (b?.slug && b.isPublished !== false) {
+            const path = `/blogs/${b.slug}`;
+            urlsMap.set(path, {
+              loc: `${origin}${path}`,
+              lastmod: b.updatedAt ? new Date(b.updatedAt).toISOString() : now,
               changefreq: "weekly",
               priority: "0.7",
             });
@@ -151,6 +174,8 @@ export async function GET(request: Request) {
     } catch (e) {
       console.error("Error fetching blogs for sitemap:", e);
     }
+
+    const urls = Array.from(urlsMap.values());
 
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
@@ -169,7 +194,7 @@ ${urls
     return new NextResponse(xml, {
       headers: {
         "Content-Type": "application/xml; charset=utf-8",
-        "Cache-Control": "public, max-age=60, s-maxage=60",
+        "Cache-Control": "no-cache, no-store, max-age=0, must-revalidate",
       },
     });
   } catch (err: any) {

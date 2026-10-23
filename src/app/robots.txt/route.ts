@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getApiBaseUrl } from "@/store/useCMSStore";
 
 export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export async function GET(request: Request) {
   // Dynamically determine origin from request host or environment variable
@@ -19,7 +20,7 @@ export async function GET(request: Request) {
   try {
     const apiUrl = getApiBaseUrl();
     const res = await fetch(`${apiUrl}/api/seo`, {
-      next: { revalidate: 60 },
+      cache: "no-store",
     });
     if (res.ok) {
       const json = await res.json();
@@ -62,7 +63,7 @@ export async function GET(request: Request) {
   return new NextResponse(robotsContent, {
     headers: {
       "Content-Type": "text/plain; charset=utf-8",
-      "Cache-Control": "public, max-age=60, s-maxage=60, stale-while-revalidate=300",
+      "Cache-Control": "no-cache, no-store, max-age=0, must-revalidate",
     },
   });
 }

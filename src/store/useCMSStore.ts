@@ -260,7 +260,7 @@ export const useCMSStore = create<CMSStoreState & CMSStoreActions>((set, get) =>
         const baseUrl = getApiBaseUrl();
         const endpointSlug = slug.startsWith("/") ? slug.slice(1) : slug;
         const response = await fetch(`${baseUrl}/api/${endpointSlug}`, {
-          next: { revalidate: 60 },
+          cache: "no-store",
         });
 
         if (!response.ok) {
@@ -323,7 +323,7 @@ export const useCMSStore = create<CMSStoreState & CMSStoreActions>((set, get) =>
       try {
         const baseUrl = getApiBaseUrl();
         const response = await fetch(`${baseUrl}/api/nav-links`, {
-          next: { revalidate: 60 },
+          cache: "no-store",
         });
 
         if (!response.ok) {
@@ -393,7 +393,7 @@ export const useCMSStore = create<CMSStoreState & CMSStoreActions>((set, get) =>
       try {
         const baseUrl = getApiBaseUrl();
         const response = await fetch(`${baseUrl}/api/seo`, {
-          next: { revalidate: 60 },
+          cache: "no-store",
         });
 
         if (!response.ok) {
@@ -441,7 +441,7 @@ export const useCMSStore = create<CMSStoreState & CMSStoreActions>((set, get) =>
           : `${baseUrl}/api/products`;
 
         const response = await fetch(url, {
-          next: { revalidate: 60 },
+          cache: "no-store",
         });
 
         if (!response.ok) {
@@ -511,7 +511,7 @@ export const useCMSStore = create<CMSStoreState & CMSStoreActions>((set, get) =>
       try {
         const baseUrl = getApiBaseUrl();
         const response = await fetch(`${baseUrl}/api/products?slug=${encodeURIComponent(slug)}`, {
-          next: { revalidate: 60 },
+          cache: "no-store",
         });
 
         if (!response.ok) {
@@ -576,7 +576,7 @@ export const useCMSStore = create<CMSStoreState & CMSStoreActions>((set, get) =>
       try {
         const baseUrl = getApiBaseUrl();
         const response = await fetch(`${baseUrl}/api/blogs`, {
-          next: { revalidate: 60 },
+          cache: "no-store",
         });
 
         if (!response.ok) {
@@ -639,7 +639,7 @@ export const useCMSStore = create<CMSStoreState & CMSStoreActions>((set, get) =>
       try {
         const baseUrl = getApiBaseUrl();
         const response = await fetch(`${baseUrl}/api/blogs?slug=${encodeURIComponent(slug)}`, {
-          next: { revalidate: 60 },
+          cache: "no-store",
         });
 
         if (!response.ok) {
@@ -692,7 +692,7 @@ export const useCMSStore = create<CMSStoreState & CMSStoreActions>((set, get) =>
       try {
         const baseUrl = getApiBaseUrl();
         const response = await fetch(`${baseUrl}/api/events`, {
-          next: { revalidate: 60 },
+          cache: "no-store",
         });
 
         if (!response.ok) {
@@ -740,7 +740,7 @@ export const useCMSStore = create<CMSStoreState & CMSStoreActions>((set, get) =>
       try {
         const baseUrl = getApiBaseUrl();
         const response = await fetch(`${baseUrl}/api/contact-us`, {
-          next: { revalidate: 60 },
+          cache: "no-store",
         });
 
         if (!response.ok) {
