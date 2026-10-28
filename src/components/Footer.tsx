@@ -3,6 +3,7 @@
 import React, { useEffect } from "react";
 import { Facebook, Youtube, Instagram, Mail, Linkedin } from "lucide-react";
 import { useCMSStore } from "@/store/useCMSStore";
+import CookieConsent from "@/components/CookieConsent";
 
 interface FooterProps {
   onOpenEnquiry: (productName?: string) => void;
@@ -34,12 +35,15 @@ export default function Footer({ onOpenEnquiry }: FooterProps) {
           )}
 
           {/* Middle Links */}
-          <div className="flex items-center gap-8 text-white">
+          <div className="flex items-center gap-6 sm:gap-8 text-white">
+            <a href="/privacy-policy" className="underline hover:text-gray-300 transition">
+              Privacy Policy
+            </a>
             <a href="/sitemap.xml" className="underline hover:text-gray-300 transition">
               Site Map
             </a>
-            <a href="/privacy-policy" className="underline hover:text-gray-300 transition">
-              Privacy Policy
+            <a href="/contact-us" className="underline hover:text-gray-300 transition">
+              Contact Us
             </a>
           </div>
 
@@ -79,55 +83,71 @@ export default function Footer({ onOpenEnquiry }: FooterProps) {
             </div>
           )}
 
-          {/* Social Media Circular Buttons */}
-          <div className="flex items-center gap-2.5">
-            {socialLinks.facebook && (
+          {/* Social Media Circular Buttons & Credits */}
+          <div className="flex flex-col items-center md:items-end gap-2">
+            <div className="flex items-center gap-2.5">
+              {socialLinks.facebook && (
+                <a
+                  href={socialLinks.facebook}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="w-9 h-9 rounded-full bg-[#3b5998] flex items-center justify-center text-white hover:opacity-90 transition shadow-xs"
+                  aria-label="Facebook"
+                >
+                  <Facebook size={18} />
+                </a>
+              )}
+              {socialLinks.youtube && (
+                <a
+                  href={socialLinks.youtube}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="w-9 h-9 rounded-full bg-[#ff0000] flex items-center justify-center text-white hover:opacity-90 transition shadow-xs"
+                  aria-label="YouTube"
+                >
+                  <Youtube size={18} />
+                </a>
+              )}
+              {socialLinks.instagram && (
+                <a
+                  href={socialLinks.instagram}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="w-9 h-9 rounded-full bg-[#e4405f] flex items-center justify-center text-white hover:opacity-90 transition shadow-xs"
+                  aria-label="Instagram"
+                >
+                  <Instagram size={18} />
+                </a>
+              )}
+              {socialLinks.linkedin && (
+                <a
+                  href={socialLinks.linkedin}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="w-9 h-9 rounded-full bg-[#0077b5] flex items-center justify-center text-white hover:opacity-90 transition shadow-xs"
+                  aria-label="LinkedIn"
+                >
+                  <Linkedin size={18} />
+                </a>
+              )}
+            </div>
+            <div className="text-[11px] sm:text-xs text-gray-300 font-normal mb-4 mt-2">
+              Designed &amp; Developed by{" "}
               <a
-                href={socialLinks.facebook}
+                href="https://thegoldtechnologies.com/"
                 target="_blank"
-                rel="noreferrer"
-                className="w-9 h-9 rounded-full bg-[#3b5998] flex items-center justify-center text-white hover:opacity-90 transition shadow-xs"
-                aria-label="Facebook"
+                rel="noopener noreferrer"
+                className="text-white hover:text-gray-200 underline underline-offset-4 decoration-1 font-semibold transition-colors"
               >
-                <Facebook size={18} />
+                TGT
               </a>
-            )}
-            {socialLinks.youtube && (
-              <a
-                href={socialLinks.youtube}
-                target="_blank"
-                rel="noreferrer"
-                className="w-9 h-9 rounded-full bg-[#ff0000] flex items-center justify-center text-white hover:opacity-90 transition shadow-xs"
-                aria-label="YouTube"
-              >
-                <Youtube size={18} />
-              </a>
-            )}
-            {socialLinks.instagram && (
-              <a
-                href={socialLinks.instagram}
-                target="_blank"
-                rel="noreferrer"
-                className="w-9 h-9 rounded-full bg-[#e4405f] flex items-center justify-center text-white hover:opacity-90 transition shadow-xs"
-                aria-label="Instagram"
-              >
-                <Instagram size={18} />
-              </a>
-            )}
-            {socialLinks.linkedin && (
-              <a
-                href={socialLinks.linkedin}
-                target="_blank"
-                rel="noreferrer"
-                className="w-9 h-9 rounded-full bg-[#0077b5] flex items-center justify-center text-white hover:opacity-90 transition shadow-xs"
-                aria-label="LinkedIn"
-              >
-                <Linkedin size={18} />
-              </a>
-            )}
+            </div>
           </div>
         </div>
       </footer>
+
+      {/* Cookie Consent Popup (Bottom Right) */}
+      <CookieConsent />
 
       {/* Persistent Red Sticky ENQUIRY Button Fixed on Bottom Right Corner */}
       <button
