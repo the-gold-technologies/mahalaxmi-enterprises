@@ -3,6 +3,7 @@
 import React, { useEffect, useMemo } from "react";
 import Script from "next/script";
 import { useCMSStore, PageSEO, getApiBaseUrl } from "@/store/useCMSStore";
+import { safeJsonForScript } from "@/lib/sanitizeHtml";
 
 interface SEOMetaProps {
   pageSlug?: string;
@@ -281,10 +282,11 @@ export default function SEOMeta({
   ]);
 
   const rawGtmId = globalSEO?.gtmId?.trim();
-  const gtmId = rawGtmId ? rawGtmId.match(/GTM-[A-Z0-9]+/i)?.[0] || rawGtmId : null;
+  // Only accept well-formed IDs: these values are interpolated into inline scripts
+  const gtmId = rawGtmId ? rawGtmId.match(/GTM-[A-Z0-9]+/i)?.[0] || null : null;
 
   const rawGaId = globalSEO?.googleAnalyticsId?.trim();
-  const gaId = rawGaId ? rawGaId.match(/(G-[A-Z0-9]+|UA-[0-9-]+)/i)?.[0] || rawGaId : null;
+  const gaId = rawGaId ? rawGaId.match(/(G-[A-Z0-9]+|UA-[0-9-]+)/i)?.[0] || null : null;
 
   return (
     <>
@@ -309,7 +311,7 @@ export default function SEOMeta({
         <script
           id="dynamic-json-ld"
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: schemaString }}
+          dangerouslySetInnerHTML={{ __html: safeJsonForScript(schemaString) }}
         />
       )}
 

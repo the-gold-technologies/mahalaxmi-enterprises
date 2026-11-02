@@ -26,7 +26,9 @@ export default function EnquiryModal({ isOpen, onClose, initialProduct = "" }: E
     setInput: setCaptchaInput,
     refresh: refreshCaptcha,
     isValid: captchaValid,
+    token: captchaToken,
   } = useCaptcha();
+  const [errorMessage, setErrorMessage] = useState("");
 
   const { submitEnquiry, globalSEO } = useCMSStore();
   const siteName = (globalSEO as any)?.siteName || "HP Lubricants";
@@ -34,6 +36,7 @@ export default function EnquiryModal({ isOpen, onClose, initialProduct = "" }: E
   useEffect(() => {
     if (isOpen) {
       setProduct(initialProduct || "");
+      setErrorMessage("");
     }
   }, [isOpen, initialProduct]);
 
@@ -43,19 +46,27 @@ export default function EnquiryModal({ isOpen, onClose, initialProduct = "" }: E
     e.preventDefault();
     if (!captchaValid) return;
     setIsSubmitting(true);
+    setErrorMessage("");
     try {
-      await submitEnquiry({
+      const res = await submitEnquiry({
         name,
         company: companyName,
         email: email || undefined,
         phone: mobile,
         product: product || "General Enquiry",
         message: companyName ? `Company: ${companyName}` : undefined,
+        captchaToken,
       });
-      setIsSubmitted(true);
+      if (res.success) {
+        setIsSubmitted(true);
+      } else {
+        setErrorMessage(res.error || "Could not submit your enquiry. Please try again.");
+        refreshCaptcha();
+      }
     } catch (err) {
       console.error("Enquiry submission error:", err);
-      setIsSubmitted(true);
+      setErrorMessage("Could not submit your enquiry. Please check your connection and try again.");
+      refreshCaptcha();
     } finally {
       setIsSubmitting(false);
     }
@@ -182,6 +193,15 @@ export default function EnquiryModal({ isOpen, onClose, initialProduct = "" }: E
                   onRefresh={refreshCaptcha}
                 />
               </div>
+
+              {errorMessage && (
+                <p
+                  role="alert"
+                  className="text-xs font-semibold text-red-700 bg-red-50 border border-red-200 rounded-lg px-3 py-2"
+                >
+                  {errorMessage}
+                </p>
+              )}
 
               <div className="pt-2">
                 <button

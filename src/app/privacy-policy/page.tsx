@@ -6,6 +6,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import EnquiryModal from "@/components/EnquiryModal";
 import SEOMeta from "@/components/SEOMeta";
+import { sanitizeHtml } from "@/lib/sanitizeHtml";
 import { useCMSStore, getHeadingTag } from "@/store/useCMSStore";
 import { isHindiActive, useLanguage } from "@/components/GoogleTranslator";
 import { ShieldCheck, Calendar, ChevronRight, Mail, Phone, MapPin, Lock } from "lucide-react";
@@ -40,7 +41,7 @@ export default function PrivacyPolicyPage() {
 
   const sanitizedContent = React.useMemo(() => {
     if (!rawHtmlContent) return "";
-    return rawHtmlContent.replace(/&nbsp;/gi, " ").replace(/\u00a0/g, " ");
+    return sanitizeHtml(rawHtmlContent.replace(/&nbsp;/gi, " ").replace(/\u00a0/g, " "));
   }, [rawHtmlContent]);
 
   const articleRef = React.useRef<HTMLElement | null>(null);

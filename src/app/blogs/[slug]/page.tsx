@@ -10,6 +10,7 @@ import BlogsBreadcrumb from "@/app/blogs/components/BlogsBreadcrumb";
 import { Calendar, Clock, User, ArrowLeft, Tag, CheckCircle2, Send } from "lucide-react";
 import { useCMSStore, PageSEO, getHeadingTag } from "@/store/useCMSStore";
 import SEOMeta from "@/components/SEOMeta";
+import { sanitizeHtml } from "@/lib/sanitizeHtml";
 import { isHindiActive, useLanguage } from "@/components/GoogleTranslator";
 
 export default function BlogDetailPage() {
@@ -79,9 +80,14 @@ export default function BlogDetailPage() {
         ? post.content.bodyHtml || null
         : null;
 
-  const cleanHtmlContent = rawHtmlContent
-    ? rawHtmlContent.replace(/&nbsp;/gi, " ").replace(/\u00a0/g, " ")
-    : null;
+  // Sanitize CMS HTML (strips scripts, event handlers, javascript: URLs)
+  const cleanHtmlContent = useMemo(
+    () =>
+      rawHtmlContent
+        ? sanitizeHtml(rawHtmlContent.replace(/&nbsp;/gi, " ").replace(/\u00a0/g, " ")) || null
+        : null,
+    [rawHtmlContent],
+  );
 
   const articleRef = React.useRef<HTMLDivElement | null>(null);
   const [contentReady, setContentReady] = useState(false);

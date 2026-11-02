@@ -208,6 +208,7 @@ interface CMSStoreActions {
     phone?: string;
     product?: string;
     message?: string;
+    captchaToken?: string;
   }) => Promise<{ success: boolean; data?: any; error?: string }>;
 }
 
@@ -585,11 +586,13 @@ export const useCMSStore = create<CMSStoreState & CMSStoreActions>((set, get) =>
 
         const json = await response.json();
         if (json.success && json.data) {
-          const blogsList = Array.isArray(json.data.blogs)
-            ? json.data.blogs
-            : Array.isArray(json.data)
-              ? json.data
-              : [];
+          const blogsList = (
+            Array.isArray(json.data.blogs)
+              ? json.data.blogs
+              : Array.isArray(json.data)
+                ? json.data
+                : []
+          ).filter((b: any) => b?.isPublished !== false); // never show draft posts
 
           const blogsSEO = json.seo || null;
 
@@ -647,7 +650,7 @@ export const useCMSStore = create<CMSStoreState & CMSStoreActions>((set, get) =>
         }
 
         const json = await response.json();
-        if (json.success && json.data) {
+        if (json.success && json.data && json.data.isPublished !== false) {
           const blogSEO = json.seo || {};
           const mergedBlog = {
             ...json.data,
@@ -784,9 +787,9 @@ export const useCMSStore = create<CMSStoreState & CMSStoreActions>((set, get) =>
         }),
       });
 
-      const json = await response.json();
+      const json = await response.json().catch(() => ({}));
       return {
-        success: json.success ?? response.ok,
+        success: response.ok && json.success !== false,
         data: json.data,
         error: json.error,
       };

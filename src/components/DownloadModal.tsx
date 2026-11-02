@@ -35,9 +35,12 @@ export default function DownloadModal({
     setInput: setCaptchaInput,
     refresh: refreshCaptcha,
     isValid: captchaValid,
+    token: captchaToken,
   } = useCaptcha();
+  const [errorMessage, setErrorMessage] = useState("");
 
   const resetForm = () => {
+    setErrorMessage("");
     setName("");
     setMobile("");
     setEmail("");
@@ -69,25 +72,38 @@ export default function DownloadModal({
       return;
     }
     setIsSubmitting(true);
+    setErrorMessage("");
     const leadName = name;
-    setSubmittedName(leadName);
 
     try {
-      await submitEnquiry({
+      const res = await submitEnquiry({
         name: leadName,
         company,
         phone: mobile,
         email: email || undefined,
         product: `${productName} (${pdfType} Download)`,
         message: `Downloaded ${pdfType} Datasheet for ${productName} (Company: ${company})`,
+        captchaToken,
       });
+      if (!res.success) {
+        setErrorMessage(res.error || "Could not process your request. Please try again.");
+        refreshCaptcha();
+        return;
+      }
     } catch (err) {
       console.error("Download lead capture error:", err);
+      setErrorMessage(
+        "Could not process your request. Please check your connection and try again.",
+      );
+      refreshCaptcha();
+      return;
     } finally {
       setIsSubmitting(false);
-      resetForm();
-      setIsDownloaded(true);
     }
+
+    setSubmittedName(leadName);
+    resetForm();
+    setIsDownloaded(true);
 
     // Trigger direct file download to device without opening external Cloudinary tabs
     if (pdfUrl && pdfUrl !== "#") {
@@ -210,6 +226,15 @@ export default function DownloadModal({
                   onRefresh={refreshCaptcha}
                 />
               </div>
+
+              {errorMessage && (
+                <p
+                  role="alert"
+                  className="text-xs font-semibold text-red-700 bg-red-50 border border-red-200 rounded-lg px-3 py-2"
+                >
+                  {errorMessage}
+                </p>
+              )}
 
               <div className="pt-2">
                 <button

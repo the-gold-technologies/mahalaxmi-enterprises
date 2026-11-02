@@ -39,6 +39,7 @@ export default function ContactFormSection() {
     setInput: setCaptchaInput,
     refresh: refreshCaptcha,
     isValid: captchaValid,
+    token: captchaToken,
   } = useCaptcha();
 
   // Exact CMS API Sections
@@ -87,10 +88,12 @@ export default function ContactFormSection() {
         message: [formData.companyName ? `Company: ${formData.companyName}` : "", formData.message]
           .filter(Boolean)
           .join("\n"),
+        captchaToken,
       });
 
-      if (res && res.error) {
-        setErrorMessage(res.error);
+      if (!res?.success) {
+        setErrorMessage(res?.error || "Could not submit your enquiry. Please try again.");
+        refreshCaptcha();
       } else {
         setIsSubmitted(true);
         setFormData({
@@ -105,7 +108,8 @@ export default function ContactFormSection() {
       }
     } catch (err: any) {
       console.error("Enquiry submit error:", err);
-      setIsSubmitted(true);
+      setErrorMessage("Could not submit your enquiry. Please check your connection and try again.");
+      refreshCaptcha();
     } finally {
       setIsSubmitting(false);
     }
