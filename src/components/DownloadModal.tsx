@@ -35,7 +35,6 @@ export default function DownloadModal({
     setInput: setCaptchaInput,
     refresh: refreshCaptcha,
     isValid: captchaValid,
-    token: captchaToken,
   } = useCaptcha();
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -83,7 +82,6 @@ export default function DownloadModal({
         email: email || undefined,
         product: `${productName} (${pdfType} Download)`,
         message: `Downloaded ${pdfType} Datasheet for ${productName} (Company: ${company})`,
-        captchaToken,
       });
       if (!res.success) {
         setErrorMessage(res.error || "Could not process your request. Please try again.");

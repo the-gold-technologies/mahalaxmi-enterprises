@@ -26,7 +26,6 @@ export default function EnquiryModal({ isOpen, onClose, initialProduct = "" }: E
     setInput: setCaptchaInput,
     refresh: refreshCaptcha,
     isValid: captchaValid,
-    token: captchaToken,
   } = useCaptcha();
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -55,7 +54,6 @@ export default function EnquiryModal({ isOpen, onClose, initialProduct = "" }: E
         phone: mobile,
         product: product || "General Enquiry",
         message: companyName ? `Company: ${companyName}` : undefined,
-        captchaToken,
       });
       if (res.success) {
         setIsSubmitted(true);

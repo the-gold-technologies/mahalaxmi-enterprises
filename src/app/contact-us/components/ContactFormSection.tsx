@@ -39,7 +39,6 @@ export default function ContactFormSection() {
     setInput: setCaptchaInput,
     refresh: refreshCaptcha,
     isValid: captchaValid,
-    token: captchaToken,
   } = useCaptcha();
 
   // Exact CMS API Sections
@@ -88,7 +87,6 @@ export default function ContactFormSection() {
         message: [formData.companyName ? `Company: ${formData.companyName}` : "", formData.message]
           .filter(Boolean)
           .join("\n"),
-        captchaToken,
       });
 
       if (!res?.success) {

@@ -113,72 +113,7 @@ interface CaptchaProps {
   code: string;
 }
 
-// --- Cloudflare Turnstile (server-verified) ---
-const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || "";
-export const isTurnstileEnabled = !!TURNSTILE_SITE_KEY;
-
-declare global {
-  interface Window {
-    turnstile?: {
-      render: (el: HTMLElement, opts: Record<string, any>) => string;
-      remove: (id: string) => void;
-    };
-  }
-}
-
-let turnstileScript: Promise<void> | null = null;
-function loadTurnstile(): Promise<void> {
-  if (window.turnstile) return Promise.resolve();
-  if (!turnstileScript) {
-    turnstileScript = new Promise((resolve, reject) => {
-      const s = document.createElement("script");
-      s.src = "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
-      s.async = true;
-      s.onload = () => resolve();
-      s.onerror = () => {
-        turnstileScript = null;
-        reject(new Error("Failed to load captcha"));
-      };
-      document.head.appendChild(s);
-    });
-  }
-  return turnstileScript;
-}
-
-function TurnstileBox({ onToken }: { onToken: (token: string) => void }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const onTokenRef = useRef(onToken);
-  onTokenRef.current = onToken;
-
-  useEffect(() => {
-    let widgetId: string | null = null;
-    let cancelled = false;
-    loadTurnstile()
-      .then(() => {
-        if (cancelled || !ref.current || !window.turnstile) return;
-        widgetId = window.turnstile.render(ref.current, {
-          sitekey: TURNSTILE_SITE_KEY,
-          callback: (token: string) => onTokenRef.current(token),
-          "expired-callback": () => onTokenRef.current(""),
-          "error-callback": () => onTokenRef.current(""),
-        });
-      })
-      .catch((err) => console.error(err));
-    return () => {
-      cancelled = true;
-      if (widgetId && window.turnstile) window.turnstile.remove(widgetId);
-    };
-  }, []);
-
-  return <div ref={ref} className="min-h-[65px]" />;
-}
-
 export function CaptchaInput({ value, onChange, isValid, onRefresh, code }: CaptchaProps) {
-  if (isTurnstileEnabled) {
-    // `code` changes on refresh, which remounts the widget for a fresh one-time token
-    return <TurnstileBox key={code} onToken={onChange} />;
-  }
-
   return (
     <div className="flex flex-col gap-2">
       <div className="flex items-center gap-2">
@@ -226,9 +161,7 @@ export function useCaptcha() {
     setInput("");
   }, []);
 
-  // Turnstile mode: `input` holds the token issued by Cloudflare (verified by the CMS server)
-  const isValid = isTurnstileEnabled ? input.length > 0 : input.toUpperCase() === code;
-  const token = isTurnstileEnabled ? input : undefined;
+  const isValid = input.toUpperCase() === code;
 
-  return { code, input, setInput, refresh, isValid, token };
+  return { code, input, setInput, refresh, isValid };
 }

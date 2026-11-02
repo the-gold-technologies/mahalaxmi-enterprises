@@ -11,6 +11,7 @@ import { ArrowLeft, FileText, Droplet, Search } from "lucide-react";
 import { useCMSStore, PageSEO, getHeadingTag } from "@/store/useCMSStore";
 import { FormattedText } from "@/components/FormattedText";
 import SEOMeta from "@/components/SEOMeta";
+import { normalizePropertiesTable } from "@/lib/propertiesTable";
 
 export default function ProductDetailPage() {
   const params = useParams();
@@ -130,8 +131,9 @@ export default function ProductDetailPage() {
   }
 
   const HeadingTag = getHeadingTag(product?.headingOptions, "h1");
-  const hasMultiCols = Boolean(product.tableHeaders && product.tableHeaders.length > 0);
-  const colCount = hasMultiCols ? product.tableHeaders!.length : 1;
+  const specTable = normalizePropertiesTable(product.tableHeaders, product.propertiesTable);
+  const hasHeaderRow = specTable.headers.length > 0;
+  const colCount = specTable.colCount;
 
   return (
     <main className="min-h-screen bg-white text-gray-800 font-sans flex flex-col justify-between">
@@ -352,7 +354,7 @@ export default function ProductDetailPage() {
           )}
 
           {/* Physico-Chemical Properties Table */}
-          {product.propertiesTable && product.propertiesTable.length > 0 && (
+          {specTable.rows.length > 0 && (
             <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-xs pt-4">
               <div className="px-6 pb-3">
                 <h3 className="text-base sm:text-lg font-bold text-[#002b5c] flex items-center gap-2">
@@ -365,19 +367,22 @@ export default function ProductDetailPage() {
                   <thead>
                     <tr className="bg-[#002b5c] text-white">
                       <th
-                        colSpan={hasMultiCols ? colCount + 1 : 2}
+                        colSpan={colCount + 1}
                         className="py-3 px-4 text-center font-extrabold uppercase border-b border-[#002b5c]"
                       >
                         {product.name}
                       </th>
                     </tr>
-                    {hasMultiCols && (
+                    {hasHeaderRow && (
                       <tr className="bg-[#002b5c] text-white border-t border-white/20">
-                        <th className="py-2 px-4 border-r border-white/20"></th>
-                        {product.tableHeaders!.map((hdr: string, hIdx: number) => (
+                        <th scope="col" className="py-2 px-4 border-r border-white/20">
+                          <span className="sr-only">Property</span>
+                        </th>
+                        {specTable.headers.map((hdr, hIdx) => (
                           <th
                             key={hIdx}
-                            className="py-2 px-4 text-center font-bold border-r border-white/20 last:border-r-0"
+                            scope="col"
+                            className="py-2 px-4 text-center font-bold border-r border-white/20 last:border-r-0 whitespace-nowrap"
                           >
                             {hdr}
                           </th>
@@ -386,33 +391,29 @@ export default function ProductDetailPage() {
                     )}
                   </thead>
                   <tbody>
-                    {product.propertiesTable.map((row: any, rIdx: number) => (
+                    {specTable.rows.map((row, rIdx) => (
                       <tr key={rIdx} className={rIdx % 2 === 0 ? "bg-white" : "bg-slate-50"}>
-                        <td className="py-2.5 px-4 font-semibold text-slate-700 border-b border-r border-slate-200">
+                        <th
+                          scope="row"
+                          className="py-2.5 px-4 font-semibold text-slate-700 border-b border-r border-slate-200 text-left min-w-[180px]"
+                        >
                           {row.property}
-                        </td>
-
-                        {hasMultiCols ? (
-                          row.values ? (
-                            row.values.map((v: any, vIdx: number) => (
-                              <td
-                                key={vIdx}
-                                className="py-2.5 px-4 text-slate-900 font-bold border-b border-r border-slate-200 last:border-r-0 text-center"
-                              >
-                                {v}
-                              </td>
-                            ))
-                          ) : (
+                        </th>
+                        {row.values ? (
+                          row.values.map((v, vIdx) => (
                             <td
-                              colSpan={colCount}
-                              className="py-2.5 px-4 text-slate-900 font-bold border-b border-slate-200 text-center"
+                              key={vIdx}
+                              className="py-2.5 px-4 text-slate-900 font-bold border-b border-r border-slate-200 last:border-r-0 text-center whitespace-nowrap"
                             >
-                              {row.value}
+                              {v || "—"}
                             </td>
-                          )
+                          ))
                         ) : (
-                          <td className="py-2.5 px-4 text-slate-900 font-bold border-b border-slate-200 text-center">
-                            {row.value}
+                          <td
+                            colSpan={colCount}
+                            className="py-2.5 px-4 text-slate-900 font-bold border-b border-slate-200 text-center"
+                          >
+                            {row.value || "—"}
                           </td>
                         )}
                       </tr>

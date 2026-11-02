@@ -208,7 +208,6 @@ interface CMSStoreActions {
     phone?: string;
     product?: string;
     message?: string;
-    captchaToken?: string;
   }) => Promise<{ success: boolean; data?: any; error?: string }>;
 }
 
