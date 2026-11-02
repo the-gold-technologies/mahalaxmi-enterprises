@@ -15,7 +15,8 @@ export default function BlogsContent() {
 
   const posts = blogs || [];
   const cmsContent = pages["blogs"]?.BlogsContent;
-  const h1Title = cmsContent?.title || "Technical Insights & Blogs";
+  const h1Title =
+    pages["blogs"]?.BlogsHero?.title || cmsContent?.title || "Technical Insights & Blogs";
   const HeadingTag = getHeadingTag(pageSEO["blogs"]?.headingOptions, "h1");
 
   const categories = ["ALL", ...Array.from(new Set(posts.map((p) => p.category).filter(Boolean)))];

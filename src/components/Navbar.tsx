@@ -28,86 +28,9 @@ interface ProductSubCategoryItem {
   title: string;
   categorySlug: string;
   anchor: string;
+  /** Link straight to the category page (sub-category name equals the category name) */
+  isWholeCategory: boolean;
 }
-
-const DEFAULT_PRODUCT_CATEGORIES: ProductSubCategoryItem[] = [
-  {
-    title: "COMPRESSOR OILS",
-    categorySlug: "industrial-oils",
-    anchor: "compressor-oils",
-  },
-  {
-    title: "CYLINDER OIL",
-    categorySlug: "industrial-oils",
-    anchor: "cylinder-oil",
-  },
-  { title: "FILM OIL", categorySlug: "industrial-oils", anchor: "film-oil" },
-  {
-    title: "GENERAL PURPOSE MACHINERY OILS",
-    categorySlug: "industrial-oils",
-    anchor: "general-purpose-machinery-oils",
-  },
-  {
-    title: "HYDRAULIC OILS",
-    categorySlug: "industrial-oils",
-    anchor: "hydraulic-oils",
-  },
-  {
-    title: "MACHINERY OILS",
-    categorySlug: "industrial-oils",
-    anchor: "machinery-oils",
-  },
-  {
-    title: "OPEN GEAR COMPOUNDS",
-    categorySlug: "industrial-oils",
-    anchor: "open-gear-compounds",
-  },
-  {
-    title: "PNEUMATIC TOOL OILS",
-    categorySlug: "industrial-oils",
-    anchor: "pneumatic-tool-oils",
-  },
-  {
-    title: "REFRIGERATION COMPRESSOR OILS",
-    categorySlug: "industrial-oils",
-    anchor: "refrigeration-compressor-oils",
-  },
-  {
-    title: "SPINDLE OILS",
-    categorySlug: "industrial-oils",
-    anchor: "spindle-oils",
-  },
-  {
-    title: "STENTER OILS",
-    categorySlug: "industrial-oils",
-    anchor: "stenter-oils",
-  },
-  {
-    title: "SUGAR MILL BEARING OILS",
-    categorySlug: "industrial-oils",
-    anchor: "sugar-mill-bearing-oils",
-  },
-  {
-    title: "TRANSFORMER OILS",
-    categorySlug: "industrial-oils",
-    anchor: "transformer-oils",
-  },
-  {
-    title: "TURBINE OILS",
-    categorySlug: "industrial-oils",
-    anchor: "turbine-oils",
-  },
-  {
-    title: "WIRE ROPE LUBRICANTS",
-    categorySlug: "industrial-oils",
-    anchor: "wire-rope-lubricants",
-  },
-  {
-    title: "INDUSTRIAL GREASES",
-    categorySlug: "industrial-greases",
-    anchor: "industrial-greases",
-  },
-];
 
 export default function Navbar({
   fontSizeMultiplier,
@@ -146,13 +69,12 @@ export default function Navbar({
     if (!searchQuery.trim()) return;
     setIsSearchDropdownOpen(false);
     const q = searchQuery.toLowerCase().trim();
-    const isGrease = products?.some(
+    const match = products?.find(
       (p) =>
-        p.categorySlug === "industrial-greases" &&
-        ((p.name || "").toLowerCase().includes(q) ||
-          ((p as any).subCategoryTitle || "").toLowerCase().includes(q)),
+        (p.name || "").toLowerCase().includes(q) ||
+        ((p as any).subCategoryTitle || "").toLowerCase().includes(q),
     );
-    const targetCat = isGrease ? "industrial-greases" : "industrial-oils";
+    const targetCat = match?.categorySlug || products?.[0]?.categorySlug || "industrial-oils";
     router.push(`/products/${targetCat}?search=${encodeURIComponent(searchQuery.trim())}`);
   };
 
@@ -173,68 +95,56 @@ export default function Navbar({
     fetchGlobalSEO().catch(console.error);
   }, [fetchProducts, fetchGlobalSEO]);
 
-  // Extract direct categories dynamically from CMS products if available
+  // Product menu is built entirely from CMS products (every category, every sub-category)
+  const toAnchor = (t: string) =>
+    t
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-|-$/g, "");
+  const productGroupTitle = (p: CMSProduct) =>
+    String((p as any).subCategoryTitle || (p as any).categoryName || p.categorySlug || "")
+      .toUpperCase()
+      .trim();
+
   const productSubCategories = useMemo<ProductSubCategoryItem[]>(() => {
-    if (!products || products.length === 0) return DEFAULT_PRODUCT_CATEGORIES;
-
+    if (!products || products.length === 0) return [];
     const map = new Map<string, ProductSubCategoryItem>();
-    products
-      .filter(
-        (p) => p.categorySlug === "industrial-oils" || p.categorySlug === "industrial-greases",
-      )
-      .forEach((p) => {
-        const title =
-          (p as any).subCategoryTitle ||
-          (p as any).subtitle ||
-          (p.categorySlug === "industrial-greases" ? "INDUSTRIAL GREASES" : "INDUSTRIAL OILS");
-        const upperTitle = title.toUpperCase().trim();
-        if (!map.has(upperTitle)) {
-          const anchor = upperTitle
-            .toLowerCase()
-            .replace(/[^a-z0-9]+/g, "-")
-            .replace(/^-|-$/g, "");
-          map.set(upperTitle, {
-            title: upperTitle,
-            categorySlug: p.categorySlug,
-            anchor,
-          });
-        }
-      });
-
-    // Ensure INDUSTRIAL GREASES is present
-    if (!map.has("INDUSTRIAL GREASES")) {
-      map.set("INDUSTRIAL GREASES", {
-        title: "INDUSTRIAL GREASES",
-        categorySlug: "industrial-greases",
-        anchor: "industrial-greases",
-      });
+    for (const p of products) {
+      if (!p.categorySlug) continue;
+      const title = productGroupTitle(p);
+      if (!title) continue;
+      const key = `${p.categorySlug}::${title}`;
+      if (!map.has(key)) {
+        const categoryName = String((p as any).categoryName || "")
+          .toUpperCase()
+          .trim();
+        map.set(key, {
+          title,
+          categorySlug: p.categorySlug,
+          anchor: toAnchor(title),
+          isWholeCategory: !!categoryName && categoryName === title,
+        });
+      }
     }
-
-    const list = Array.from(map.values()).sort((a, b) => a.title.localeCompare(b.title));
-    return list.length > 0 ? list : DEFAULT_PRODUCT_CATEGORIES;
+    return Array.from(map.values()).sort((a, b) => a.title.localeCompare(b.title));
   }, [products]);
 
-  const currentSubCat =
-    productSubCategories.find((c) => c.anchor === activeHoverCategory) ||
-    productSubCategories[0] ||
-    DEFAULT_PRODUCT_CATEGORIES[0];
+  const currentSubCat: ProductSubCategoryItem | undefined =
+    productSubCategories.find((c) => c.anchor === activeHoverCategory) || productSubCategories[0];
 
   const currentCategoryProducts = useMemo(() => {
-    if (!products || products.length === 0) return [];
-    return products.filter((p) => {
-      const pTitle = ((p as any).subCategoryTitle || (p as any).subtitle || "")
-        .toUpperCase()
-        .trim();
-      const pAnchor = pTitle
-        .toLowerCase()
-        .replace(/[^a-z0-9]+/g, "-")
-        .replace(/^-|-$/g, "");
-      if (currentSubCat.anchor === "industrial-greases") {
-        return p.categorySlug === "industrial-greases" || pAnchor === "industrial-greases";
-      }
-      return pAnchor === currentSubCat.anchor;
-    });
+    if (!products || !currentSubCat) return [];
+    return products.filter(
+      (p) =>
+        p.categorySlug === currentSubCat.categorySlug &&
+        productGroupTitle(p) === currentSubCat.title,
+    );
   }, [products, currentSubCat]);
+
+  const subCategoryHref = (cat: ProductSubCategoryItem) =>
+    cat.isWholeCategory
+      ? `/products/${cat.categorySlug}`
+      : `/products/${cat.categorySlug}#subcat-${cat.anchor}`;
 
   const logoSrc = globalSEO?.logo || "/mahalaxmi png logo .png";
 
@@ -607,11 +517,7 @@ export default function Navbar({
                             className="block"
                           >
                             <Link
-                              href={
-                                cat.categorySlug === "industrial-greases"
-                                  ? "/products/industrial-greases"
-                                  : `/products/${cat.categorySlug}#subcat-${cat.anchor}`
-                              }
+                              href={subCategoryHref(cat)}
                               onClick={() => {
                                 setActiveTab(item.name);
                                 setOpenDropdown(null);
@@ -780,7 +686,7 @@ export default function Navbar({
                             {productSubCategories.map((catItem, cIdx) => (
                               <Link
                                 key={cIdx}
-                                href={`/products/${catItem.categorySlug}#subcat-${catItem.anchor}`}
+                                href={subCategoryHref(catItem)}
                                 onClick={() => {
                                   setMobileMenuOpen(false);
                                   setMobileProductsOpen(false);

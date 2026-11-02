@@ -30,11 +30,10 @@ export async function GET(request: Request) {
       });
     }
 
-    // 2. If custom uploaded XML file is provided in CMS and is a valid sitemap (<urlset or <sitemapindex)
+    // 2. If a custom XML file was uploaded in the CMS, serve it exactly as uploaded
     if (
-      globalSEO?.sitemapCustomContent &&
-      (globalSEO.sitemapCustomContent.includes("<urlset") ||
-        globalSEO.sitemapCustomContent.includes("<sitemapindex"))
+      typeof globalSEO?.sitemapCustomContent === "string" &&
+      globalSEO.sitemapCustomContent.trim()
     ) {
       return new NextResponse(globalSEO.sitemapCustomContent.trim(), {
         headers: {
