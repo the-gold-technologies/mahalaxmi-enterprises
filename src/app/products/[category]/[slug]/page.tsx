@@ -11,7 +11,8 @@ import { ArrowLeft, FileText, Droplet, Search } from "lucide-react";
 import { useCMSStore, PageSEO, getHeadingTag } from "@/store/useCMSStore";
 import { FormattedText } from "@/components/FormattedText";
 import SEOMeta from "@/components/SEOMeta";
-import { normalizePropertiesTable } from "@/lib/propertiesTable";
+import { SpecTable } from "@/components/SpecTable";
+import { ProductCustomSections } from "@/components/ProductCustomSections";
 
 export default function ProductDetailPage() {
   const params = useParams();
@@ -131,9 +132,6 @@ export default function ProductDetailPage() {
   }
 
   const HeadingTag = getHeadingTag(product?.headingOptions, "h1");
-  const specTable = normalizePropertiesTable(product.tableHeaders, product.propertiesTable);
-  const hasHeaderRow = specTable.headers.length > 0;
-  const colCount = specTable.colCount;
 
   return (
     <main className="min-h-screen bg-white text-gray-800 font-sans flex flex-col justify-between">
@@ -205,8 +203,8 @@ export default function ProductDetailPage() {
                 </HeadingTag>
                 <div className="w-12 h-1 bg-[#002b5c] rounded-full mb-4" />
 
-                {/* Specifications or Key Highlights */}
-                {product.specsText ? (
+                {/* Specifications (hidden when empty) */}
+                {product.specsText?.trim() && (
                   <div className="bg-slate-50 border-l-4 border-[#eb1e25] rounded-r-xl p-3.5 shadow-xs mb-4">
                     <h3 className="text-[0.6875rem] font-bold uppercase tracking-wider text-[#eb1e25] mb-1">
                       Meets Specifications:
@@ -215,16 +213,7 @@ export default function ProductDetailPage() {
                       {product.specsText}
                     </p>
                   </div>
-                ) : product.applicationAreas ? (
-                  <div className="bg-slate-50 border-l-4 border-[#002b5c] rounded-r-xl p-3.5 shadow-xs mb-4">
-                    <h3 className="text-[0.6875rem] font-bold uppercase tracking-wider text-[#002b5c] mb-1">
-                      Key Application:
-                    </h3>
-                    <p className="text-xs text-slate-700 leading-relaxed font-sans font-medium">
-                      {product.applicationAreas}
-                    </p>
-                  </div>
-                ) : null}
+                )}
 
                 {/* Quick Info Badges */}
                 <div className="flex flex-wrap gap-2 text-[0.6875rem] text-slate-600 font-medium">
@@ -354,75 +343,16 @@ export default function ProductDetailPage() {
           )}
 
           {/* Physico-Chemical Properties Table */}
-          {specTable.rows.length > 0 && (
-            <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-xs pt-4">
-              <div className="px-6 pb-3">
-                <h3 className="text-base sm:text-lg font-bold text-[#002b5c] flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-[#eb1e25]" />{" "}
-                  {product.propertiesTableTitle || "Physico-Chemical Properties"}
-                </h3>
-              </div>
-              <div className="overflow-x-auto">
-                <table className="w-full text-left text-xs font-sans border-collapse">
-                  <thead>
-                    <tr className="bg-[#002b5c] text-white">
-                      <th
-                        colSpan={colCount + 1}
-                        className="py-3 px-4 text-center font-extrabold uppercase border-b border-[#002b5c]"
-                      >
-                        {product.name}
-                      </th>
-                    </tr>
-                    {hasHeaderRow && (
-                      <tr className="bg-[#002b5c] text-white border-t border-white/20">
-                        <th scope="col" className="py-2 px-4 border-r border-white/20">
-                          <span className="sr-only">Property</span>
-                        </th>
-                        {specTable.headers.map((hdr, hIdx) => (
-                          <th
-                            key={hIdx}
-                            scope="col"
-                            className="py-2 px-4 text-center font-bold border-r border-white/20 last:border-r-0 whitespace-nowrap"
-                          >
-                            {hdr}
-                          </th>
-                        ))}
-                      </tr>
-                    )}
-                  </thead>
-                  <tbody>
-                    {specTable.rows.map((row, rIdx) => (
-                      <tr key={rIdx} className={rIdx % 2 === 0 ? "bg-white" : "bg-slate-50"}>
-                        <th
-                          scope="row"
-                          className="py-2.5 px-4 font-semibold text-slate-700 border-b border-r border-slate-200 text-left min-w-[180px]"
-                        >
-                          {row.property}
-                        </th>
-                        {row.values ? (
-                          row.values.map((v, vIdx) => (
-                            <td
-                              key={vIdx}
-                              className="py-2.5 px-4 text-slate-900 font-bold border-b border-r border-slate-200 last:border-r-0 text-center whitespace-nowrap"
-                            >
-                              {v || "—"}
-                            </td>
-                          ))
-                        ) : (
-                          <td
-                            colSpan={colCount}
-                            className="py-2.5 px-4 text-slate-900 font-bold border-b border-slate-200 text-center"
-                          >
-                            {row.value || "—"}
-                          </td>
-                        )}
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          )}
+          <SpecTable
+            title={product.propertiesTableTitle || "Physico-Chemical Properties"}
+            topHeader={product.tableTopHeader || product.name}
+            propertyHeader={product.tablePropertyHeader}
+            tableHeaders={product.tableHeaders}
+            rows={product.propertiesTable}
+          />
+
+          {/* Additional sections added per product in the CMS */}
+          <ProductCustomSections sections={product.customSections} productName={product.name} />
 
           {/* Action Buttons: TDS, MSDS, & Inquire */}
           <div className="pt-4 flex flex-wrap items-center gap-3">

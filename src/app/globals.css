@@ -141,6 +141,26 @@ body {
   box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
 }
 
+/* Quill 2 editor markup: all lists are <ol>, bullets marked with data-list="bullet" */
+.blog-rich-content li[data-list="bullet"] {
+  list-style-type: disc;
+}
+.blog-rich-content li[data-list="ordered"] {
+  list-style-type: decimal;
+}
+.blog-rich-content .ql-ui {
+  display: none;
+}
+.blog-rich-content .ql-align-center {
+  text-align: center;
+}
+.blog-rich-content .ql-align-right {
+  text-align: right;
+}
+.blog-rich-content .ql-align-justify {
+  text-align: justify;
+}
+
 /* Seamless Google Translate Styling - Hide default toolbar, banner & balloons */
 .goog-te-banner-frame.skiptranslate,
 .goog-te-banner-frame,
