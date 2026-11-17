@@ -67,16 +67,39 @@ export function normalizePropertiesTable(
   const colCount = Math.max(headers.length, maxValues, 1);
   while (headers.length > 0 && headers.length < colCount) headers.push("");
 
+  const padded = rows.map((r): { property: string; value: string; values: string[] | null } => {
+    if (!r.values) return r;
+    const values = r.values.slice(0, colCount);
+    while (values.length < colCount) values.push("");
+    return { ...r, values };
+  });
+
+  // Drop columns that are completely empty (no header text and no cell value)
+  const keep = Array.from(
+    { length: colCount },
+    (_, c) => Boolean(headers[c]) || padded.some((r) => r.values?.[c]),
+  );
+  const keptCount = keep.filter(Boolean).length;
+  // Spanning rows still need at least one column to sit in
+  const finalCount = Math.max(keptCount, 1);
+  const finalHeaders = keptCount ? headers.filter((_, c) => keep[c]) : [];
+
   return {
-    headers,
-    colCount,
-    rows: rows.map((r) => {
-      if (!r.values || colCount === 1) {
-        return { property: r.property, value: r.values ? r.values[0] : r.value, values: null };
-      }
-      const values = r.values.slice(0, colCount);
-      while (values.length < colCount) values.push("");
-      return { property: r.property, value: r.value, values };
-    }),
+    headers: finalHeaders.some(Boolean) ? finalHeaders : [],
+    colCount: finalCount,
+    rows: padded
+      .map((r) => {
+        const values = r.values
+          ? keptCount
+            ? r.values.filter((_: string, c: number) => keep[c])
+            : [""]
+          : null;
+        if (!values || finalCount === 1) {
+          return { property: r.property, value: values ? values[0] : r.value, values: null };
+        }
+        return { property: r.property, value: r.value, values };
+      })
+      // A row is empty when neither its property nor any visible value has text
+      .filter((r) => r.property || r.value || r.values?.some(Boolean)),
   };
 }

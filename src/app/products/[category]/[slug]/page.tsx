@@ -276,10 +276,12 @@ export default function ProductDetailPage() {
           {/* Description */}
           {product.description && (
             <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs">
-              <h3 className="text-base sm:text-lg font-bold text-[#002b5c] mb-2 flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-[#eb1e25]" />{" "}
-                {product.descriptionTitle || "Description"}
-              </h3>
+              {product.descriptionTitle?.trim() && (
+                <h3 className="text-base sm:text-lg font-bold text-[#002b5c] mb-2 flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-[#eb1e25]" />{" "}
+                  {product.descriptionTitle.trim()}
+                </h3>
+              )}
               <p className="text-xs sm:text-sm text-slate-700 leading-relaxed font-sans font-normal">
                 <FormattedText text={product.description} />
               </p>
@@ -291,10 +293,12 @@ export default function ProductDetailPage() {
             {/* Application Areas */}
             {product.applicationAreas && (
               <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs flex flex-col">
-                <h3 className="text-base sm:text-lg font-bold text-[#eb1e25] mb-3 flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-[#002b5c]" />{" "}
-                  {product.applicationAreasTitle || "Application Areas"}:
-                </h3>
+                {product.applicationAreasTitle?.trim() && (
+                  <h3 className="text-base sm:text-lg font-bold text-[#eb1e25] mb-3 flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-[#002b5c]" />{" "}
+                    {product.applicationAreasTitle.trim()}:
+                  </h3>
+                )}
                 <p className="text-xs sm:text-sm text-slate-700 leading-relaxed font-sans">
                   <FormattedText text={product.applicationAreas} />
                 </p>
@@ -304,10 +308,12 @@ export default function ProductDetailPage() {
             {/* Performance Benefits */}
             {product.performanceBenefits && product.performanceBenefits.length > 0 && (
               <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs flex flex-col">
-                <h3 className="text-base sm:text-lg font-bold text-[#eb1e25] mb-3 flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-[#002b5c]" />{" "}
-                  {product.performanceBenefitsTitle || "Performance Benefits"}:
-                </h3>
+                {product.performanceBenefitsTitle?.trim() && (
+                  <h3 className="text-base sm:text-lg font-bold text-[#eb1e25] mb-3 flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-[#002b5c]" />{" "}
+                    {product.performanceBenefitsTitle.trim()}:
+                  </h3>
+                )}
                 <ul className="space-y-2.5">
                   {product.performanceBenefits.map((benefit: string, bIdx: number) => (
                     <li
@@ -328,10 +334,12 @@ export default function ProductDetailPage() {
           {/* Special Features */}
           {product.specialFeatures && product.specialFeatures.length > 0 && (
             <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs">
-              <h3 className="text-base sm:text-lg font-bold text-[#002b5c] mb-3 flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-[#eb1e25]" />{" "}
-                {product.specialFeaturesTitle || "Special Features"}:
-              </h3>
+              {product.specialFeaturesTitle?.trim() && (
+                <h3 className="text-base sm:text-lg font-bold text-[#002b5c] mb-3 flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-[#eb1e25]" />{" "}
+                  {product.specialFeaturesTitle.trim()}:
+                </h3>
+              )}
               <ul className="space-y-2">
                 {product.specialFeatures.map((feat: string, fIdx: number) => (
                   <li key={fIdx} className="text-xs sm:text-sm text-slate-700">
@@ -344,8 +352,8 @@ export default function ProductDetailPage() {
 
           {/* Physico-Chemical Properties Table */}
           <SpecTable
-            title={product.propertiesTableTitle || "Physico-Chemical Properties"}
-            topHeader={product.tableTopHeader || product.name}
+            title={product.propertiesTableTitle}
+            topHeader={product.tableTopHeader}
             propertyHeader={product.tablePropertyHeader}
             tableHeaders={product.tableHeaders}
             rows={product.propertiesTable}
