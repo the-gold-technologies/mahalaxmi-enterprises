@@ -46,7 +46,13 @@ export function normalizePropertiesTable(
     .filter((r) => r.property || r.value || r.values?.some(Boolean));
 
   const maxValues = rows.reduce((m, r) => Math.max(m, r.values?.length || 0), 0);
-  let headers = Array.isArray(rawHeaders) ? rawHeaders.map(str) : [];
+  // Older CMS saves auto-filled blank headings as "Column 1", "Column 2"… — treat those as blank
+  let headers = Array.isArray(rawHeaders)
+    ? rawHeaders.map((h, i) => {
+        const t = str(h);
+        return t === `Column ${i + 1}` ? "" : t;
+      })
+    : [];
 
   // Legacy data saved headers as ["Property", "Value"]: the first one labels the property column
   if (
