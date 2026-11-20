@@ -63,18 +63,19 @@ export default function CategoryProductsPage() {
     >();
 
     categoryProducts.forEach((p) => {
-      const subTitle = p.subCategoryTitle || p.name;
+      const rawSub = (p.subCategoryTitle || p.name).trim();
+      const groupKey = rawSub.toUpperCase();
       const cover = p.containerImage || category?.coverImage || "";
 
-      if (!groupMap.has(subTitle)) {
-        groupMap.set(subTitle, {
-          title: subTitle,
+      if (!groupMap.has(groupKey)) {
+        groupMap.set(groupKey, {
+          title: rawSub.toUpperCase(),
           coverImage: cover,
           products: [],
         });
       }
 
-      const existing = groupMap.get(subTitle)!;
+      const existing = groupMap.get(groupKey)!;
       if (!existing.coverImage && cover) {
         existing.coverImage = cover;
       }

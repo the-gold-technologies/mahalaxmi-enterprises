@@ -67,14 +67,17 @@ export default function ProductDetailPage() {
   const subCategoryList = useMemo(() => {
     if (!products) return [];
     const catProducts = products.filter((p) => !categorySlug || p.categorySlug === categorySlug);
-    const titles = Array.from(
-      new Set(
-        catProducts
-          .map((p) => p.subCategoryTitle)
-          .filter((t): t is string => Boolean(t && t.trim())),
-      ),
-    );
-    return titles.map((title) => ({ title }));
+    const map = new Map<string, string>();
+    catProducts.forEach((p) => {
+      const t = p.subCategoryTitle?.trim();
+      if (t) {
+        const norm = t.toUpperCase();
+        if (!map.has(norm)) {
+          map.set(norm, norm);
+        }
+      }
+    });
+    return Array.from(map.values()).map((title) => ({ title }));
   }, [products, categorySlug]);
 
   const productSEO: PageSEO = useMemo(() => {
